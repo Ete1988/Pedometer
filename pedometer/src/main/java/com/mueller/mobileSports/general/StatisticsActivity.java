@@ -1,33 +1,35 @@
 package com.mueller.mobileSports.general;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.mueller.mobileSports.pedometer.MainActivity.R;
+import com.mueller.mobileSports.pedometer.sharedValues;
 
 
 public class StatisticsActivity extends AppCompatActivity {
 
-    //TODO
+    private sharedValues values;
     private TextView dayCount;
     private TextView weekCount;
-    private SharedPreferences myData;
-
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        values = sharedValues.getInstance(this);
         dayCount = (TextView) findViewById(R.id.dayCountView);
         weekCount = (TextView) findViewById(R.id.weekCountView);
-        myData = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-        //TODO why -1??
-        dayCount.setText(Integer.toString(myData.getInt("dayCount", 0)));
-        weekCount.setText(Integer.toString(myData.getInt("weekCount", 0)));
+        getData();
+    }
+
+    private void getData() {
+
+        dayCount.setText(Integer.toString(values.getInt("dayCount")));
+        weekCount.setText(Integer.toString(values.getInt("weekCount")));
 
 
     }

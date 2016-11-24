@@ -2,7 +2,6 @@ package com.mueller.mobileSports.general;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -14,17 +13,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.mueller.mobileSports.pedometer.MainActivity.R;
-
-import org.w3c.dom.Text;
+import com.mueller.mobileSports.pedometer.sharedValues;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private SharedPreferences myData;
-    private SharedPreferences.Editor editor;
     private int physicalActivityLevel;
     private int goal;
     private TextView level;
     private TextView stepGoal;
+    private sharedValues values;
 
     private String[] goal_arr = {"5000", "6000", "7000", "8000", "9000", "10000", "Other? Please set here!"};
 
@@ -50,11 +47,10 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         level = (TextView) findViewById(R.id.level);
-
-        myData = getApplicationContext().getSharedPreferences(" stepGoal = (TextView) findViewById(R.id.stepGoalView);MyPref", MODE_PRIVATE);
-        editor = myData.edit();
-        physicalActivityLevel = myData.getInt("physicalActivityLevel", 0);
-        goal = myData.getInt("stepGoal", 0);
+        stepGoal = (TextView) findViewById(R.id.stepGoalView);
+        values = sharedValues.getInstance(this);
+        physicalActivityLevel = values.getInt("physicalActivityLevel");
+        goal = values.getInt("stepGoal");
         setLevel();
         setGoal();
 
@@ -72,14 +68,13 @@ public class SettingsActivity extends AppCompatActivity {
     public void setActivityLevelDialog(View v) {
 
         AlertDialog.Builder activityLevelDialog = new AlertDialog.Builder(this);
-        //activityLevelDialog.setIcon(R.drawable.icon);
         activityLevelDialog.setTitle("Select your activity level");
         activityLevelDialog.setSingleChoiceItems(actLevel_arr, -1, new DialogInterface
                 .OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 physicalActivityLevel = item;
                 setLevel();
-                dialog.dismiss();// dismiss the alertbox after chose option
+                dialog.dismiss();
 
             }
         });
@@ -90,14 +85,13 @@ public class SettingsActivity extends AppCompatActivity {
     public void setGoalDialog(View v) {
 
         AlertDialog.Builder activityLevelDialog = new AlertDialog.Builder(this);
-        //activityLevelDialog.setIcon(R.drawable.icon);
         activityLevelDialog.setTitle("Set your goal for today");
         activityLevelDialog.setSingleChoiceItems(goal_arr, -1, new DialogInterface
                 .OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 goal = item;
                 setGoal();
-                dialog.dismiss();// dismiss the alertbox after chose option
+                dialog.dismiss();
 
             }
         });
@@ -107,7 +101,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void editGoal() {
-        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Please enter daily Goal");
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -116,13 +110,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int positiveButton) {
-                    /*String foo = input.getText().toString();
-                    goal = Integer.parseInt(foo);
-                    stepGoal.setText(input.getText());
-                    editor.putInt("stepGoal", goal);
-                    editor.apply();*/
-                    stepGoal.setText(input.getText());
-                    dialog.dismiss();
+                String foo = input.getText().toString();
+                goal = Integer.parseInt(foo);
+                stepGoal.setText(input.getText());
+                values.saveInt("stepGoal", goal);
+                dialog.dismiss();
 
             }
         });
@@ -130,19 +122,14 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int negativeButton) {
                 //Put actions for CANCEL button here, or leave in blank
 
-                stepGoal.setText("7000");
-                /*goal = 7000;
-                editor.putInt("stepGoal", goal);
-                editor.apply();*/
+                stepGoal.setText(Integer.toString(values.getInt("stepGoal")));
                 dialog.dismiss();
 
             }
         });
         alert.show();
 
-
     }
-
 
     private void setLevel() {
 
@@ -176,41 +163,44 @@ public class SettingsActivity extends AppCompatActivity {
                 break;
         }
 
-        editor.putInt("physicalActivityLevel", physicalActivityLevel);
-        editor.apply();
+        values.saveInt("physicalActivityLevel", physicalActivityLevel);
     }
 
-    //TODO case 6
     private void setGoal() {
         switch (goal) {
+
             case 0:
                 stepGoal.setText("5000");
+                goal = 5000;
                 break;
             case 1:
                 stepGoal.setText("6000");
+                goal = 6000;
                 break;
             case 2:
                 stepGoal.setText("7000");
+                goal = 7000;
                 break;
             case 3:
                 stepGoal.setText("8000");
+                goal = 8000;
                 break;
             case 4:
                 stepGoal.setText("9000");
+                goal = 9000;
                 break;
             case 5:
                 stepGoal.setText("10000");
+                goal = 10000;
                 break;
             case 6:
                 editGoal();
                 break;
             default:
-                stepGoal.setText("7000");
+                stepGoal.setText(Integer.toString(values.getInt("stepGoal")));
                 break;
         }
-
-        editor.putInt("stepGoal", goal);
-        editor.apply();
+        values.saveInt("stepGoal", goal);
     }
 }
 

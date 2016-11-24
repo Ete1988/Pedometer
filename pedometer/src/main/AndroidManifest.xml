@@ -9,12 +9,13 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-<!--Hello-->
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.NoActionBar">
+        <!--Main
         <activity
             android:theme="@style/SplashTheme"
             android:name="com.mueller.mobileSports.general.SplashActivity"
@@ -25,11 +26,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.mueller.mobileSports.general.LoginActivity"
             android:label="@string/app_name"/>
         <activity
             android:name="com.mueller.mobileSports.pedometer.PedometerActivity"
             android:label="Pedometer" />
+
+       Main-->
+
+        <!--Default-->
+
+           <activity
+            android:name="com.mueller.mobileSports.pedometer.PedometerActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.mueller.mobileSports.general.LoginActivity"
+            android:label="@string/app_name"/>
+
+        <!--Default-->
+
         <activity
             android:name="com.mueller.mobileSports.general.SettingsActivity"
             android:label="Settings" />
@@ -43,9 +65,6 @@
             android:name="com.mueller.mobileSports.general.StatisticsActivity"
             android:label="@string/title_activity_statistics" />
         <activity android:name="com.mueller.mobileSports.heartRate.HeartRateActivity" />
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login"></activity>
     </application>
 
 </manifest>

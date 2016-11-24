@@ -18,13 +18,11 @@ package com.mueller.mobileSports.pedometer;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -42,23 +40,17 @@ import com.mueller.mobileSports.general.LoginActivity;
 import com.mueller.mobileSports.general.SettingsActivity;
 import com.mueller.mobileSports.general.StatisticsActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
-import com.mueller.mobileSports.pedometer.pedometerUtility.pedometerData;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 public class PedometerActivity extends AppCompatActivity implements SensorEventListener {
 
     private CircularProgressBar cBar;
     private SensorManager sensorManager;
-    private SharedPreferences myData;
-    private SharedPreferences.Editor editor;
+    private TextView date;
     private int stepsOverWeek;
     private int stepsOverDay;
-    private pedometerData data = new pedometerData();
-    private Handler mHandler = new Handler();
+
+    private sharedValues values;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,102 +59,113 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        values = sharedValues.getInstance(this);
+        date = (TextView) findViewById(R.id.date);
         cBar = (CircularProgressBar) findViewById(R.id.circularprogressbar3);
-        cBar.setSubTitle("Steps today");
-        cBar.setMax(7000);
-        myData = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-        editor = myData.edit();
-        updateAll();
+        cBar.setSubTitle("Steps");
+        values.checkTime();
+        getData();
     }
 
-    private void updateAll() {
-        updateDayCount();
-        updateWeekCount();
+
+    private void getData() {
+        stepsOverDay = values.getInt("dayCount");
+        stepsOverWeek = values.getInt("weekCount");
+        date.setText(values.getString("checkDate"));
+        cBar.setMax(values.getInt("stepGoal"));
     }
 
-    private void updateDayCount() {
-        try {
-            boolean check;
-            check = checkIfNewDay();
-            isNewDay(check);
-        } catch (ParseException e) {
-            e.printStackTrace();
+    private void updateData() {
+        values.saveInt("dayCount", stepsOverDay);
+        values.saveInt("weekCount", stepsOverWeek);
+    }
+
+    /*
+
+
+        private void updateDayCount() {
+            try {
+                boolean check;
+                check = checkIfNewDay();
+                isNewDay(check);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
-    }
 
-    private void isNewDay(boolean checkDay) {
-        if (checkDay) {
-            stepsOverDay = 0;
-        } else {
-            stepsOverDay = myData.getInt("dayCount", 0);
+        private void isNewDay(boolean checkDay) {
+            if (checkDay) {
+                stepsOverDay = 0;
+            } else {
+                stepsOverDay = myData.getInt("dayCount", 0);
+            }
         }
-    }
 
-    private boolean checkIfNewDay() throws ParseException {
+        private boolean checkIfNewDay() throws ParseException {
 
-        TextView date = (TextView) findViewById(R.id.date);
-        Date todayDate = new Date();
-        SimpleDateFormat currDate = new SimpleDateFormat("EE dd MMM yyyy");
-        String currentDate = currDate.format(todayDate);
-        date.setText(currentDate);
+            TextView date = (TextView) findViewById(R.id.date);
+            Date todayDate = new Date();
+            SimpleDateFormat currDate = new SimpleDateFormat("EE dd MMM yyyy");
+            String currentDate = currDate.format(todayDate);
+            date.setText(currentDate);
 
-        if (!(myData.contains("checkDate"))) {
-            editor.putString("checkDate", currentDate);
-            return true;
-        } else {
-
-            Date oldDate = currDate.parse((myData.getString("checkDate", null)));
-            Date now = currDate.parse(currentDate);
-
-            if (oldDate.before(now)) {
-                editor.putInt("dayCount", 0);
+            if (!(myData.contains("checkDate"))) {
                 editor.putString("checkDate", currentDate);
                 return true;
-            } else if (oldDate.equals(now)) {
-                editor.putInt("dayCount", stepsOverDay);
-                return false;
             } else {
-                //should never be reached
-                //TODO test this out
-                return true;
+
+                Date oldDate = currDate.parse((myData.getString("checkDate", null)));
+                Date now = currDate.parse(currentDate);
+
+                if (oldDate.before(now)) {
+                    editor.putInt("dayCount", 0);
+                    editor.putString("checkDate", currentDate);
+                    return true;
+                } else if (oldDate.equals(now)) {
+                    editor.putInt("dayCount", stepsOverDay);
+                    return false;
+                } else {
+                    //should never be reached
+                    //TODO test this out
+                    return true;
+                }
             }
         }
-    }
 
-    //TODO test this.
-    private void updateWeekCount() {
+        //TODO test this.
+        private void updateWeekCount() {
 
-        boolean checkWeek = checkIfNewWeek();
-        if (checkWeek) {
-            stepsOverWeek = 0;
-        } else {
-            stepsOverWeek = myData.getInt("weekCount", 0);
+            boolean checkWeek = checkIfNewWeek();
+            if (checkWeek) {
+                stepsOverWeek = 0;
+            } else {
+                stepsOverWeek = myData.getInt("weekCount", 0);
+            }
         }
-    }
 
-    private boolean checkIfNewWeek() {
+        private boolean checkIfNewWeek() {
 
-        Calendar c = Calendar.getInstance();
-        if (!myData.contains("weekOfYear")) {
-            editor.putInt("weekOfYear", c.get(Calendar.WEEK_OF_YEAR));
-            return true;
-        } else {
-
-            if ((c.get(Calendar.WEEK_OF_YEAR)) > (myData.getInt("weekOfYear", 0))) {
-                editor.putInt("weekCount", 0);
+            Calendar c = Calendar.getInstance();
+            if (!myData.contains("weekOfYear")) {
                 editor.putInt("weekOfYear", c.get(Calendar.WEEK_OF_YEAR));
                 return true;
-            } else if ((c.get(Calendar.WEEK_OF_YEAR)) == (myData.getInt("weekOfYear", 0))) {
-                editor.putInt("weekCount", stepsOverWeek);
-                return false;
             } else {
-                //should never be reached
-                //TODO test this out
-                return false;
+
+                if ((c.get(Calendar.WEEK_OF_YEAR)) > (myData.getInt("weekOfYear", 0))) {
+                    editor.putInt("weekCount", 0);
+                    editor.putInt("weekOfYear", c.get(Calendar.WEEK_OF_YEAR));
+                    return true;
+                } else if ((c.get(Calendar.WEEK_OF_YEAR)) == (myData.getInt("weekOfYear", 0))) {
+                    editor.putInt("weekCount", stepsOverWeek);
+                    return false;
+                } else {
+                    //should never be reached
+                    //TODO test this out
+                    return false;
+                }
             }
         }
-    }
-
+    */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -172,7 +175,7 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
 
     public void onClick(View v) {
         if (v.getId() == R.id.statsBtn) {
-            updateAll();
+            updateData();
             Intent intent = new Intent(PedometerActivity.this, StatisticsActivity.class);
             startActivity(intent);
         }
@@ -210,8 +213,7 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
     @Override
     protected void onResume() {
         super.onResume();
-        updateAll();
-        editor.apply();
+        getData();
         Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         if (countSensor != null) {
             sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
@@ -224,16 +226,18 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        updateAll();
-        editor.apply();
+        updateData();
+        //editor.apply();
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        updateData();
         // if you unregister the last listener, the hardware will stop detecting step events
         //sensorManager.unregisterListener(this);
-        editor.apply();
+        //editor.apply();
     }
 
     @Override
@@ -242,7 +246,6 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
         stepsOverWeek++;
         cBar.setProgress(stepsOverDay);
         cBar.setTitle(Integer.toString(stepsOverDay));
-
     }
 
     @Override
