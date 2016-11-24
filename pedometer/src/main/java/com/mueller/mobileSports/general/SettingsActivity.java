@@ -52,7 +52,7 @@ public class SettingsActivity extends AppCompatActivity {
         physicalActivityLevel = values.getInt("physicalActivityLevel");
         goal = values.getInt("stepGoal");
         setLevel();
-        setGoal();
+        //setGoal();
 
         setSupportActionBar(myToolbar);
         setTitle("Settings");

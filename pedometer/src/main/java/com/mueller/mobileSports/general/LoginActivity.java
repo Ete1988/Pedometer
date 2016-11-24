@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         Backendless.initApp(this, APP_ID, SECRET_KEY, APPVERSION);
 
         loginButton = (Button) findViewById(R.id.email_sign_in_button);
-        _emailText = (EditText) findViewById(R.id.email);
+        _emailText = (EditText) findViewById(R.id.input_email);
         _passwordText = (EditText) findViewById(R.id.password);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
