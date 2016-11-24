@@ -14,14 +14,14 @@ import java.util.Date;
 
 public class sharedValues {
 
-    private static sharedValues yourPreference;
+    private static sharedValues myValues;
     private SharedPreferences sharedPreferences;
 
     public static sharedValues getInstance(Context context) {
-        if (yourPreference == null) {
-            yourPreference = new sharedValues(context);
+        if (myValues == null) {
+            myValues = new sharedValues(context);
         }
-        return yourPreference;
+        return myValues;
     }
 
     private sharedValues(Context context) {
@@ -83,7 +83,7 @@ public class sharedValues {
             Date oldDate = currDate.parse((getString("checkDate")));
             Date now = currDate.parse(currentDate);
             if (oldDate.before(now)) {
-                //Before today
+                //Before today...
                 saveInt("dayCount", 0);
                 saveString("checkDate", currentDate);
             }
@@ -100,7 +100,7 @@ public class sharedValues {
         } else {
 
             if ((c.get(Calendar.WEEK_OF_YEAR)) > (getInt("weekOfYear"))) {
-                //New week
+                //New week...
                 saveInt("weekCount", 0);
                 saveInt("weekOfYear", c.get(Calendar.WEEK_OF_YEAR));
 
