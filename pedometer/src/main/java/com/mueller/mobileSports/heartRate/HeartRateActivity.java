@@ -5,7 +5,7 @@ import android.os.Bundle;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 
 public class HeartRateActivity extends AppCompatActivity {
-
+//test
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
