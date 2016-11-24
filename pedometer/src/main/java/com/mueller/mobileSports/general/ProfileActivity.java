@@ -19,6 +19,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.BackendlessCallback;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
+import com.mueller.mobileSports.pedometer.sharedValues;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,13 +35,13 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText gender;
     private EditText weight;
     private int heartRate;
+    private int dailyStepCount;
     private int weeklyStepCount;
-    private int monthlyStepCount;
 
     private Date created;
     private Date updated;
     private File uploadedFile;
-
+    private sharedValues values;
     private Button saveChangesButton;
 
     public static String APP_ID = "61D5CC9D-40B5-4853-FF2F-BCFDD7F64700";
@@ -52,6 +53,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        values = sharedValues.getInstance(this);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         setTitle("Edit Profile");
@@ -111,9 +113,11 @@ public class ProfileActivity extends AppCompatActivity {
         final BackendlessUser user = new BackendlessUser();
 
         // save object asynchronously
+        // // TODO: 24.11.2016 monthlyCount
+
 
         Backendless.Persistence.save(new saveProfileChanges(username.getText().toString(), Integer.parseInt(height.getText().toString()),
-        Integer.parseInt(age.getText().toString()), gender.getText().toString(), Integer.parseInt(weight.getText().toString()), 12, 111, 1345), new BackendlessCallback<saveProfileChanges>()
+        Integer.parseInt(age.getText().toString()), gender.getText().toString(), Integer.parseInt(weight.getText().toString()), 12, values.getInt("dayCount"), values.getInt("weekCount")), new BackendlessCallback<saveProfileChanges>()
         {
             @Override
             public void handleResponse( saveProfileChanges change )

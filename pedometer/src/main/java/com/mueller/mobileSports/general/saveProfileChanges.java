@@ -13,8 +13,8 @@ public class saveProfileChanges {
     private String gender;
     private int weight;
     private int heartRate;
+    private int dailyStepCount;
     private int weeklyStepCount;
-    private int monthlyStepCount;
     private File uploadedFile;
 
     public saveProfileChanges(){}
@@ -28,8 +28,8 @@ public class saveProfileChanges {
         this.gender = gender;
         this.weight = weight;
         this.heartRate = heartRate;
-        this.weeklyStepCount = weeklyStepCount;
-        this.monthlyStepCount = monthlyStepCount;
+        this.dailyStepCount = weeklyStepCount;
+        this.weeklyStepCount = monthlyStepCount;
         this.height = height;
 
 
@@ -83,20 +83,20 @@ public class saveProfileChanges {
         this.heartRate = heartRate;
     }
 
+    public int getDailyStepCount() {
+        return dailyStepCount;
+    }
+
+    public void setDailyStepCount(int dailyStepCount) {
+        this.dailyStepCount = dailyStepCount;
+    }
+
     public int getWeeklyStepCount() {
         return weeklyStepCount;
     }
 
     public void setWeeklyStepCount(int weeklyStepCount) {
         this.weeklyStepCount = weeklyStepCount;
-    }
-
-    public int getMonthlyStepCount() {
-        return monthlyStepCount;
-    }
-
-    public void setMonthlyStepCount(int monthlyStepCount) {
-        this.monthlyStepCount = monthlyStepCount;
     }
 
 
