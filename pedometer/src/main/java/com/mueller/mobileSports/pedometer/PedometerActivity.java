@@ -50,7 +50,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class PedometerActivity extends AppCompatActivity implements SensorEventListener {
-//This is a new COmment
+
     private CircularProgressBar cBar;
     private SensorManager sensorManager;
     private SharedPreferences myData;
