@@ -11,14 +11,4 @@
 
     </item>
 
-
-<!--
-    <item>
-        <nine-patch xmlns:android="http://schemas.android.com/apk/res/android"
-            android:src="@drawable/rung"
-            android:tileMode="disabled"
-
-            />
-    </item>
-    -->
 </layer-list>
