@@ -6,9 +6,7 @@
        <item>
            <bitmap
                android:gravity="center"
-               android:src="@drawable/rung"/>
-
-
+               android:src="@drawable/run"/>
     </item>
 
 </layer-list>
