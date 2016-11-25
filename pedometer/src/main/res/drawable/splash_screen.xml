@@ -6,7 +6,7 @@
        <item>
            <bitmap
                android:gravity="center"
-               android:src="@mipmap/run_splash"/>
+               android:src="@drawable/rung"/>
 
 
     </item>
