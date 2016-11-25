@@ -27,9 +27,9 @@
         android:text="www.pedometer.info" />
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/splash_screen"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/splash_screen"
         android:id="@+id/imageView"
         android:visibility="visible"/>
 
