@@ -3,22 +3,22 @@
 
     <item
         android:drawable="@color/splashBackground"/>
-    <!--   <item>
+       <item>
            <bitmap
                android:gravity="center"
-               android:src="@drawable/running"/>
+               android:src="@mipmap/run_splash"/>
 
 
     </item>
-    -->
 
 
+<!--
     <item>
         <nine-patch xmlns:android="http://schemas.android.com/apk/res/android"
-            android:src="@drawable/running"
+            android:src="@drawable/rung"
             android:tileMode="disabled"
 
             />
     </item>
-
+    -->
 </layer-list>
