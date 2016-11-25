@@ -13,13 +13,13 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
+        android:label="Pedometer"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <!--Main-->
         <activity
             android:theme="@style/SplashTheme"
             android:name="com.mueller.mobileSports.general.SplashActivity"
-            android:label="@string/app_name">
+            android:label="Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
