@@ -15,7 +15,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <!--Main
+        <!--Main-->
         <activity
             android:theme="@style/SplashTheme"
             android:name="com.mueller.mobileSports.general.SplashActivity"
@@ -33,9 +33,9 @@
             android:name="com.mueller.mobileSports.pedometer.PedometerActivity"
             android:label="Pedometer" />
 
-       Main-->
+       <!--Main-->
 
-        <!--Default-->
+        <!--Default
 
            <activity
             android:name="com.mueller.mobileSports.pedometer.PedometerActivity"
@@ -50,7 +50,7 @@
         <activity android:name="com.mueller.mobileSports.general.LoginActivity"
             android:label="@string/app_name"/>
 
-        <!--Default-->
+        Default-->
 
         <activity
             android:name="com.mueller.mobileSports.general.SettingsActivity"
