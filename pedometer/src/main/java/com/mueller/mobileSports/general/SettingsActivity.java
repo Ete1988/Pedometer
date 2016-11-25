@@ -52,7 +52,7 @@ public class SettingsActivity extends AppCompatActivity {
         physicalActivityLevel = values.getInt("physicalActivityLevel");
         goal = values.getInt("stepGoal");
         setLevel();
-        //setGoal();
+        setGoal();
 
         setSupportActionBar(myToolbar);
         setTitle("Settings");
@@ -167,32 +167,21 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setGoal() {
+
         switch (goal) {
 
             case 0:
-                stepGoal.setText("5000");
-                goal = 5000;
-                break;
+                goal = 5000;stepGoal.setText("5000");break;
             case 1:
-                stepGoal.setText("6000");
-                goal = 6000;
-                break;
+                goal = 6000;stepGoal.setText("6000");break;
             case 2:
-                stepGoal.setText("7000");
-                goal = 7000;
-                break;
+                goal = 7000;stepGoal.setText("7000");break;
             case 3:
-                stepGoal.setText("8000");
-                goal = 8000;
-                break;
+                goal = 8000;stepGoal.setText("8000");break;
             case 4:
-                stepGoal.setText("9000");
-                goal = 9000;
-                break;
+                goal = 9000;stepGoal.setText("9000");break;
             case 5:
-                stepGoal.setText("10000");
-                goal = 10000;
-                break;
+                goal = 10000;stepGoal.setText("10000");break;
             case 6:
                 editGoal();
                 break;
