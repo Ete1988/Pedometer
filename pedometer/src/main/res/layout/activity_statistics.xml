@@ -6,7 +6,7 @@
     android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mueller.mobileSports.general.StatisticsActivity">
+    tools:context="com.mueller.mobileSports.pedometer.general.StatisticsActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"

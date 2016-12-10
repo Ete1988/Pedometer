@@ -16,36 +16,36 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.NoActionBar">
 
-   <!-- Splash screen on startup -->
+        <!-- Splash screen on startup -->
         <activity
-            android:theme="@style/SplashTheme"
-            android:name="com.mueller.mobileSports.general.SplashActivity"
-            android:label="@string/app_name">
+            android:name="com.mueller.mobileSports.pedometer.general.SplashActivity"
+            android:label="@string/app_name"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.mueller.mobileSports.pedometer.PedometerActivity"
-            android:label="@string/app_name"/>
         <activity
-            android:name="com.mueller.mobileSports.account.LoginActivity"
+            android:name="com.mueller.mobileSports.pedometer.PedometerActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.mueller.mobileSports.pedometer.account.LoginActivity"
             android:label="Pedometer" />
         <activity
-            android:name="com.mueller.mobileSports.general.SettingsActivity"
+            android:name="com.mueller.mobileSports.pedometer.general.SettingsActivity"
             android:label="Settings" />
         <activity
-            android:name="com.mueller.mobileSports.account.ProfileActivity"
+            android:name="com.mueller.mobileSports.pedometer.account.ProfileActivity"
             android:label="Edit Profile" />
         <activity
-            android:name="com.mueller.mobileSports.account.RegisterActivity"
+            android:name="com.mueller.mobileSports.pedometer.account.RegisterActivity"
             android:label="Register" />
         <activity
-            android:name="com.mueller.mobileSports.general.StatisticsActivity"
+            android:name="com.mueller.mobileSports.pedometer.general.StatisticsActivity"
             android:label="@string/title_activity_statistics" />
-        <activity android:name="com.mueller.mobileSports.heartRate.HeartRateActivity" />
+        <activity android:name="com.mueller.mobileSports.pedometer.heartRate.HeartRateActivity" />
     </application>
 
 </manifest>

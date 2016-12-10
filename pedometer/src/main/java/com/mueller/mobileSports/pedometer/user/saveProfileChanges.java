@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.user;
+package com.mueller.mobileSports.pedometer.user;
 
 import java.io.File;
 

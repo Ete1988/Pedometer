@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.account;
+package com.mueller.mobileSports.pedometer.account;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -18,7 +18,7 @@ import android.widget.EditText;
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.BackendlessCallback;
-import com.mueller.mobileSports.user.saveProfileChanges;
+import com.mueller.mobileSports.pedometer.user.saveProfileChanges;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 
 import java.io.File;

@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.account;
+package com.mueller.mobileSports.pedometer.account;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.mueller.mobileSports.general.AlertDialogManager;
+import com.mueller.mobileSports.pedometer.general.AlertDialogManager;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
 
@@ -23,16 +23,7 @@ import com.mueller.mobileSports.pedometer.PedometerActivity;
  * A login screen that offers login via email/password.
  */
 
-/**
-
- */
 public class LoginActivity extends AppCompatActivity {
-
-
-    public static String APP_ID = "61D5CC9D-40B5-4853-FF2F-BCFDD7F64700";
-    public static String SECRET_KEY = "76967CB3-F1DE-308D-FF0F-6BA915A44300";
-    public static String APPVERSION = "v1";
-
 
     EditText txtEmail,txtPassword;
     Button loginButton;
@@ -49,14 +40,10 @@ public class LoginActivity extends AppCompatActivity {
         android.support.v7.widget.Toolbar myToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         setTitle("Pedometer");
-        Backendless.initApp(this, APP_ID, SECRET_KEY, APPVERSION);
         session = new SessionManager(getApplicationContext());
         loginButton = (Button) findViewById(R.id.email_sign_in_button);
         txtEmail = (EditText) findViewById(R.id.input_email);
         txtPassword = (EditText) findViewById(R.id.password);
-
-        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -82,6 +69,23 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    AsyncCallback<BackendlessUser> loginResponder = new AsyncCallback<BackendlessUser>() {
+        @Override
+        public void handleResponse( BackendlessUser backendlessUser ) {
+
+            Toast.makeText(getBaseContext(), "Thanks for logging in!", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(getApplicationContext(), PedometerActivity.class);
+            startActivity(intent);
+        }
+
+        @Override
+        public void handleFault( BackendlessFault backendlessFault ) {
+            Toast.makeText(getBaseContext(), "Error logging in! Please register or check your log in details", Toast.LENGTH_LONG).show();
+        }
+    };
+
+
+
     public void login () {
         //Get username, password from EditText
         String email = txtEmail.getText().toString();
@@ -89,10 +93,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check if username, password is filled
         if(email.trim().length() > 0 && password.trim().length() > 0){
-            // For testing puspose username, password is checked with sample data
-            // username = test
-            // password = test
-
             final ProgressDialog progress = new ProgressDialog(this);
             progress.setTitle("Loading");
             progress.setMessage("Wait while loading...");
@@ -100,38 +100,14 @@ public class LoginActivity extends AppCompatActivity {
             progress.show();
 
             //Backendless Login and let user stay logged in.
-            Backendless.UserService.login(email, password, new AsyncCallback<BackendlessUser>() {
-
-
-
-                @Override
-                public void handleResponse(BackendlessUser backendlessUser) {
-
-
-                    session.createLoginSession(backendlessUser.getUserId(),backendlessUser.getEmail());
-
-                    Toast.makeText(getBaseContext(), "Thanks for logging in!", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(getApplicationContext(), PedometerActivity.class);
-                    startActivity(intent);
-
-                }
-
-                @Override
-                public void handleFault(BackendlessFault backendlessFault) {
-
-                    Toast.makeText(getBaseContext(), "Error logging in! Please register or check your log in details", Toast.LENGTH_LONG).show();
-
-                    progress.dismiss();
-                }
-            }, true);
+            Backendless.UserService.login(email, password, loginResponder, true);
+            progress.dismiss();
 
         }else{
             // user didn't entered username or password
             // Show alert asking him to enter the details
             alert.showAlertDialog(LoginActivity.this, "Login failed..", "Please enter username and password", false);
         }
-
-
 
     }
 }

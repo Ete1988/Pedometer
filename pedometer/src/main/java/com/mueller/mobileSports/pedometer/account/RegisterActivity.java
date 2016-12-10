@@ -1,9 +1,8 @@
-package com.mueller.mobileSports.account;
+package com.mueller.mobileSports.pedometer.account;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -28,12 +27,18 @@ import butterknife.ButterKnife;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    @Bind(R.id.input_name) EditText _nameText;
-    @Bind(R.id.input_email) EditText _emailText;
-    @Bind(R.id.password) EditText _passwordText;
-    @Bind(R.id.confirmpassword)  EditText _confirmPasswordText;
-    @Bind(R.id.createAccount_button) Button _signupButton;
-    @Bind(R.id.link_login) TextView _loginLink;
+    @Bind(R.id.input_name)
+    EditText _nameText;
+    @Bind(R.id.input_email)
+    EditText _emailText;
+    @Bind(R.id.password)
+    EditText _passwordText;
+    @Bind(R.id.confirmpassword)
+    EditText _confirmPasswordText;
+    @Bind(R.id.createAccount_button)
+    Button _signupButton;
+    @Bind(R.id.link_login)
+    TextView _loginLink;
 
 
     private final static String APP_ID = "61D5CC9D-40B5-4853-FF2F-BCFDD7F64700";
@@ -74,13 +79,6 @@ public class RegisterActivity extends AppCompatActivity {
                     pd.setIndeterminate(true);
                     pd.show();
 
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            pd.dismiss();
-                        }
-                    }, 3000); // 3000 milliseconds delay
-
                     Backendless.UserService.register(user, new AsyncCallback<BackendlessUser>() {
                         @Override
                         public void handleResponse(BackendlessUser backendlessUser) {
@@ -111,7 +109,6 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
     }
-
 
     public boolean validate() {
         boolean valid = true;

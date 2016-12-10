@@ -17,18 +17,12 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.backendless.Backendless;
-import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessFault;
 import com.lylc.widget.circularprogressbar.CircularProgressBar;
-import com.mueller.mobileSports.general.AlertDialogManager;
-import com.mueller.mobileSports.account.LoginActivity;
-import com.mueller.mobileSports.general.SettingsActivity;
-import com.mueller.mobileSports.general.StatisticsActivity;
-import com.mueller.mobileSports.account.SessionManager;
+import com.mueller.mobileSports.pedometer.general.AlertDialogManager;
+import com.mueller.mobileSports.pedometer.general.SettingsActivity;
+import com.mueller.mobileSports.pedometer.general.StatisticsActivity;
+import com.mueller.mobileSports.pedometer.account.SessionManager;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
-
-import java.util.HashMap;
 
 
 public class PedometerActivity extends AppCompatActivity implements SensorEventListener {
@@ -73,14 +67,15 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
          * */
         session.checkLogin();
 
+
         // get user data from session
-        HashMap<String, String> user = session.getUserDetails();
+       // HashMap<String, String> user = session.getUserDetails();
 
         // name
-        String name = user.get(SessionManager.KEY_NAME);
+       // String name = user.get(SessionManager.KEY_NAME);
 
         // email
-        String email = user.get(SessionManager.KEY_EMAIL);
+       // String email = user.get(SessionManager.KEY_EMAIL);
 
         // displaying user data
         //cBar.setTitle("Name: <b>" + name + "</b>");
@@ -125,20 +120,7 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
                 startActivity(i);
                 break;
             case R.id.action_logout:
-                Backendless.UserService.logout(new AsyncCallback<Void>() {
-                    @Override
-                    public void handleResponse(Void aVoid) {
-                        Toast.makeText(getBaseContext(), "You logged out!", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(PedometerActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void handleFault(BackendlessFault backendlessFault) {
-                        Toast.makeText(getBaseContext(), "Log Out failed!", Toast.LENGTH_LONG).show();
-                    }
-                });
-
+                session.logoutUser();
             default:
                 break;
         }

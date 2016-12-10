@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.general;
+package com.mueller.mobileSports.pedometer.general;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.mueller.mobileSports.account.ProfileActivity;
+import com.mueller.mobileSports.pedometer.account.ProfileActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.sharedValues;
 

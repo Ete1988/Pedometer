@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.heartRate;
+package com.mueller.mobileSports.pedometer.heartRate;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

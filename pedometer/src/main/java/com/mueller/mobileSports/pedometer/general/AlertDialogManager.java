@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.general;
+package com.mueller.mobileSports.pedometer.general;
 
 import android.app.AlertDialog;
 import android.content.Context;

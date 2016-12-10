@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/background"
-    tools:context="com.mueller.mobileSports.general.SplashActivity">
+    tools:context="com.mueller.mobileSports.pedometer.general.SplashActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
