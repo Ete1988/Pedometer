@@ -18,26 +18,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lylc.widget.circularprogressbar.CircularProgressBar;
-import com.mueller.mobileSports.pedometer.general.AlertDialogManager;
-import com.mueller.mobileSports.pedometer.general.SettingsActivity;
-import com.mueller.mobileSports.pedometer.general.StatisticsActivity;
-import com.mueller.mobileSports.pedometer.account.SessionManager;
+import com.mueller.mobileSports.account.SessionManager;
+import com.mueller.mobileSports.general.SettingsActivity;
+import com.mueller.mobileSports.general.StatisticsActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
+import com.mueller.mobileSports.user.UserProfileData;
 
 
 public class PedometerActivity extends AppCompatActivity implements SensorEventListener {
 
+    // Session Manager Class
+    SessionManager session;
     private CircularProgressBar cBar;
     private SensorManager sensorManager;
     private TextView date;
     private int stepsOverWeek, stepsOverDay;
     private sharedValues values;
+    private UserProfileData myData;
 
-    // Alert Dialog Manager
-    AlertDialogManager alert = new AlertDialogManager();
-
-    // Session Manager Class
-    SessionManager session;
 
 
     @Override
@@ -48,52 +46,31 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         values = sharedValues.getInstance(this);
+        myData = new UserProfileData();
         date = (TextView) findViewById(R.id.date);
         cBar = (CircularProgressBar) findViewById(R.id.circularprogressbar3);
         cBar.setSubTitle("Steps");
+        session = new SessionManager(getApplicationContext());
+        session.checkLogin();
         values.checkTime();
         getData();
-
-        // Session class instance
-        session = new SessionManager(getApplicationContext());
-
-        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
-
-
-        /**
-         * Call this function whenever you want to check user login
-         * This will redirect user to LoginActivity is he is not
-         * logged in
-         * */
-        session.checkLogin();
-
-
-        // get user data from session
-       // HashMap<String, String> user = session.getUserDetails();
-
-        // name
-       // String name = user.get(SessionManager.KEY_NAME);
-
-        // email
-       // String email = user.get(SessionManager.KEY_EMAIL);
-
-        // displaying user data
-        //cBar.setTitle("Name: <b>" + name + "</b>");
-        //cBar.setSubTitle("Email: <b>" + email + "</b>");
-
     }
+
 
 
     private void getData() {
         stepsOverDay = values.getInt("dayCount");
-        stepsOverWeek = values.getInt("weekCount");
+        stepsOverWeek = myData.getWeeklyStepCount();
+        //stepsOverWeek = values.getInt("weekCount");
         date.setText(values.getString("checkDate"));
         cBar.setMax(values.getInt("stepGoal"));
     }
 
     private void updateData() {
+
+        myData.setWeeklyStepCount(stepsOverWeek);
         values.saveInt("dayCount", stepsOverDay);
-        values.saveInt("weekCount", stepsOverWeek);
+        //values.saveInt("weekCount", stepsOverWeek);
     }
 
     @Override

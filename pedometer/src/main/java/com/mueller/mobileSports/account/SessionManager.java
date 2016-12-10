@@ -1,12 +1,14 @@
-package com.mueller.mobileSports.pedometer.account;
+package com.mueller.mobileSports.account;
 
 import android.content.Context;
 import android.content.Intent;
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.local.UserTokenStorageFactory;
+import com.mueller.mobileSports.user.UserProfileData;
 
 
 /**
@@ -17,27 +19,26 @@ import com.backendless.persistence.local.UserTokenStorageFactory;
 
 public class SessionManager {
 
-    // Context
     Context _context;
-
-    // Constructor
-    public SessionManager(Context context) {
-        this._context = context;
-    }
-
     AsyncCallback<Void> logoutResponder = new AsyncCallback<Void>() {
         @Override
         public void handleResponse(Void aVoid) {
             boolean isValidLogin = Backendless.UserService.isValidLogin();
-            System.out.println("Is user logged in? - " + isValidLogin);
-            System.out.println("Logging user out");
+
         }
 
         @Override
         public void handleFault(BackendlessFault backendlessFault) {
-            System.out.println("Server reported an error " + backendlessFault.getMessage());
+
         }
     };
+    private UserProfileData myData;
+
+    // Constructor
+    public SessionManager(Context context) {
+        this._context = context;
+        myData = new UserProfileData();
+    }
 
     /**
      * Check login method wil check user login status
@@ -86,12 +87,48 @@ public class SessionManager {
 
         String userToken = UserTokenStorageFactory.instance().getStorage().get();
         if (userToken != null && !userToken.equals("")) {
+            loadCurrentUser();
+            loadCurrentUserData();
             return true;
         } else {
             return false;
         }
 
     }
+
+    //Load currentUser
+    private void loadCurrentUser() {
+
+        String currentUserId = Backendless.UserService.loggedInUser();
+        Backendless.UserService.findById(currentUserId, new AsyncCallback<BackendlessUser>() {
+            @Override
+            public void handleResponse(BackendlessUser currentUser) {
+                Backendless.UserService.setCurrentUser(currentUser);
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+
+            }
+        });
+    }
+
+    private void loadCurrentUserData() {
+        Backendless.Persistence.of(UserProfileData.class).findFirst(new AsyncCallback<UserProfileData>() {
+            @Override
+            public void handleResponse(UserProfileData data) {
+                myData = data;
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                // an error has occurred, the error code can be retrieved with fault.getCode()
+            }
+        });
+
+    }
+
+
 
     public boolean uploadUserData() {
 

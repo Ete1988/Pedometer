@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.pedometer.general;
+package com.mueller.mobileSports.general;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,9 +12,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.mueller.mobileSports.pedometer.account.ProfileActivity;
+import com.mueller.mobileSports.account.ProfileActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.sharedValues;
+import com.mueller.mobileSports.user.UserProfileData;
 
 /**
  * Created by Ete on 11/10/2016.
@@ -25,6 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
     private int physicalActivityLevel, goal;
     private TextView level,stepGoal;
     private sharedValues values;
+    private UserProfileData myData;
 
     private String[] goal_arr = {"5000", "6000", "7000", "8000", "9000", "10000", "Other? Please set here!"};
 
@@ -51,9 +53,13 @@ public class SettingsActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         level = (TextView) findViewById(R.id.level);
         stepGoal = (TextView) findViewById(R.id.stepGoalView);
+        myData = new UserProfileData();
         values = sharedValues.getInstance(this);
-        physicalActivityLevel = values.getInt("physicalActivityLevel");
-        goal = values.getInt("stepGoal");
+        //physicalActivityLevel = values.getInt("physicalActivityLevel");
+        physicalActivityLevel = myData.getActivityLevel();
+        //goal = values.getInt("stepGoal");
+        goal = myData.getStepGoal();
+
         setLevel();
         setGoal();
 
@@ -116,7 +122,8 @@ public class SettingsActivity extends AppCompatActivity {
                 String foo = input.getText().toString();
                 goal = Integer.parseInt(foo);
                 stepGoal.setText(input.getText());
-                values.saveInt("stepGoal", goal);
+                //values.saveInt("stepGoal", goal);
+                myData.setStepGoal(goal);
                 dialog.dismiss();
 
             }
@@ -125,7 +132,8 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int negativeButton) {
                 //Put actions for CANCEL button here, or leave in blank
 
-                stepGoal.setText(Integer.toString(values.getInt("stepGoal")));
+                //stepGoal.setText(Integer.toString(values.getInt("stepGoal")));
+                stepGoal.setText(Integer.toString(myData.getStepGoal()));
                 dialog.dismiss();
 
             }
@@ -166,7 +174,8 @@ public class SettingsActivity extends AppCompatActivity {
                 break;
         }
 
-        values.saveInt("physicalActivityLevel", physicalActivityLevel);
+        //values.saveInt("physicalActivityLevel", physicalActivityLevel);
+        myData.setActivityLevel(physicalActivityLevel);
     }
 
     private void setGoal() {
@@ -189,10 +198,12 @@ public class SettingsActivity extends AppCompatActivity {
                 editGoal();
                 break;
             default:
-                stepGoal.setText(Integer.toString(values.getInt("stepGoal")));
+                // stepGoal.setText(Integer.toString(values.getInt("stepGoal")));
+                stepGoal.setText(Integer.toString(myData.getStepGoal()));
                 break;
         }
-        values.saveInt("stepGoal", goal);
+        //values.saveInt("stepGoal", goal);
+        myData.setStepGoal(goal);
     }
 }
 

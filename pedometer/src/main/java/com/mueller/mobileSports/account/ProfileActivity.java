@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.pedometer.account;
+package com.mueller.mobileSports.account;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -6,20 +6,19 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.backendless.Backendless;
-import com.backendless.BackendlessUser;
-import com.backendless.async.callback.BackendlessCallback;
-import com.mueller.mobileSports.pedometer.user.saveProfileChanges;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
+import com.mueller.mobileSports.user.UserProfileData;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,11 +38,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Date created, updated;
     private File uploadedFile;
     private Button saveChangesButton;
-
-    public static String APP_ID = "61D5CC9D-40B5-4853-FF2F-BCFDD7F64700";
-    public static String SECRET_KEY = "76967CB3-F1DE-308D-FF0F-6BA915A44300";
-    public static String APPVERSION = "v1";
-
+    private UserProfileData myData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,17 +47,14 @@ public class ProfileActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         setTitle("Edit Profile");
-
-        Backendless.initApp(this, APP_ID, SECRET_KEY, APPVERSION);
-
+        myData = new UserProfileData();
         height = (EditText) findViewById(R.id.input_height);
         username = (EditText) findViewById(R.id.input_name);
         gender = (EditText) findViewById(R.id.input_gender);
-        weight = (EditText) findViewById(R.id.weight);
+        weight = (EditText) findViewById(R.id.input_weight);
         age = (EditText) findViewById(R.id.input_age);
         saveChangesButton = (Button) findViewById(R.id.btn_saveChanges);
-
-
+        loadData();
 
         saveChangesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,52 +62,56 @@ public class ProfileActivity extends AppCompatActivity {
                 boolean check = validate();
                 if (check) {
 
-                    saveChanges();
-
-                    final ProgressDialog pd = new ProgressDialog(ProfileActivity.this);
-                    pd.setTitle("Saving changes...");
-                    pd.setMessage("Please wait.");
-                    pd.setCancelable(false);
-                    pd.setIndeterminate(true);
-                    pd.show();
-
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            pd.dismiss();
-                        }
-                    }, 2000); // 2000 milliseconds delay
-
-
-
-                    height.setText("");
-                    username.setText("");
-                    height.setText("");
-                    age.setText("");
-                    gender.setText("");
-                    weight.setText("");
-
+                    updateData();
                 }
             }
         });
     }
 
-    public void saveChanges()
+    private void loadData() {
+
+
+        height.setText(Integer.toString(myData.getHeight()));
+        age.setText(Integer.toString(myData.getAge()));
+        weight.setText(Integer.toString(myData.getWeight()));
+        gender.setText(myData.getGender());
+        username.setText(myData.getUsername());
+
+    }
+
+    public void updateData()
     {
-        final BackendlessUser user = new BackendlessUser();
+        myData.setAge(Integer.parseInt(age.getText().toString()));
+        myData.setGender(gender.getText().toString());
+        myData.setHeight(Integer.parseInt(height.getText().toString()));
+        myData.setWeight(Integer.parseInt(weight.getText().toString()));
+        myData.setUsername(username.getText().toString());
 
-        // save object asynchronously
+        final ProgressDialog pd = new ProgressDialog(ProfileActivity.this);
+        pd.setTitle("Saving changes...");
+        pd.setMessage("Please wait.");
+        pd.setCancelable(false);
+        pd.setIndeterminate(true);
+        pd.show();
 
-        Backendless.Persistence.save(new saveProfileChanges(username.getText().toString(), Integer.parseInt(height.getText().toString()),
-        Integer.parseInt(age.getText().toString()), gender.getText().toString(), Integer.parseInt(weight.getText().toString()), 12, 111, 1345), new BackendlessCallback<saveProfileChanges>()
+        Backendless.Persistence.of(UserProfileData.class).save(myData, new AsyncCallback<UserProfileData>()
         {
             @Override
-            public void handleResponse( saveProfileChanges change )
+            public void handleResponse(UserProfileData updatedData)
             {
-                Log.i( "Changes", "Got new changes from " + user.getEmail() );
+                System.out.println("Person's name after update " + updatedData.toString());
+                pd.dismiss();
+                Toast.makeText(getBaseContext(), "Success!", Toast.LENGTH_LONG).show();
             }
-        } );
 
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                pd.dismiss();
+                Toast.makeText(getBaseContext(), "Failure!", Toast.LENGTH_LONG).show();
+
+
+            }
+        });
     }
 
     public void onClick(View v) {
@@ -148,17 +144,16 @@ public class ProfileActivity extends AppCompatActivity {
 
     public boolean validate() {
         boolean valid = true;
-        String name = username.getText().toString();
         String emailText = height.getText().toString();
 
-
+/*
         if (name.length() < 3) {
             username.setError("at least 3 characters");
             valid = false;
         } else {
             username.setError(null);
         }
-
+*/
         return valid;
     }
 

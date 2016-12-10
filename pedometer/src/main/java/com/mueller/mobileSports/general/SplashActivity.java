@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.pedometer.general;
+package com.mueller.mobileSports.general;
 
 import android.content.Intent;
 import android.os.Bundle;

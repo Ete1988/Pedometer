@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.pedometer.heartRate.HRMUtility;
+package com.mueller.mobileSports.heartRate.HRMUtility;
 
 /**
  * Created by Ete on 17/11/2016.

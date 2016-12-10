@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_statistics"
-    android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mueller.mobileSports.pedometer.general.StatisticsActivity">
+    android:background="@color/background"
+    tools:context="com.mueller.mobileSports.general.StatisticsActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -18,59 +18,59 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <TextView
-        android:text=" "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/dayCountView"
-        android:layout_marginTop="16dp"
-        android:textSize="24sp"
-        android:textAllCaps="true"
-        android:layout_below="@+id/dayCount"
-        android:layout_alignRight="@+id/weekCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/weekCount"
-        android:textStyle="normal|bold"
-        android:layout_marginLeft="50dp" />
-
-    <TextView
-        android:text=" "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/weekCountView"
-        android:textSize="24sp"
-        android:textStyle="normal|bold"
-        android:textAllCaps="true"
-        android:layout_marginTop="23dp"
-        android:layout_marginLeft="50dp"
-        android:layout_below="@+id/weekCount"
         android:layout_alignRight="@+id/weekCount"
-        android:layout_alignEnd="@+id/weekCount" />
+        android:layout_below="@+id/dayCount"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="16dp"
+        android:text=" "
+        android:textAllCaps="true"
+        android:textSize="24sp"
+        android:textStyle="normal|bold" />
 
     <TextView
-        android:text="@string/steps_today"
+        android:id="@+id/weekCountView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/weekCount"
+        android:layout_alignRight="@+id/weekCount"
+        android:layout_below="@+id/weekCount"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="23dp"
+        android:text=" "
+        android:textAllCaps="true"
+        android:textSize="24sp"
+        android:textStyle="normal|bold" />
+
+    <TextView
         android:id="@+id/dayCount"
-        android:textSize="18sp"
-        android:textStyle="normal|bold|italic"
-        android:textAlignment="center"
-        android:layout_below="@+id/my_toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/my_toolbar"
         android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp" />
+        android:layout_marginStart="8dp"
+        android:text="@string/steps_today"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="normal|bold|italic" />
 
     <TextView
-        android:text="@string/steps_this_week"
+        android:id="@+id/weekCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:id="@+id/weekCount"
-        android:textSize="18sp"
-        android:textStyle="normal|bold|italic"
-        android:textAlignment="center"
-        android:layout_below="@+id/dayCountView"
         android:layout_alignLeft="@+id/dayCount"
-        android:layout_alignStart="@+id/dayCount" />
+        android:layout_alignStart="@+id/dayCount"
+        android:layout_below="@+id/dayCountView"
+        android:layout_marginTop="20dp"
+        android:text="@string/steps_this_week"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="normal|bold|italic" />
 
 </RelativeLayout>
 

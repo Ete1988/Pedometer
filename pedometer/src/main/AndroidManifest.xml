@@ -18,7 +18,7 @@
 
         <!-- Splash screen on startup -->
         <activity
-            android:name="com.mueller.mobileSports.pedometer.general.SplashActivity"
+            android:name="com.mueller.mobileSports.general.SplashActivity"
             android:label="@string/app_name"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -31,21 +31,21 @@
             android:name="com.mueller.mobileSports.pedometer.PedometerActivity"
             android:label="@string/app_name" />
         <activity
-            android:name="com.mueller.mobileSports.pedometer.account.LoginActivity"
+            android:name="com.mueller.mobileSports.account.LoginActivity"
             android:label="Pedometer" />
         <activity
-            android:name="com.mueller.mobileSports.pedometer.general.SettingsActivity"
+            android:name="com.mueller.mobileSports.general.SettingsActivity"
             android:label="Settings" />
         <activity
-            android:name="com.mueller.mobileSports.pedometer.account.ProfileActivity"
+            android:name="com.mueller.mobileSports.account.ProfileActivity"
             android:label="Edit Profile" />
         <activity
-            android:name="com.mueller.mobileSports.pedometer.account.RegisterActivity"
+            android:name="com.mueller.mobileSports.account.RegisterActivity"
             android:label="Register" />
         <activity
-            android:name="com.mueller.mobileSports.pedometer.general.StatisticsActivity"
+            android:name="com.mueller.mobileSports.general.StatisticsActivity"
             android:label="@string/title_activity_statistics" />
-        <activity android:name="com.mueller.mobileSports.pedometer.heartRate.HeartRateActivity" />
+        <activity android:name="com.mueller.mobileSports.heartRate.HeartRateActivity" />
     </application>
 
 </manifest>

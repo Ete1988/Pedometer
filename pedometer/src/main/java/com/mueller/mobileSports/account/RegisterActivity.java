@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.pedometer.account;
+package com.mueller.mobileSports.account;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -27,8 +27,9 @@ import butterknife.ButterKnife;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    @Bind(R.id.input_name)
-    EditText _nameText;
+    private final static String APP_ID = "61D5CC9D-40B5-4853-FF2F-BCFDD7F64700";
+    private final static String SECRET_KEY = "76967CB3-F1DE-308D-FF0F-6BA915A44300";
+    private final static String APPVERSION = "v1";
     @Bind(R.id.input_email)
     EditText _emailText;
     @Bind(R.id.password)
@@ -39,12 +40,6 @@ public class RegisterActivity extends AppCompatActivity {
     Button _signupButton;
     @Bind(R.id.link_login)
     TextView _loginLink;
-
-
-    private final static String APP_ID = "61D5CC9D-40B5-4853-FF2F-BCFDD7F64700";
-    private final static String SECRET_KEY = "76967CB3-F1DE-308D-FF0F-6BA915A44300";
-    private final static String APPVERSION = "v1";
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,12 +60,11 @@ public class RegisterActivity extends AppCompatActivity {
 
                     String email = _emailText.getText().toString();
                     String password = _passwordText.getText().toString();
-                    String username = _nameText.getText().toString();
+
 
                     BackendlessUser user = new BackendlessUser();
                     user.setEmail(email);
                     user.setPassword(password);
-                    user.setProperty("name", username);
 
                     final ProgressDialog pd = new ProgressDialog(RegisterActivity.this);
                     pd.setTitle("Creating account...");
@@ -112,18 +106,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     public boolean validate() {
         boolean valid = true;
-        String name = _nameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
         String confirmPassword = _confirmPasswordText.getText().toString();
-
-
-        if (name.isEmpty() || name.length() < 3) {
-            _nameText.setError("at least 3 characters");
-            valid = false;
-        } else {
-            _nameText.setError(null);
-        }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             _emailText.setError("enter a valid email address");
