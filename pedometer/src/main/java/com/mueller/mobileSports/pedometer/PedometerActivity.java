@@ -21,10 +21,14 @@ import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.lylc.widget.circularprogressbar.CircularProgressBar;
-import com.mueller.mobileSports.general.LoginActivity;
+import com.mueller.mobileSports.general.AlertDialogManager;
+import com.mueller.mobileSports.account.LoginActivity;
 import com.mueller.mobileSports.general.SettingsActivity;
 import com.mueller.mobileSports.general.StatisticsActivity;
+import com.mueller.mobileSports.account.SessionManager;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
+
+import java.util.HashMap;
 
 
 public class PedometerActivity extends AppCompatActivity implements SensorEventListener {
@@ -32,9 +36,15 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
     private CircularProgressBar cBar;
     private SensorManager sensorManager;
     private TextView date;
-    private int stepsOverWeek;
-    private int stepsOverDay;
+    private int stepsOverWeek, stepsOverDay;
     private sharedValues values;
+
+    // Alert Dialog Manager
+    AlertDialogManager alert = new AlertDialogManager();
+
+    // Session Manager Class
+    SessionManager session;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +59,33 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
         cBar.setSubTitle("Steps");
         values.checkTime();
         getData();
+
+        // Session class instance
+        session = new SessionManager(getApplicationContext());
+
+        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
+
+
+        /**
+         * Call this function whenever you want to check user login
+         * This will redirect user to LoginActivity is he is not
+         * logged in
+         * */
+        session.checkLogin();
+
+        // get user data from session
+        HashMap<String, String> user = session.getUserDetails();
+
+        // name
+        String name = user.get(SessionManager.KEY_NAME);
+
+        // email
+        String email = user.get(SessionManager.KEY_EMAIL);
+
+        // displaying user data
+        //cBar.setTitle("Name: <b>" + name + "</b>");
+        //cBar.setSubTitle("Email: <b>" + email + "</b>");
+
     }
 
 

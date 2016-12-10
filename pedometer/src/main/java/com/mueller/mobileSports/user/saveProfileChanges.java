@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.general;
+package com.mueller.mobileSports.user;
 
 import java.io.File;
 
@@ -7,14 +7,8 @@ import java.io.File;
  */
 
 public class saveProfileChanges {
-    private String username;
-    private int height;
-    private int age;
-    private String gender;
-    private int weight;
-    private int heartRate;
-    private int weeklyStepCount;
-    private int monthlyStepCount;
+    private String username, gender;
+    private int height, age,weight, heartRate, weeklyStepCount, monthlyStepCount;
     private File uploadedFile;
 
     public saveProfileChanges(){}

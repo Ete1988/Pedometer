@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.general;
+package com.mueller.mobileSports.account;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -18,6 +18,7 @@ import android.widget.EditText;
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.BackendlessCallback;
+import com.mueller.mobileSports.user.saveProfileChanges;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 
 import java.io.File;
@@ -25,22 +26,18 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 
+/**
+ * Created by Sandra on 8/10/2016.
+ * A profile screen to display and edit user profile data
+ */
+
 public class ProfileActivity extends AppCompatActivity {
 
     public static final int GET_FROM_GALLERY = 3;
-    private EditText username;
-    private EditText height;
-    private EditText age;
-    private EditText gender;
-    private EditText weight;
-    private int heartRate;
-    private int weeklyStepCount;
-    private int monthlyStepCount;
-
-    private Date created;
-    private Date updated;
+    private EditText username, height, age, gender, weight;
+    private int heartRate, weeklyStepCount, monthlyStepCount;
+    private Date created, updated;
     private File uploadedFile;
-
     private Button saveChangesButton;
 
     public static String APP_ID = "61D5CC9D-40B5-4853-FF2F-BCFDD7F64700";
@@ -102,9 +99,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
 
     public void saveChanges()
     {

@@ -8,12 +8,14 @@ import android.widget.TextView;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.sharedValues;
 
+/**
+ * Created by Ete on 8/10/2016.
+ */
 
 public class StatisticsActivity extends AppCompatActivity {
 
     private sharedValues values;
-    private TextView dayCount;
-    private TextView weekCount;
+    private TextView dayCount,weekCount;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -12,15 +12,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.mueller.mobileSports.account.ProfileActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.sharedValues;
 
+/**
+ * Created by Ete on 11/10/2016.
+ */
+
 public class SettingsActivity extends AppCompatActivity {
 
-    private int physicalActivityLevel;
-    private int goal;
-    private TextView level;
-    private TextView stepGoal;
+    private int physicalActivityLevel, goal;
+    private TextView level,stepGoal;
     private sharedValues values;
 
     private String[] goal_arr = {"5000", "6000", "7000", "8000", "9000", "10000", "Other? Please set here!"};

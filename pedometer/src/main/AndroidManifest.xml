@@ -15,7 +15,8 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <!--Main-->
+
+   <!-- Splash screen on startup -->
         <activity
             android:theme="@style/SplashTheme"
             android:name="com.mueller.mobileSports.general.SplashActivity"
@@ -27,39 +28,19 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.mueller.mobileSports.general.LoginActivity"
+        <activity android:name="com.mueller.mobileSports.pedometer.PedometerActivity"
             android:label="@string/app_name"/>
         <activity
-            android:name="com.mueller.mobileSports.pedometer.PedometerActivity"
+            android:name="com.mueller.mobileSports.account.LoginActivity"
             android:label="Pedometer" />
-
-       <!--Main-->
-
-        <!--Default
-
-           <activity
-            android:name="com.mueller.mobileSports.pedometer.PedometerActivity"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name="com.mueller.mobileSports.general.LoginActivity"
-            android:label="@string/app_name"/>
-
-        Default-->
-
         <activity
             android:name="com.mueller.mobileSports.general.SettingsActivity"
             android:label="Settings" />
         <activity
-            android:name="com.mueller.mobileSports.general.ProfileActivity"
+            android:name="com.mueller.mobileSports.account.ProfileActivity"
             android:label="Edit Profile" />
         <activity
-            android:name="com.mueller.mobileSports.general.RegisterActivity"
+            android:name="com.mueller.mobileSports.account.RegisterActivity"
             android:label="Register" />
         <activity
             android:name="com.mueller.mobileSports.general.StatisticsActivity"

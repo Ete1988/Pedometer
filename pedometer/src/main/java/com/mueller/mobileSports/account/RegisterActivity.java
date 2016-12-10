@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.general;
+package com.mueller.mobileSports.account;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -20,6 +20,11 @@ import com.mueller.mobileSports.pedometer.MainActivity.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+/**
+ * Created by Sandra on 8/10/2016.
+ * A register screen to create a new user account
+ */
 
 public class RegisterActivity extends AppCompatActivity {
 
