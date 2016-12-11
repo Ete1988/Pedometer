@@ -16,6 +16,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.mueller.mobileSports.general.AlertDialogManager;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
+import com.mueller.mobileSports.user.UserProfileData;
 
 
 /**
@@ -28,13 +29,14 @@ public class LoginActivity extends AppCompatActivity {
     EditText txtEmail,txtPassword;
     Button loginButton;
     SessionManager session;
+    UserProfileData myData;
 
     // Alert Dialog Manager
     AlertDialogManager alert = new AlertDialogManager();
     AsyncCallback<BackendlessUser> loginResponder = new AsyncCallback<BackendlessUser>() {
         @Override
         public void handleResponse(BackendlessUser backendlessUser) {
-
+            Backendless.UserService.setCurrentUser(backendlessUser);
             Toast.makeText(getBaseContext(), "Thanks for logging in!", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(getApplicationContext(), PedometerActivity.class);
             startActivity(intent);
@@ -63,6 +65,8 @@ public class LoginActivity extends AppCompatActivity {
                 login();
             }
         });
+        myData = new UserProfileData();
+        System.out.println(myData.toString());
 
 
     }
@@ -90,7 +94,6 @@ public class LoginActivity extends AppCompatActivity {
         // Check if username, password is filled
         if(email.trim().length() > 0 && password.trim().length() > 0){
             final ProgressDialog progress = new ProgressDialog(this);
-
 
             progress.setTitle("Loading");
             progress.setMessage("Wait while loading...");

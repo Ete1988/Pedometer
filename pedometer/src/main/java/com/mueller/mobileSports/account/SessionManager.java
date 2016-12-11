@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.BackendlessDataQuery;
 import com.backendless.persistence.local.UserTokenStorageFactory;
 import com.mueller.mobileSports.user.UserProfileData;
 
@@ -66,6 +68,8 @@ public class SessionManager {
 
         if (this.isLoggedIn()) {
 
+            myData.deleteAll();
+            System.out.println(myData.toString());
             Backendless.UserService.logout(logoutResponder);
             // After logout redirect user to Loing Activity
             Intent i = new Intent(_context, LoginActivity.class);
@@ -100,6 +104,7 @@ public class SessionManager {
     private void loadCurrentUser() {
 
         String currentUserId = Backendless.UserService.loggedInUser();
+        System.out.println(currentUserId);
         Backendless.UserService.findById(currentUserId, new AsyncCallback<BackendlessUser>() {
             @Override
             public void handleResponse(BackendlessUser currentUser) {
@@ -114,10 +119,20 @@ public class SessionManager {
     }
 
     private void loadCurrentUserData() {
-        Backendless.Persistence.of(UserProfileData.class).findFirst(new AsyncCallback<UserProfileData>() {
+        String currentUserId = Backendless.UserService.loggedInUser();
+        String whereClause = "ownerID = '" + currentUserId + "'";
+        BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+        dataQuery.setWhereClause(whereClause);
+
+        Backendless.Persistence.of(UserProfileData.class).find(dataQuery, new AsyncCallback<BackendlessCollection<UserProfileData>>() {
             @Override
-            public void handleResponse(UserProfileData data) {
-                myData = data;
+            public void handleResponse(BackendlessCollection<UserProfileData> data) {
+                if (data.getTotalObjects() == 0) {
+                    myData = new UserProfileData("", "", "", 0, 0, 0, 0, 0, 0, 0, 0, null);
+                } else {
+                    myData = data.getData().get(0);
+                }
+
             }
 
             @Override

@@ -13,22 +13,26 @@ public class UserProfileData {
 
     private static String username, gender, objectId;
     private static int height, age, weight, heartRate, weeklyStepCount, monthlyStepCount, activityLevel, stepGoal;
-    private File uploadedFile;
+    private static File uploadedFile;
 
     public UserProfileData() {
     }
 
-    public UserProfileData(int height, int age, String gender, int weight, int heartRate, int weeklyStepCount, int monthlyStepCount) {
+    public UserProfileData(String username, String gender, String objectId, int age, int height, int weight, int heartRate, int weeklyStepCount, int monthlyStepCount, int activityLevel, int stepGoal, File uploadedFile) {
 
-        UserProfileData.age = age;
-        UserProfileData.gender = gender;
-        UserProfileData.weight = weight;
-        UserProfileData.heartRate = heartRate;
-        UserProfileData.weeklyStepCount = weeklyStepCount;
-        UserProfileData.monthlyStepCount = monthlyStepCount;
-        UserProfileData.height = height;
+        setUsername(username);
+        setGender(gender);
+        setObjectId(objectId);
+        setAge(age);
+        setHeight(height);
+        setWeight(weight);
+        setHeartRate(heartRate);
+        setWeeklyStepCount(weeklyStepCount);
+        setMonthlyStepCount(monthlyStepCount);
+        setActivityLevel(activityLevel);
+        setStepGoal(stepGoal);
+        setUploadedFile(uploadedFile);
     }
-
     public UserProfileData(UserProfileData data) {
         age = data.getAge();
         gender = data.getGender();
@@ -135,9 +139,23 @@ public class UserProfileData {
     }
 
     public void setUploadedFile(File uploadedFile) {
-        this.uploadedFile = uploadedFile;
+        UserProfileData.uploadedFile = uploadedFile;
     }
 
+    public void deleteAll() {
+        this.setAge(0);
+        this.setHeight(0);
+        this.setUsername("");
+        this.setWeight(0);
+        this.setStepGoal(0);
+        this.setActivityLevel(0);
+        this.setHeartRate(0);
+        this.setMonthlyStepCount(0);
+        this.setGender("");
+        this.setObjectId(null);
+        this.setUploadedFile(null);
+
+    }
     //Used for some testing only
     @Override
     public String toString() {
