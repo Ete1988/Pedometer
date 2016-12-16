@@ -44,6 +44,7 @@
     <string name="emptyString" />
     <string name="set_goals">Set Goals</string>
     <string name="steps_today">Steps today</string>
+    <string name="default_timer">00:00:00</string>
 
     <!-- Settings -->
 

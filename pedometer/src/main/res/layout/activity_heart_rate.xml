@@ -34,6 +34,7 @@
             android:layout_toStartOf="@+id/HRMStatsBtn"
             android:background="@null"
             android:clickable="true"
+            android:contentDescription="@string/emptyString"
             android:scaleType="fitXY"
             android:src="@mipmap/ic_heart"
             android:visibility="visible" />
@@ -47,6 +48,7 @@
             android:layout_toEndOf="@+id/HRMStatsBtn"
             android:background="@null"
             android:clickable="true"
+            android:contentDescription="@string/emptyString"
             android:scaleType="fitXY"
             android:src="@color/black_overlay"
             android:visibility="visible" />
@@ -59,31 +61,53 @@
             android:layout_centerHorizontal="true"
             android:background="@null"
             android:clickable="true"
+            android:contentDescription="@string/emptyString"
             android:scaleType="fitXY"
             android:src="@mipmap/ic_stats"
             android:visibility="visible" />
 
-    </RelativeLayout>
 
-    <ToggleButton
-        android:id="@+id/stopWatchToggleButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/timeTextView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="85dp"
-        android:background="@drawable/toggle_button"
-        android:text="ToggleButton"
-        android:textOff=""
-        android:textOn="" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/timeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/my_toolbar"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="143dp"
-        android:text="00:00:00" />
+        android:layout_marginTop="48dp"
+        android:fontFamily="sans-serif"
+        android:text="@string/default_timer"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textSize="24sp"
+        android:textStyle="normal|bold" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timeTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:id="@+id/iv_start_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:layout_marginEnd="27dp"
+            android:contentDescription="@string/emptyString"
+            app:srcCompat="@mipmap/ic_start" />
+
+        <ImageView
+            android:id="@+id/iv_reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/emptyString"
+            app:srcCompat="@mipmap/ic_reset" />
+
+
+    </LinearLayout>
 
 
 </RelativeLayout>
