@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Activity titles -->
     <string name="app_name">Pedometer</string>
-    <string name="title_activity_login">Sign in</string>
-    <string name="title_activity_account">AccountActivity</string>
-    <string name="title_activity_settings">SettingsActivity</string>
-    <string name="title_activity_statistics">Statistics</string>
 
-    <!-- Menu -->
+    <!-- Strings related to menu bar -->
     <string name="menu_settings">Settings</string>
 
-    <!-- Statistics Layout -->
+    <!-- Strings related to statistics layout -->
     <string name="steps_this_week">Steps this week:</string>
     <string name="step_goal">Step goal:</string>
 
-    <!-- Settings Layout -->
+    <!-- Strings related to settings layout -->
     <string name="accountDetails">Edit Profile</string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="activity_level">Activity level:</string>
+    <string name="set_activity_level">set activity level</string>
 
-    <!-- Profile -->
+    <!-- Strings related to profile layout -->
     <string name="hint_name">Name</string>
     <string name="hint_height">Height</string>
     <string name="hint_age">Age</string>
@@ -29,7 +26,7 @@
     <string name="err_msg_email">Enter valid height address</string>
 
 
-    <!-- Strings related to login -->
+    <!-- Strings related to login layout -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
@@ -43,12 +40,12 @@
         completions."
     </string>
 
+
     <string name="emptyString" />
     <string name="set_goals">Set Goals</string>
     <string name="steps_today">Steps today</string>
-    <string name="title_activity_par_quest">parQuest</string>
-    <string name="activity_level">Activity level:</string>
-    <string name="level">level</string>
-    <string name="set_activity_level">set activity level</string>
+
+    <!-- Settings -->
+
 
 </resources>

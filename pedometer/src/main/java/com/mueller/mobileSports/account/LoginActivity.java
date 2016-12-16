@@ -14,6 +14,8 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.mueller.mobileSports.general.AlertDialogManager;
+import com.mueller.mobileSports.heartRate.HRMUtility.HeartRateMonitor;
+import com.mueller.mobileSports.heartRate.HRMUtility.SimulationHRM;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
 import com.mueller.mobileSports.user.UserProfileData;
@@ -26,8 +28,8 @@ import com.mueller.mobileSports.user.UserProfileData;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText txtEmail,txtPassword;
-    Button loginButton;
+    EditText mEmailText, mPasswordText;
+    Button mLoginButton;
     SessionManager session;
     UserProfileData myData;
 
@@ -56,40 +58,43 @@ public class LoginActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         setTitle("Pedometer");
         session = new SessionManager(getApplicationContext());
-        loginButton = (Button) findViewById(R.id.email_sign_in_button);
-        txtEmail = (EditText) findViewById(R.id.input_email);
-        txtPassword = (EditText) findViewById(R.id.password);
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        mLoginButton = (Button) findViewById(R.id.email_sign_in_button);
+        mEmailText = (EditText) findViewById(R.id.input_email);
+        mPasswordText = (EditText) findViewById(R.id.password);
+        myData = new UserProfileData();
+        mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 login();
             }
         });
-        myData = new UserProfileData();
-        System.out.println(myData.toString());
-
-
     }
 
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
 
-
     }
 
-    public void onClick(View v) {
+    public void onClickLogin(View v) {
         if (v.getId() == R.id.register_button) {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
+        }
+
+        if (v.getId() == R.id.test_button) {
+            HeartRateMonitor hrm = new SimulationHRM(this);
+
+            hrm.getHeartRate();
+
         }
 
     }
 
     public void login () {
         //Get username, password from EditText
-        String email = txtEmail.getText().toString();
-        String password = txtPassword.getText().toString();
+        String email = mEmailText.getText().toString();
+        String password = mPasswordText.getText().toString();
 
         // Check if username, password is filled
         if(email.trim().length() > 0 && password.trim().length() > 0){

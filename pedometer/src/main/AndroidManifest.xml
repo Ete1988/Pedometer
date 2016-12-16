@@ -32,7 +32,7 @@
             android:label="@string/app_name" />
         <activity
             android:name="com.mueller.mobileSports.account.LoginActivity"
-            android:label="Pedometer" />
+            android:label="Login" />
         <activity
             android:name="com.mueller.mobileSports.general.SettingsActivity"
             android:label="Settings" />
@@ -44,8 +44,10 @@
             android:label="Register" />
         <activity
             android:name="com.mueller.mobileSports.general.StatisticsActivity"
-            android:label="@string/title_activity_statistics" />
-        <activity android:name="com.mueller.mobileSports.heartRate.HeartRateActivity" />
+            android:label="Statistics" />
+        <activity
+            android:name="com.mueller.mobileSports.heartRate.HeartRateActivity"
+            android:label="Heart-Rate Monitor" />
     </application>
 
 </manifest>

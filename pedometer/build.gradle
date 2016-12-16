@@ -22,6 +22,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.android.support:design:24.0.0'
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile project(':library')
+    compile project(':libary')
     compile project(':backendless')
+    compile files('D:/PersonalStuff/Uni/Programmierung/Android/MobileSports/Pedometer/Libs/opencsv-3.8.jar')
 }

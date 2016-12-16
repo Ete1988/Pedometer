@@ -4,11 +4,10 @@ package com.mueller.mobileSports.heartRate.HRMUtility;
  * Created by Ete on 17/11/2016.
  */
 
-public class HRMFactory extends SensorFactory {
+public interface HeartRateMonitor {
 
 
-    @Override
-    public void createHRM() {
+    int getHeartRate();
 
-    }
+
 }

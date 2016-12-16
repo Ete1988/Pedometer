@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="40dp"
-            android:fontFamily="sans-serif-medium"
+            android:fontFamily="sans-serionf-medium"
             android:text="Create Account"
             android:textColor="@android:color/black"
             android:textStyle="normal|bold" />
@@ -77,7 +77,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:gravity="center"
-            android:onClick="onClick"
             android:paddingTop="20dp"
             android:text="Already have an account? Login"
             android:textSize="16sp" />

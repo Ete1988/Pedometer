@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.mueller.mobileSports.account.ProfileActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
-import com.mueller.mobileSports.pedometer.sharedValues;
 import com.mueller.mobileSports.user.UserProfileData;
 
 /**
@@ -23,14 +22,13 @@ import com.mueller.mobileSports.user.UserProfileData;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private int physicalActivityLevel, goal;
-    private TextView level,stepGoal;
-    private sharedValues values;
+    private int physicalActivityLevel, StepGoal;
+    private TextView mActivityLevelText, mCurrentStepGoalText;
     private UserProfileData myData;
 
-    private String[] goal_arr = {"5000", "6000", "7000", "8000", "9000", "10000", "Other? Please set here!"};
+    private String[] goalsValuesArray = {"5000", "6000", "7000", "8000", "9000", "10000", "Other? Please set here!"};
 
-    private String[] actLevel_arr = {"0: Avoid walking or exertion, for example, always use elevator, drive " +
+    private String[] activityLevelTextArray = {"0: Avoid walking or exertion, for example, always use elevator, drive " +
             "whenever possible instead of walking",
             "1: Walk for pleasure, routinely use stairs, occasionally exercise " +
                     "sufficiently to cause heavy breathing or perspiration",
@@ -51,14 +49,11 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        level = (TextView) findViewById(R.id.level);
-        stepGoal = (TextView) findViewById(R.id.stepGoalView);
+        mActivityLevelText = (TextView) findViewById(R.id.level);
+        mCurrentStepGoalText = (TextView) findViewById(R.id.stepGoalView);
         myData = new UserProfileData();
-        values = sharedValues.getInstance(this);
-        //physicalActivityLevel = values.getInt("physicalActivityLevel");
         physicalActivityLevel = myData.getActivityLevel();
-        //goal = values.getInt("stepGoal");
-        goal = myData.getStepGoal();
+        StepGoal = myData.getStepGoal();
 
         setLevel();
         setGoal();
@@ -67,7 +62,7 @@ public class SettingsActivity extends AppCompatActivity {
         setTitle("Settings");
     }
 
-    public void onClick(View v) {
+    public void onClickSettings(View v) {
         if (v.getId() == R.id.editProfileButton) {
             Intent intent = new Intent(SettingsActivity.this, ProfileActivity.class);
             startActivity(intent);
@@ -77,8 +72,8 @@ public class SettingsActivity extends AppCompatActivity {
     public void setActivityLevelDialog(View v) {
 
         AlertDialog.Builder activityLevelDialog = new AlertDialog.Builder(this);
-        activityLevelDialog.setTitle("Select your activity level");
-        activityLevelDialog.setSingleChoiceItems(actLevel_arr, -1, new DialogInterface
+        activityLevelDialog.setTitle("Select your activity mActivityLevelText");
+        activityLevelDialog.setSingleChoiceItems(activityLevelTextArray, -1, new DialogInterface
                 .OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 physicalActivityLevel = item;
@@ -94,11 +89,11 @@ public class SettingsActivity extends AppCompatActivity {
     public void setGoalDialog(View v) {
 
         AlertDialog.Builder activityLevelDialog = new AlertDialog.Builder(this);
-        activityLevelDialog.setTitle("Set your goal for today");
-        activityLevelDialog.setSingleChoiceItems(goal_arr, -1, new DialogInterface
+        activityLevelDialog.setTitle("Set your StepGoal for today");
+        activityLevelDialog.setSingleChoiceItems(goalsValuesArray, -1, new DialogInterface
                 .OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
-                goal = item;
+                StepGoal = item;
                 setGoal();
                 dialog.dismiss();
 
@@ -120,10 +115,9 @@ public class SettingsActivity extends AppCompatActivity {
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int positiveButton) {
                 String foo = input.getText().toString();
-                goal = Integer.parseInt(foo);
-                stepGoal.setText(input.getText());
-                //values.saveInt("stepGoal", goal);
-                myData.setStepGoal(goal);
+                StepGoal = Integer.parseInt(foo);
+                mCurrentStepGoalText.setText(input.getText());
+                myData.setStepGoal(StepGoal);
                 dialog.dismiss();
 
             }
@@ -131,9 +125,7 @@ public class SettingsActivity extends AppCompatActivity {
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int negativeButton) {
                 //Put actions for CANCEL button here, or leave in blank
-
-                //stepGoal.setText(Integer.toString(values.getInt("stepGoal")));
-                stepGoal.setText(Integer.toString(myData.getStepGoal()));
+                mCurrentStepGoalText.setText(Integer.toString(myData.getStepGoal()));
                 dialog.dismiss();
 
             }
@@ -146,64 +138,73 @@ public class SettingsActivity extends AppCompatActivity {
 
         switch (physicalActivityLevel) {
             case 0:
-                level.setText("0");
+                mActivityLevelText.setText("0");
                 break;
             case 1:
-                level.setText("1");
+                mActivityLevelText.setText("1");
                 break;
             case 2:
-                level.setText("2");
+                mActivityLevelText.setText("2");
                 break;
             case 3:
-                level.setText("3");
+                mActivityLevelText.setText("3");
                 break;
             case 4:
-                level.setText("4");
+                mActivityLevelText.setText("4");
                 break;
             case 5:
-                level.setText("5");
+                mActivityLevelText.setText("5");
                 break;
             case 6:
-                level.setText("6");
+                mActivityLevelText.setText("6");
                 break;
             case 7:
-                level.setText("7");
+                mActivityLevelText.setText("7");
                 break;
             default:
-                level.setText(" ");
+                mActivityLevelText.setText(" ");
                 break;
         }
 
-        //values.saveInt("physicalActivityLevel", physicalActivityLevel);
         myData.setActivityLevel(physicalActivityLevel);
     }
 
     private void setGoal() {
 
-        switch (goal) {
+        switch (StepGoal) {
 
             case 0:
-                goal = 5000;stepGoal.setText("5000");break;
+                StepGoal = 5000;
+                mCurrentStepGoalText.setText("5000");
+                break;
             case 1:
-                goal = 6000;stepGoal.setText("6000");break;
+                StepGoal = 6000;
+                mCurrentStepGoalText.setText("6000");
+                break;
             case 2:
-                goal = 7000;stepGoal.setText("7000");break;
+                StepGoal = 7000;
+                mCurrentStepGoalText.setText("7000");
+                break;
             case 3:
-                goal = 8000;stepGoal.setText("8000");break;
+                StepGoal = 8000;
+                mCurrentStepGoalText.setText("8000");
+                break;
             case 4:
-                goal = 9000;stepGoal.setText("9000");break;
+                StepGoal = 9000;
+                mCurrentStepGoalText.setText("9000");
+                break;
             case 5:
-                goal = 10000;stepGoal.setText("10000");break;
+                StepGoal = 10000;
+                mCurrentStepGoalText.setText("10000");
+                break;
             case 6:
                 editGoal();
                 break;
             default:
-                // stepGoal.setText(Integer.toString(values.getInt("stepGoal")));
-                stepGoal.setText(Integer.toString(myData.getStepGoal()));
+                mCurrentStepGoalText.setText(Integer.toString(myData.getStepGoal()));
                 break;
         }
-        //values.saveInt("stepGoal", goal);
-        myData.setStepGoal(goal);
+        myData.setStepGoal(StepGoal);
     }
 }
 

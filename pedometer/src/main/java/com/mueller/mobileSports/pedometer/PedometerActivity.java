@@ -21,6 +21,7 @@ import com.lylc.widget.circularprogressbar.CircularProgressBar;
 import com.mueller.mobileSports.account.SessionManager;
 import com.mueller.mobileSports.general.SettingsActivity;
 import com.mueller.mobileSports.general.StatisticsActivity;
+import com.mueller.mobileSports.heartRate.HeartRateActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.user.UserProfileData;
 
@@ -33,7 +34,7 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
     private SensorManager sensorManager;
     private TextView date;
     private int stepsOverWeek, stepsOverDay;
-    private sharedValues values;
+    private SharedValues values;
     private UserProfileData myData;
 
 
@@ -45,7 +46,7 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        values = sharedValues.getInstance(this);
+        values = SharedValues.getInstance(this);
         myData = new UserProfileData();
         date = (TextView) findViewById(R.id.date);
         cBar = (CircularProgressBar) findViewById(R.id.circularprogressbar3);
@@ -61,7 +62,6 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
     private void getData() {
         stepsOverDay = values.getInt("dayCount");
         stepsOverWeek = myData.getWeeklyStepCount();
-        //stepsOverWeek = values.getInt("weekCount");
         date.setText(values.getString("checkDate"));
         cBar.setMax(values.getInt("stepGoal"));
     }
@@ -70,7 +70,6 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
 
         myData.setWeeklyStepCount(stepsOverWeek);
         values.saveInt("dayCount", stepsOverDay);
-        //values.saveInt("weekCount", stepsOverWeek);
     }
 
     @Override
@@ -80,10 +79,13 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
         return true;
     }
 
-    public void onClick(View v) {
-        if (v.getId() == R.id.statsBtn) {
-            updateData();
+    public void onClickPedometer(View v) {
+        updateData();
+        if (v.getId() == R.id.PedometerStatsBtn) {
             Intent intent = new Intent(PedometerActivity.this, StatisticsActivity.class);
+            startActivity(intent);
+        } else if (v.getId() == R.id.PedometerHeartBtn) {
+            Intent intent = new Intent(PedometerActivity.this, HeartRateActivity.class);
             startActivity(intent);
         }
     }

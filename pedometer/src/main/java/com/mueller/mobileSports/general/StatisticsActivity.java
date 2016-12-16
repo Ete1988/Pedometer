@@ -6,7 +6,8 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.mueller.mobileSports.pedometer.MainActivity.R;
-import com.mueller.mobileSports.pedometer.sharedValues;
+import com.mueller.mobileSports.pedometer.SharedValues;
+import com.mueller.mobileSports.user.UserProfileData;
 
 /**
  * Created by Ete on 8/10/2016.
@@ -14,15 +15,17 @@ import com.mueller.mobileSports.pedometer.sharedValues;
 
 public class StatisticsActivity extends AppCompatActivity {
 
-    private sharedValues values;
+    private SharedValues values;
     private TextView dayCount,weekCount;
+    private UserProfileData myData;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        values = sharedValues.getInstance(this);
+        myData = new UserProfileData();
+        values = SharedValues.getInstance(this);
         dayCount = (TextView) findViewById(R.id.dayCountView);
         weekCount = (TextView) findViewById(R.id.weekCountView);
         getData();
@@ -31,7 +34,7 @@ public class StatisticsActivity extends AppCompatActivity {
     private void getData() {
 
         dayCount.setText(Integer.toString(values.getInt("dayCount")));
-        weekCount.setText(Integer.toString(values.getInt("weekCount")));
+        weekCount.setText(Integer.toString(myData.getWeeklyStepCount()));
 
 
     }

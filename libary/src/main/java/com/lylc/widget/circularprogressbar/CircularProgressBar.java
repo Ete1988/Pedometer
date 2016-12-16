@@ -36,33 +36,21 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.ProgressBar;
-import com.lylc.widget.circularprogressbar.R;
 
 public class CircularProgressBar extends ProgressBar{
 	private static final String TAG = "CircularProgressBar";
 
 	private static final int STROKE_WIDTH = 20;
-
-	private String mTitle = "";		
-	private String mSubTitle = "";
-
-	private int mStrokeWidth = STROKE_WIDTH;
-
 	private final RectF mCircleBounds = new RectF();
-
 	private final Paint mProgressColorPaint = new Paint();
 	private final Paint mBackgroundColorPaint = new Paint();
-	private final Paint mTitlePaint = new Paint(); 
+	private final Paint mTitlePaint = new Paint();
 	private final Paint mSubtitlePaint = new Paint();
-
+	private String mTitle = "";
+	private String mSubTitle = "";
+	private int mStrokeWidth = STROKE_WIDTH;
 	private boolean mHasShadow = true;
 	private int mShadowColor = Color.BLACK;
-
-	public interface ProgressAnimationListener{
-		void onAnimationStart();
-		void onAnimationFinish();
-		void onAnimationProgress(int progress);
-	}
 
 	public CircularProgressBar(Context context) {
 		super(context);
@@ -137,13 +125,13 @@ public class CircularProgressBar extends ProgressBar{
 		mBackgroundColorPaint.setStyle(Paint.Style.STROKE);
 		mBackgroundColorPaint.setStrokeWidth(mStrokeWidth);
 
-		mTitlePaint.setTextSize(60); 
+		mTitlePaint.setTextSize(60);
 		mTitlePaint.setStyle(Style.FILL);
 		mTitlePaint.setAntiAlias(true);
 		mTitlePaint.setTypeface(Typeface.create("Roboto-Thin", Typeface.NORMAL));
 		mTitlePaint.setShadowLayer(0.1f, 0, 1, Color.GRAY);
 
-		mSubtitlePaint.setTextSize(20); 
+		mSubtitlePaint.setTextSize(20);
 		mSubtitlePaint.setStyle(Style.FILL);
 		mSubtitlePaint.setAntiAlias(true);
 		mSubtitlePaint.setTypeface(Typeface.create("Roboto-Thin", Typeface.BOLD));
@@ -170,13 +158,13 @@ public class CircularProgressBar extends ProgressBar{
 			if(TextUtils.isEmpty(mSubTitle)){
 				yPos += titleHeight/2;
 			}
-			canvas.drawText(mTitle, xPos, yPos, mTitlePaint); 
+			canvas.drawText(mTitle, xPos, yPos, mTitlePaint);
 
 			yPos += titleHeight;
 			xPos = (int)(getMeasuredWidth()/2 - mSubtitlePaint.measureText(mSubTitle) / 2);
 
 			canvas.drawText(mSubTitle, xPos, yPos, mSubtitlePaint);
-		}		
+		}
 
 		super.onDraw(canvas);
 	}
@@ -240,16 +228,11 @@ public class CircularProgressBar extends ProgressBar{
 					Log.d(TAG, progress + "");
 					CircularProgressBar.this.setProgress(progress);
 					if(listener!=null)
-						listener.onAnimationProgress(progress);					
+						listener.onAnimationProgress(progress);
 				}
 			}
 		});
 		progressBarAnimator.start();
-	}
-
-	public synchronized void setTitle(String title){
-		this.mTitle = title;
-		invalidate();
 	}
 
 	public synchronized void setSubTitle(String subtitle){
@@ -267,11 +250,6 @@ public class CircularProgressBar extends ProgressBar{
 		invalidate();
 	}
 
-	public synchronized void setHasShadow(boolean flag){
-		this.mHasShadow = flag;
-		invalidate();
-	}
-
 	public synchronized void setShadow(int color){
 		this.mShadowColor = color;
 		invalidate();
@@ -281,7 +259,25 @@ public class CircularProgressBar extends ProgressBar{
 		return mTitle;
 	}
 
+	public synchronized void setTitle(String title) {
+		this.mTitle = title;
+		invalidate();
+	}
+
 	public boolean getHasShadow(){
 		return mHasShadow;
+	}
+
+	public synchronized void setHasShadow(boolean flag) {
+		this.mHasShadow = flag;
+		invalidate();
+	}
+
+	public interface ProgressAnimationListener {
+		void onAnimationStart();
+
+		void onAnimationFinish();
+
+		void onAnimationProgress(int progress);
 	}
 }

@@ -12,20 +12,20 @@ import java.util.Date;
  * Created by Ete on 24/11/2016.
  */
 
-public class sharedValues {
+public class SharedValues {
 
-    private static sharedValues myValues;
+    private static SharedValues myValues;
     private SharedPreferences sharedPreferences;
 
-    public static sharedValues getInstance(Context context) {
-        if (myValues == null) {
-            myValues = new sharedValues(context);
-        }
-        return myValues;
+    private SharedValues(Context context) {
+        sharedPreferences = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
     }
 
-    private sharedValues(Context context) {
-        sharedPreferences = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+    public static SharedValues getInstance(Context context) {
+        if (myValues == null) {
+            myValues = new SharedValues(context);
+        }
+        return myValues;
     }
 
     private void saveString(String key, String value) {
@@ -89,7 +89,6 @@ public class sharedValues {
             }
         }
     }
-
 
     private void checkIfNewWeek() {
 

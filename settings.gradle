@@ -1,2 +1,2 @@
-include ':library', ':backendless'
+include ':libary', ':backendless'
 include ':pedometer'

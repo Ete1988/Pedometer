@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:circular="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
@@ -17,81 +17,82 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <TextView
-        android:text="@string/emptyString"
+        android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/my_toolbar"
         android:layout_alignParentEnd="true"
+        android:layout_below="@+id/my_toolbar"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="8dp"
-        android:id="@+id/date"
+        android:text="@string/emptyString"
         android:textSize="18sp"
-        android:typeface="sans"
-        android:textStyle="normal|bold|italic" />
+        android:textStyle="normal|bold|italic"
+        android:typeface="sans" />
+
+    <RelativeLayout
+        android:id="@+id/toolbarmenucontainer"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/black_overlay"
+        android:orientation="?attr/colorPrimary">
+
+        <ImageButton
+            android:id="@+id/PedometerHeartBtn"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="36dp"
+            android:layout_toStartOf="@+id/PedometerStatsBtn"
+            android:background="@null"
+            android:clickable="true"
+            android:contentDescription="@string/emptyString"
+            android:onClick="onClickPedometer"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_heart"
+            android:visibility="visible" />
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="37dp"
+            android:layout_toEndOf="@+id/PedometerStatsBtn"
+            android:background="@null"
+            android:clickable="true"
+            android:contentDescription="@string/emptyString"
+            android:onClick="onClickPedometer"
+            android:scaleType="fitXY"
+            android:src="@color/black_overlay"
+            android:visibility="visible" />
+
+        <ImageButton
+            android:id="@+id/PedometerStatsBtn"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@null"
+            android:clickable="true"
+            android:contentDescription="@string/emptyString"
+            android:onClick="onClickPedometer"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_stats"
+            android:visibility="visible" />
+
+    </RelativeLayout>
 
     <com.lylc.widget.circularprogressbar.CircularProgressBar
         android:id="@+id/circularprogressbar3"
         style="@style/Widget.ProgressBar.CircularProgressBar"
         android:layout_width="150dip"
         android:layout_height="150dip"
-        circular:cpb_subtitle="subtitle"
-        circular:cpb_title="Title"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <RelativeLayout
-        android:id="@+id/toolbarmenucontainer"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/black_overlay"
-        android:orientation="?attr/colorPrimary"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/date"
         android:layout_centerHorizontal="true"
-       >
-
-        <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:scaleType="fitXY"
-            android:background="@null"
-            android:src="@mipmap/ic_heart"
-            android:layout_alignParentTop="true"
-            android:layout_toStartOf="@+id/statsBtn"
-            android:layout_marginEnd="36dp"
-            android:id="@+id/heartBtn"
-            android:visibility="visible"
-            android:contentDescription="Button" />
-
-        <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:scaleType="fitXY"
-            android:src="@color/black_overlay"
-            android:id="@+id/imageButton2"
-            android:background="@null"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/statsBtn"
-            android:layout_marginStart="37dp"
-            android:visibility="visible"
-            />
-
-        <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:scaleType="fitXY"
-            android:background="@null"
-            android:src="@mipmap/ic_stats"
-            android:id="@+id/statsBtn"
-            android:visibility="visible"
-            android:contentDescription="Button"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:onClick="onClick"/>
-
-    </RelativeLayout>
+        circular:cpb_subtitle="subtitle"
+        circular:cpb_title="Title" />
 
 
 </RelativeLayout>

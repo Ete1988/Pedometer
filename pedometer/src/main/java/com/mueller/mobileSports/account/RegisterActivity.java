@@ -27,9 +27,6 @@ import butterknife.ButterKnife;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private final static String APP_ID = "61D5CC9D-40B5-4853-FF2F-BCFDD7F64700";
-    private final static String SECRET_KEY = "76967CB3-F1DE-308D-FF0F-6BA915A44300";
-    private final static String APPVERSION = "v1";
     @Bind(R.id.input_email)
     EditText _emailText;
     @Bind(R.id.password)
@@ -49,7 +46,6 @@ public class RegisterActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         setTitle("Register");
-        Backendless.initApp(this, APP_ID, SECRET_KEY, APPVERSION);
 
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +91,6 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         _loginLink.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
                 // Finish the registration screen and return to the Login activity
                 finish();

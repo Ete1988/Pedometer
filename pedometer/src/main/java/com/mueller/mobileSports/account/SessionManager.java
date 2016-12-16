@@ -21,11 +21,13 @@ import com.mueller.mobileSports.user.UserProfileData;
 
 public class SessionManager {
 
-    Context _context;
-    AsyncCallback<Void> logoutResponder = new AsyncCallback<Void>() {
+    private boolean isValidLogin;
+    private Context context;
+
+    private AsyncCallback<Void> logoutResponder = new AsyncCallback<Void>() {
         @Override
         public void handleResponse(Void aVoid) {
-            boolean isValidLogin = Backendless.UserService.isValidLogin();
+            isValidLogin = Backendless.UserService.isValidLogin();
 
         }
 
@@ -38,7 +40,7 @@ public class SessionManager {
 
     // Constructor
     public SessionManager(Context context) {
-        this._context = context;
+        this.context = context;
         myData = new UserProfileData();
     }
 
@@ -49,17 +51,14 @@ public class SessionManager {
      */
 
     public void checkLogin() {
-        // Check login status
+
+
         if (!this.isLoggedIn()) {
 
-            // user is not logged in redirect him to Login Activity
-            Intent i = new Intent(_context, LoginActivity.class);
-            // Closing all the Activities
+            Intent i = new Intent(context, LoginActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            // Add new Flag to start new Activity
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            // Staring Login Activity
-            _context.startActivity(i);
+            context.startActivity(i);
 
         }
     }
@@ -72,13 +71,13 @@ public class SessionManager {
             System.out.println(myData.toString());
             Backendless.UserService.logout(logoutResponder);
             // After logout redirect user to Loing Activity
-            Intent i = new Intent(_context, LoginActivity.class);
+            Intent i = new Intent(context, LoginActivity.class);
             // Closing all the Activities
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             // Add new Flag to start new Activity
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             // Staring Login Activity
-            _context.startActivity(i);
+            context.startActivity(i);
         }
     }
 
