@@ -49,7 +49,6 @@ public class SessionManager {
      * If false it will redirect user to login page
      * Else won't do anything
      */
-
     public void checkLogin() {
 
 
@@ -63,6 +62,10 @@ public class SessionManager {
         }
     }
 
+    /**
+     * Method to logout the current user.
+     * Removes all userrelevant data and then redirects the user to the login screen
+     */
     public void logoutUser() {
 
         if (this.isLoggedIn()) {
@@ -80,10 +83,9 @@ public class SessionManager {
 
     /**
      * Quick check for login
+     *
      **/
-
-    // Get Login State
-    public boolean isLoggedIn() {
+    private boolean isLoggedIn() {
 
         String userToken = UserTokenStorageFactory.instance().getStorage().get();
         if (userToken != null && !userToken.equals("")) {
@@ -93,7 +95,6 @@ public class SessionManager {
         } else {
             return false;
         }
-
     }
 
     //Load currentUser
@@ -113,6 +114,7 @@ public class SessionManager {
         });
     }
 
+    // Load current userData
     private void loadCurrentUserData() {
         String currentUserId = Backendless.UserService.loggedInUser();
         String whereClause = "ownerID = '" + currentUserId + "'";
@@ -137,7 +139,6 @@ public class SessionManager {
         });
 
     }
-
 
     public boolean uploadUserData() {
 

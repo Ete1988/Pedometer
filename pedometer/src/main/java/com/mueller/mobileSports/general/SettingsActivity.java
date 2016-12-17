@@ -18,6 +18,9 @@ import java.util.Locale;
 
 /**
  * Created by Ete on 11/10/2016.
+ *
+ * Activity that offers methods to adjust app relevant data.
+ *
  */
 
 public class SettingsActivity extends BottomBarButtonManager {

@@ -13,7 +13,6 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.mueller.mobileSports.general.AlertDialogManager;
 import com.mueller.mobileSports.heartRate.HRMUtility.HeartRateMonitor;
 import com.mueller.mobileSports.heartRate.HRMUtility.SimulationHRM;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
@@ -33,8 +32,6 @@ public class LoginActivity extends AppCompatActivity {
     SessionManager session;
     UserProfileData myData;
 
-    // Alert Dialog Manager
-    AlertDialogManager alert = new AlertDialogManager();
     AsyncCallback<BackendlessUser> loginResponder = new AsyncCallback<BackendlessUser>() {
         @Override
         public void handleResponse(BackendlessUser backendlessUser) {

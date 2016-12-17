@@ -16,6 +16,12 @@ import com.mueller.mobileSports.pedometer.MainActivity.R;
 
 import java.util.Locale;
 
+/**
+ * Created by Ete
+ * <p>
+ * Activity meant for the heart rate monitoring app mode
+ */
+
 public class HeartRateActivity extends BottomBarButtonManager {
 
     long init, paused;

@@ -13,6 +13,8 @@ import java.util.Locale;
 
 /**
  * Created by Ete on 8/10/2016.
+ *
+ * Activity to display app relevant statistics.
  */
 
 public class StatisticsActivity extends AppCompatActivity {
@@ -37,7 +39,6 @@ public class StatisticsActivity extends AppCompatActivity {
 
         dayCount.setText(String.format(Locale.getDefault(), "%05d", values.getInt("dayCount")));
         weekCount.setText(String.format(Locale.getDefault(), "%05d", myData.getWeeklyStepCount()));
-
 
     }
 }

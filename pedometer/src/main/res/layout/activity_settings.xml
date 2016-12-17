@@ -86,19 +86,8 @@
         android:layout_below="@+id/stepGoalView"
         android:layout_marginTop="21dp"
         android:onClick="setGoalDialog"
-        android:text="Set goal"
+        android:text="@string/set_goal"
         android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/editProfileButton"
-        style="@android:style/Widget.Button.Inset"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/goalSelector"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="41dp"
-        android:onClick="onClickSettings"
-        android:text="@string/accountDetails" />
 
     <include
         android:id="@+id/bottombar"

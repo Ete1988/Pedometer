@@ -9,10 +9,13 @@ import com.mueller.mobileSports.pedometer.PedometerActivity;
 
 /**
  * Created by Sandra on 8/10/2016.
+ *
+ * Just a splash screen on startup
  */
 
 public class SplashActivity extends AppCompatActivity {
 
+    //Backendless data.
     private static String APP_ID = "61D5CC9D-40B5-4853-FF2F-BCFDD7F64700";
     private static String SECRET_KEY = "76967CB3-F1DE-308D-FF0F-6BA915A44300";
     private static String APPVERSION = "v1";

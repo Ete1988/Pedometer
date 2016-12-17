@@ -18,7 +18,11 @@ import com.mueller.mobileSports.general.BottomBarButtonManager;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.user.UserProfileData;
 
-
+/**
+ * Created by Ete
+ * <p>
+ * Activity meant for the pedometer app mode
+ */
 public class PedometerActivity extends BottomBarButtonManager implements SensorEventListener {
 
     // Session Manager Class
@@ -27,7 +31,8 @@ public class PedometerActivity extends BottomBarButtonManager implements SensorE
     private SensorManager sensorManager;
     private TextView date;
     private int stepsOverWeek, stepsOverDay;
-    private SharedValues values;
+    private TimeManager timeManager;
+    private SharedValues sharedValues;
     private UserProfileData myData;
 
     @Override
@@ -42,14 +47,14 @@ public class PedometerActivity extends BottomBarButtonManager implements SensorE
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        values = SharedValues.getInstance(this);
         myData = new UserProfileData();
         date = (TextView) findViewById(R.id.date);
         cBar = (CircularProgressBar) findViewById(R.id.circularprogressbar3);
         cBar.setSubTitle("Steps");
         sessionManager = new SessionManager(getApplicationContext());
         sessionManager.checkLogin();
-        values.checkTime();
+        timeManager.checkTime();
+        sharedValues = SharedValues.getInstance(this);
         getData();
         mappingWidgets();
     }
@@ -60,16 +65,16 @@ public class PedometerActivity extends BottomBarButtonManager implements SensorE
     }
 
     private void getData() {
-        stepsOverDay = values.getInt("dayCount");
+        stepsOverDay = sharedValues.getInt("dayCount");
         stepsOverWeek = myData.getWeeklyStepCount();
-        date.setText(values.getString("checkDate"));
-        cBar.setMax(values.getInt("stepGoal"));
+        date.setText(sharedValues.getString("checkDate"));
+        cBar.setMax(myData.getStepGoal());
     }
 
     private void updateData() {
 
         myData.setWeeklyStepCount(stepsOverWeek);
-        values.saveInt("dayCount", stepsOverDay);
+        sharedValues.saveInt("dayCount", stepsOverDay);
     }
 
     @Override

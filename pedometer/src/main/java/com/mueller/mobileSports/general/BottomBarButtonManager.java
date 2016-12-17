@@ -17,9 +17,12 @@ import com.mueller.mobileSports.pedometer.PedometerActivity;
 
 /**
  * Created by Ete on 17/12/2016.
+ *
+ * Abstract base class for all activities to who include the bottom bar layout.
+ *
  */
 
-public class BottomBarButtonManager extends AppCompatActivity implements View.OnClickListener {
+public abstract class BottomBarButtonManager extends AppCompatActivity implements View.OnClickListener {
 
     protected ImageButton mPedometerBtn;
     ImageButton mSettingsBtn, mHeartRateBtn, mProfileBtn, mLogoutBtn;
@@ -33,6 +36,9 @@ public class BottomBarButtonManager extends AppCompatActivity implements View.On
         sessionManager = new SessionManager(this);
     }
 
+    /**
+     * Map all buttons accordingly
+     */
     protected void mappingWidgets() {
 
         mPedometerBtn = (ImageButton) findViewById(R.id.PedometerBtn);
@@ -96,6 +102,7 @@ public class BottomBarButtonManager extends AppCompatActivity implements View.On
         }
     }
 /*
+
     protected void handleBackgrounds(View v) {
         if (v == mPedometerBtn) {
             mPedometerBtn.setBackgroundResource(R.drawable.bottom_btn_hover);
@@ -113,6 +120,7 @@ public class BottomBarButtonManager extends AppCompatActivity implements View.On
             mHeartRateBtn.setBackgroundResource(R.drawable.bottom_btn_hover);
         }
     }
+
 */
 }
 

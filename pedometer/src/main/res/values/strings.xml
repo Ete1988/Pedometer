@@ -18,6 +18,7 @@
     <string name="activity_level">Activity level:</string>
     <string name="set_activity_level">set activity level</string>
     <string name="set_goals">Set Goals</string>
+    <string name="set_goal">Set goal</string>
     <string name="log_out">Log Out</string>
     <string name="fiveTH">5000</string>
     <string name="sixTH">6000</string>
@@ -41,7 +42,7 @@
     <string name="minimum">Minimum:</string>
     <string name="maximum">Maximum:</string>
     <string name="heart_rate">Heart Rate:</string>
-    <string name="standartValue">000</string>
+    <string name="standardValue">000</string>
     <string name="start_monitoring">Start Monitoring</string>
     <string name="stop_monitoring">Stop Monitoring</string>
 
@@ -50,15 +51,6 @@
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_register">No Account yet? Register here!</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This height address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing height
-        completions."
-    </string>
-
 
     <string name="emptyString" />
 
