@@ -13,7 +13,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -24,52 +24,52 @@
         android:paddingRight="20dp"
         android:paddingTop="10dp">
 
-    <!-- Login progress -->
+        <!-- Login progress -->
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="100dp">
-
-        <EditText
-            android:id="@+id/input_email"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
-            android:inputType="textEmailAddress" />
-    </android.support.design.widget.TextInputLayout>
+            android:paddingTop="100dp">
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/input_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress" />
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/password"
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/email_sign_in_button"
+            style="@android:style/Widget.Button.Inset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:text="@string/action_sign_in"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/register_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
-            android:inputType="textPassword"/>
-    </android.support.design.widget.TextInputLayout>
-
-    <Button
-        android:id="@+id/email_sign_in_button"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="40dp"
-        android:text="@string/action_sign_in"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/register_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="onClickLogin"
-        android:paddingLeft="60dp"
-        android:paddingTop="20dp"
-        android:text="@string/action_register"
-        android:textStyle="bold" />
+            android:onClick="onClickLogin"
+            android:paddingLeft="60dp"
+            android:paddingTop="20dp"
+            android:text="@string/action_register"
+            android:textStyle="bold" />
 
 
         <Button

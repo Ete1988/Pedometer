@@ -16,7 +16,7 @@ import com.mueller.mobileSports.user.UserProfileData;
 public class StatisticsActivity extends AppCompatActivity {
 
     private SharedValues values;
-    private TextView dayCount,weekCount;
+    private TextView dayCount, weekCount;
     private UserProfileData myData;
 
     public void onCreate(Bundle savedInstanceState) {

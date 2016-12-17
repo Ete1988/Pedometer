@@ -21,10 +21,9 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
 
-
     <Button
         android:id="@+id/editProfileButton"
-        style="@style/Widget.AppCompat.Button.Colored"
+        style="@android:style/Widget.Button.Inset"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -65,12 +64,11 @@
         android:layout_marginTop="18dp"
         android:fontFamily="serif"
         android:textSize="30sp"
-        android:textStyle="normal|bold|italic"
-         />
+        android:textStyle="normal|bold|italic" />
 
     <Button
         android:id="@+id/goalSelector"
-        style="@style/Widget.AppCompat.Button.Colored"
+        style="@android:style/Widget.Button.Inset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -93,7 +91,7 @@
 
     <Button
         android:id="@+id/levelSelector"
-        style="@style/Widget.AppCompat.Button.Colored"
+        style="@android:style/Widget.Button.Inset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

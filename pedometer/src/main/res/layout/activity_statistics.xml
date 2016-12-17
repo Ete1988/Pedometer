@@ -15,7 +15,7 @@
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <TextView
         android:id="@+id/dayCountView"
@@ -26,7 +26,7 @@
         android:layout_below="@+id/dayCount"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="16dp"
-        android:text=" "
+        android:text="@string/emptyString"
         android:textAllCaps="true"
         android:textSize="24sp"
         android:textStyle="normal|bold" />
@@ -40,7 +40,7 @@
         android:layout_below="@+id/weekCount"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="23dp"
-        android:text=" "
+        android:text="@string/emptyString"
         android:textAllCaps="true"
         android:textSize="24sp"
         android:textStyle="normal|bold" />

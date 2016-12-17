@@ -91,13 +91,13 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void login () {
+    public void login() {
         //Get username, password from EditText
         String email = mEmailText.getText().toString();
         String password = mPasswordText.getText().toString();
 
         // Check if username, password is filled
-        if(email.trim().length() > 0 && password.trim().length() > 0){
+        if (email.trim().length() > 0 && password.trim().length() > 0) {
             final ProgressDialog progress = new ProgressDialog(this);
 
             progress.setTitle("Loading");
@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
             Backendless.UserService.login(email, password, loginResponder, true);
             progress.dismiss();
 
-        }else{
+        } else {
             // user didn't entered username or password
             // Show alert asking him to enter the details
             alert.showAlertDialog(LoginActivity.this, "Login failed..", "Please enter username and password", false);

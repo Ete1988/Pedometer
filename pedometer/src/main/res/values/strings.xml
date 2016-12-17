@@ -9,12 +9,15 @@
     <!-- Strings related to statistics layout -->
     <string name="steps_this_week">Steps this week:</string>
     <string name="step_goal">Step goal:</string>
+    <string name="steps_today">Steps today</string>
+
 
     <!-- Strings related to settings layout -->
     <string name="accountDetails">Edit Profile</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="activity_level">Activity level:</string>
     <string name="set_activity_level">set activity level</string>
+    <string name="set_goals">Set Goals</string>
 
     <!-- Strings related to profile layout -->
     <string name="hint_name">Name</string>
@@ -25,6 +28,15 @@
     <string name="hint_weight">Weight in Kg</string>
     <string name="err_msg_email">Enter valid height address</string>
 
+    <!-- Strings related to heart rate layout -->
+    <string name="default_timer">00:00:00</string>
+    <string name="average">Average:</string>
+    <string name="minimum">Minimum:</string>
+    <string name="maximum">Maximum:</string>
+    <string name="heart_rate">Heart Rate:</string>
+    <string name="standartValue">000</string>
+    <string name="start_monitoring">Start Monitoring</string>
+    <string name="stop_monitoring">Stop Monitoring</string>
 
     <!-- Strings related to login layout -->
     <string name="prompt_email">Email</string>
@@ -42,11 +54,7 @@
 
 
     <string name="emptyString" />
-    <string name="set_goals">Set Goals</string>
-    <string name="steps_today">Steps today</string>
-    <string name="default_timer">00:00:00</string>
-
-    <!-- Settings -->
+    <string name="log_out">Log Out</string>
 
 
 </resources>

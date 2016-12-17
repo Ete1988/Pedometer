@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Ete on 24/11/2016.
@@ -72,7 +73,7 @@ public class SharedValues {
     private void checkIfNewDay() throws ParseException {
 
         Date todayDate = new Date();
-        SimpleDateFormat currDate = new SimpleDateFormat("EE dd MMM yyyy");
+        SimpleDateFormat currDate = new SimpleDateFormat("EE dd MMM yyyy", Locale.getDefault());
         String currentDate = currDate.format(todayDate);
 
         if (!(checkIfContained("checkDate"))) {

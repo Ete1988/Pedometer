@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.lylc.widget.circularprogressbar.CircularProgressBar;
 import com.mueller.mobileSports.account.SessionManager;
 import com.mueller.mobileSports.general.SettingsActivity;
-import com.mueller.mobileSports.general.StatisticsActivity;
 import com.mueller.mobileSports.heartRate.HeartRateActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.user.UserProfileData;
@@ -36,7 +35,6 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
     private int stepsOverWeek, stepsOverDay;
     private SharedValues values;
     private UserProfileData myData;
-
 
 
     @Override
@@ -56,8 +54,6 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
         values.checkTime();
         getData();
     }
-
-
 
     private void getData() {
         stepsOverDay = values.getInt("dayCount");
@@ -81,8 +77,8 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
 
     public void onClickPedometer(View v) {
         updateData();
-        if (v.getId() == R.id.PedometerStatsBtn) {
-            Intent intent = new Intent(PedometerActivity.this, StatisticsActivity.class);
+        if (v.getId() == R.id.PedometerSettingsBtn) {
+            Intent intent = new Intent(PedometerActivity.this, SettingsActivity.class);
             startActivity(intent);
         } else if (v.getId() == R.id.PedometerHeartBtn) {
             Intent intent = new Intent(PedometerActivity.this, HeartRateActivity.class);

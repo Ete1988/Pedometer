@@ -21,8 +21,8 @@ import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.user.UserProfileData;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Created by Sandra on 8/10/2016.
@@ -68,16 +68,15 @@ public class ProfileActivity extends AppCompatActivity {
     private void loadData() {
 
 
-        mHeightText.setText(Integer.toString(myData.getHeight()));
-        mAgeText.setText(Integer.toString(myData.getAge()));
-        mWeightText.setText(Integer.toString(myData.getWeight()));
+        mHeightText.setText(String.format(Locale.getDefault(), "%03d", myData.getHeight()));
+        mAgeText.setText(String.format(Locale.getDefault(), "%03d", myData.getAge()));
+        mWeightText.setText(String.format(Locale.getDefault(), "%03d", myData.getWeight()));
         mGenderText.setText(myData.getGender());
         mUsernameText.setText(myData.getUsername());
 
     }
 
-    public void updateData()
-    {
+    public void updateData() {
         myData.setAge(Integer.parseInt(mAgeText.getText().toString()));
         myData.setGender(mGenderText.getText().toString());
         myData.setHeight(Integer.parseInt(mHeightText.getText().toString()));
@@ -91,12 +90,9 @@ public class ProfileActivity extends AppCompatActivity {
         pd.setIndeterminate(true);
         pd.show();
 
-        Backendless.Persistence.of(UserProfileData.class).save(myData, new AsyncCallback<UserProfileData>()
-        {
+        Backendless.Persistence.of(UserProfileData.class).save(myData, new AsyncCallback<UserProfileData>() {
             @Override
-            public void handleResponse(UserProfileData updatedData)
-            {
-                System.out.println("Person's name after update " + updatedData.toString());
+            public void handleResponse(UserProfileData updatedData) {
                 pd.dismiss();
                 Toast.makeText(getBaseContext(), "Success!", Toast.LENGTH_LONG).show();
             }
@@ -127,9 +123,6 @@ public class ProfileActivity extends AppCompatActivity {
             Bitmap bitmap = null;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

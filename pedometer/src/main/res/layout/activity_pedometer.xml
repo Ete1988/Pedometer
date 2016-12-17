@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical"
-    tools:context="com.mueller.mobileSports.pedometer.PedometerActivity" >
+    tools:context="com.mueller.mobileSports.pedometer.PedometerActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -14,7 +14,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <TextView
         android:id="@+id/date"
@@ -44,7 +44,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_marginEnd="36dp"
-            android:layout_toStartOf="@+id/PedometerStatsBtn"
+            android:layout_toStartOf="@+id/PedometerSettingsBtn"
             android:background="@null"
             android:clickable="true"
             android:contentDescription="@string/emptyString"
@@ -59,7 +59,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_marginStart="37dp"
-            android:layout_toEndOf="@+id/PedometerStatsBtn"
+            android:layout_toEndOf="@+id/PedometerSettingsBtn"
             android:background="@null"
             android:clickable="true"
             android:contentDescription="@string/emptyString"
@@ -69,7 +69,7 @@
             android:visibility="visible" />
 
         <ImageButton
-            android:id="@+id/PedometerStatsBtn"
+            android:id="@+id/PedometerSettingsBtn"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
@@ -79,7 +79,7 @@
             android:contentDescription="@string/emptyString"
             android:onClick="onClickPedometer"
             android:scaleType="fitXY"
-            android:src="@mipmap/ic_stats"
+            android:src="@mipmap/ic_settings"
             android:visibility="visible" />
 
     </RelativeLayout>

@@ -33,6 +33,7 @@ public class UserProfileData {
         setStepGoal(stepGoal);
         setUploadedFile(uploadedFile);
     }
+
     public UserProfileData(UserProfileData data) {
         age = data.getAge();
         gender = data.getGender();
@@ -66,7 +67,7 @@ public class UserProfileData {
         return objectId;
     }
 
-    public void setObjectId(String objectId) {
+    private void setObjectId(String objectId) {
         UserProfileData.objectId = objectId;
     }
 
@@ -156,6 +157,7 @@ public class UserProfileData {
         this.setUploadedFile(null);
 
     }
+
     //Used for some testing only
     @Override
     public String toString() {

@@ -12,7 +12,7 @@
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
 
     <LinearLayout
@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email"
-                android:inputType="textEmailAddress"/>
+                android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -45,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -57,12 +57,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Confirm Password"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
 
-        <Button android:id="@+id/createAccount_button"
-            style="@style/Widget.AppCompat.Button.Colored"
+        <Button
+            android:id="@+id/createAccount_button"
+            style="@android:style/Widget.Button.Inset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -72,7 +73,8 @@
             android:textColor="@android:color/black"
             android:textStyle="normal|bold" />
 
-        <TextView android:id="@+id/link_login"
+        <TextView
+            android:id="@+id/link_login"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"

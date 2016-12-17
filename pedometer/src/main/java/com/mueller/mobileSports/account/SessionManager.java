@@ -68,7 +68,6 @@ public class SessionManager {
         if (this.isLoggedIn()) {
 
             myData.deleteAll();
-            System.out.println(myData.toString());
             Backendless.UserService.logout(logoutResponder);
             // After logout redirect user to Loing Activity
             Intent i = new Intent(context, LoginActivity.class);
@@ -103,7 +102,6 @@ public class SessionManager {
     private void loadCurrentUser() {
 
         String currentUserId = Backendless.UserService.loggedInUser();
-        System.out.println(currentUserId);
         Backendless.UserService.findById(currentUserId, new AsyncCallback<BackendlessUser>() {
             @Override
             public void handleResponse(BackendlessUser currentUser) {
@@ -141,7 +139,6 @@ public class SessionManager {
         });
 
     }
-
 
 
     public boolean uploadUserData() {

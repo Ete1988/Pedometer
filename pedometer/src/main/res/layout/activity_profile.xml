@@ -111,11 +111,13 @@
 
         <Button
             android:id="@+id/btn_saveChanges"
+            style="@android:style/Widget.Button.Inset"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
+            android:elevation="0dp"
             android:text="@string/save"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/black" />
 
 
     </LinearLayout>

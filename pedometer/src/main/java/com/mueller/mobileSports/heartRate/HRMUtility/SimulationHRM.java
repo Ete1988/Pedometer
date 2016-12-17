@@ -3,6 +3,7 @@ package com.mueller.mobileSports.heartRate.HRMUtility;
 import android.content.Context;
 import android.content.res.AssetManager;
 
+import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
 
 import java.io.IOException;
@@ -16,46 +17,65 @@ import java.io.InputStreamReader;
 public class SimulationHRM implements HeartRateMonitor {
 
 
-    Context context;
+    private Context context;
+    private int[] simulationData;
 
     public SimulationHRM(Context context) {
         this.context = context;
+        int SIZE_OF_SIMULATION_DATA = 541;
+        simulationData = new int[SIZE_OF_SIMULATION_DATA];
     }
 
     @Override
-    public int getHeartRate() {
+    public int[] getHeartRate() {
 
+        tryToReadSimulationData();
+        return simulationData;
+    }
+
+    @Override
+    public int getAverageHeartRate() {
+        return 0;
+    }
+
+    @Override
+    public int getMaxHeartRate() {
+        return 0;
+    }
+
+    @Override
+    public int getMinHeartRate() {
+        return 0;
+    }
+
+    private void tryToReadSimulationData() {
         try {
             readSimulationFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return 0;
-
     }
 
     private void readSimulationFile() throws IOException {
-
+        int i = 0;
         AssetManager assetManager = context.getAssets();
 
         try {
 
             InputStream csvStream = assetManager.open("simulationData.csv");
             InputStreamReader csvStreamReader = new InputStreamReader(csvStream);
-            CSVReader csvReader = new CSVReader(csvStreamReader);
+            CSVReader csvReader = new CSVReader(csvStreamReader, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, 1);
             String[] line;
-
-            // throw away the header
 
             csvReader.readNext();
 
             while ((line = csvReader.readNext()) != null) {
-                System.out.println(" Heart Rate: " + line[1]);
+                simulationData[i] = Integer.parseInt(line[1]);
+                i++;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
     }
 }
