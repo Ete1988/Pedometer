@@ -1,24 +1,22 @@
 package com.mueller.mobileSports.heartRate;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mueller.mobileSports.general.SettingsActivity;
+import com.mueller.mobileSports.account.SessionManager;
+import com.mueller.mobileSports.general.BottomBarButtonManager;
 import com.mueller.mobileSports.heartRate.HRMUtility.HeartRateMonitor;
 import com.mueller.mobileSports.heartRate.HRMUtility.SimulationHRM;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
-import com.mueller.mobileSports.pedometer.PedometerActivity;
 
 import java.util.Locale;
 
-public class HeartRateActivity extends AppCompatActivity {
+public class HeartRateActivity extends BottomBarButtonManager {
 
     long init, paused;
     private ImageView iv_start, iv_restart;
@@ -41,6 +39,7 @@ public class HeartRateActivity extends AppCompatActivity {
             mHandler.postDelayed(this, 30);
         }
     };
+    private SessionManager sessionManager;
     private int[] heartRateDataArray, averageHeartRateArray;
     public Runnable mHeartRateSimulation = new Runnable() {
         @Override
@@ -71,6 +70,8 @@ public class HeartRateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_heart_rate);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        mappingWidgets();
+        sessionManager = new SessionManager(this);
         test_Btn = (Button) findViewById(R.id.test_btn);
         mTextTime = (TextView) findViewById(R.id.timeTextView);
         mHeartRate = (TextView) findViewById(R.id.HeartRate);
@@ -140,6 +141,16 @@ public class HeartRateActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void mappingWidgets() {
+        super.mappingWidgets();
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+    }
+
     private int calculateAverageHeartRate() {
         int sum = 0;
         for (int i : averageHeartRateArray) {
@@ -170,16 +181,6 @@ public class HeartRateActivity extends AppCompatActivity {
         System.out.println(heartRateDataArray.length);
     }
 
-    public void onClickHeartRate(View v) {
-        if (v.getId() == R.id.HRMSettingsBtn) {
-            Intent intent = new Intent(HeartRateActivity.this, SettingsActivity.class);
-            startActivity(intent);
-        } else if (v.getId() == R.id.HRMPedometerBtn) {
-            Intent intent = new Intent(HeartRateActivity.this, PedometerActivity.class);
-            startActivity(intent);
-        }
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -189,6 +190,7 @@ public class HeartRateActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        sessionManager.checkLogin();
         start_time += System.currentTimeMillis() - paused;
     }
 

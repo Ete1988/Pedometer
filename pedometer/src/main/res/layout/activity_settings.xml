@@ -21,18 +21,6 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
 
-    <Button
-        android:id="@+id/editProfileButton"
-        style="@android:style/Widget.Button.Inset"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="56dp"
-        android:layout_marginEnd="10dp"
-        android:layout_toStartOf="@+id/levelSelector"
-        android:onClick="onClickSettings"
-        android:text="@string/accountDetails" />
-
     <TextView
         android:id="@+id/stepGoal"
         android:layout_width="wrap_content"
@@ -100,6 +88,23 @@
         android:onClick="setGoalDialog"
         android:text="Set goal"
         android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/editProfileButton"
+        style="@android:style/Widget.Button.Inset"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/goalSelector"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="41dp"
+        android:onClick="onClickSettings"
+        android:text="@string/accountDetails" />
+
+    <include
+        android:id="@+id/bottombar"
+        layout="@layout/bottom_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 
 </RelativeLayout>

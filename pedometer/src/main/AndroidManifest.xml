@@ -32,7 +32,8 @@
             android:label="@string/app_name" />
         <activity
             android:name="com.mueller.mobileSports.account.LoginActivity"
-            android:label="Login" />
+            android:label="Login"
+            android:launchMode="singleTop" />
         <activity
             android:name="com.mueller.mobileSports.general.SettingsActivity"
             android:label="Settings" />

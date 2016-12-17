@@ -18,6 +18,13 @@
     <string name="activity_level">Activity level:</string>
     <string name="set_activity_level">set activity level</string>
     <string name="set_goals">Set Goals</string>
+    <string name="log_out">Log Out</string>
+    <string name="fiveTH">5000</string>
+    <string name="sixTH">6000</string>
+    <string name="sevenTH">7000</string>
+    <string name="eigthTH">8000</string>
+    <string name="itsOverNineTHousand">9000</string>
+    <string name="tenTH">10000</string>
 
     <!-- Strings related to profile layout -->
     <string name="hint_name">Name</string>
@@ -54,7 +61,6 @@
 
 
     <string name="emptyString" />
-    <string name="log_out">Log Out</string>
 
 
 </resources>

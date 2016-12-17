@@ -1,31 +1,31 @@
 package com.mueller.mobileSports.general;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.mueller.mobileSports.account.ProfileActivity;
+import com.mueller.mobileSports.account.SessionManager;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.user.UserProfileData;
+
+import java.util.Locale;
 
 /**
  * Created by Ete on 11/10/2016.
  */
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends BottomBarButtonManager {
 
     private int physicalActivityLevel, StepGoal;
     private TextView mActivityLevelText, mCurrentStepGoalText;
     private UserProfileData myData;
-
+    private SessionManager sessionManager;
     private String[] goalsValuesArray = {"5000", "6000", "7000", "8000", "9000", "10000", "Other? Please set here!"};
 
     private String[] activityLevelTextArray = {"0: Avoid walking or exertion, for example, always use elevator, drive " +
@@ -44,16 +44,19 @@ public class SettingsActivity extends AppCompatActivity {
                     "in comparable physical activity"
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        sessionManager = new SessionManager(this);
         mActivityLevelText = (TextView) findViewById(R.id.level);
         mCurrentStepGoalText = (TextView) findViewById(R.id.stepGoalView);
         myData = new UserProfileData();
         physicalActivityLevel = myData.getActivityLevel();
         StepGoal = myData.getStepGoal();
+        mappingWidgets();
 
         setLevel();
         setGoal();
@@ -62,11 +65,14 @@ public class SettingsActivity extends AppCompatActivity {
         setTitle("Settings");
     }
 
-    public void onClickSettings(View v) {
-        if (v.getId() == R.id.editProfileButton) {
-            Intent intent = new Intent(SettingsActivity.this, ProfileActivity.class);
-            startActivity(intent);
-        }
+    @Override
+    protected void mappingWidgets() {
+        super.mappingWidgets();
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
     }
 
     public void setActivityLevelDialog(View v) {
@@ -125,7 +131,7 @@ public class SettingsActivity extends AppCompatActivity {
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int negativeButton) {
                 //Put actions for CANCEL button here, or leave in blank
-                mCurrentStepGoalText.setText(Integer.toString(myData.getStepGoal()));
+                mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", myData.getStepGoal()));
                 dialog.dismiss();
 
             }
@@ -175,36 +181,43 @@ public class SettingsActivity extends AppCompatActivity {
 
             case 0:
                 StepGoal = 5000;
-                mCurrentStepGoalText.setText("5000");
+                mCurrentStepGoalText.setText(R.string.fiveTH);
                 break;
             case 1:
                 StepGoal = 6000;
-                mCurrentStepGoalText.setText("6000");
+                mCurrentStepGoalText.setText(R.string.sixTH);
                 break;
             case 2:
                 StepGoal = 7000;
-                mCurrentStepGoalText.setText("7000");
+                mCurrentStepGoalText.setText(R.string.sevenTH);
                 break;
             case 3:
                 StepGoal = 8000;
-                mCurrentStepGoalText.setText("8000");
+                mCurrentStepGoalText.setText(R.string.eigthTH);
                 break;
             case 4:
                 StepGoal = 9000;
-                mCurrentStepGoalText.setText("9000");
+                mCurrentStepGoalText.setText(R.string.itsOverNineTHousand);
                 break;
             case 5:
                 StepGoal = 10000;
-                mCurrentStepGoalText.setText("10000");
+                mCurrentStepGoalText.setText(R.string.tenTH);
                 break;
             case 6:
                 editGoal();
                 break;
             default:
-                mCurrentStepGoalText.setText(Integer.toString(myData.getStepGoal()));
+                mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", myData.getStepGoal()));
                 break;
         }
         myData.setStepGoal(StepGoal);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sessionManager.checkLogin();
     }
 }
 

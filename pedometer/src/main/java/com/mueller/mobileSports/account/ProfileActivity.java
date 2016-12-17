@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +16,7 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.mueller.mobileSports.general.BottomBarButtonManager;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.user.UserProfileData;
 
@@ -29,13 +29,14 @@ import java.util.Locale;
  * A profile screen to display and edit user profile data
  */
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends BottomBarButtonManager {
 
     public static final int GET_FROM_GALLERY = 3;
     private EditText mUsernameText, mHeightText, mAgeText, mGenderText, mWeightText;
     private File uploadedFile;
     private Button mSaveChangesBtn;
     private UserProfileData myData;
+    private SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class ProfileActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         setTitle("Edit Profile");
+        sessionManager = new SessionManager(this);
         myData = new UserProfileData();
         mHeightText = (EditText) findViewById(R.id.input_height);
         mUsernameText = (EditText) findViewById(R.id.input_name);
@@ -52,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
         mAgeText = (EditText) findViewById(R.id.input_age);
         mSaveChangesBtn = (Button) findViewById(R.id.btn_saveChanges);
         loadData();
-
+        mappingWidgets();
         mSaveChangesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +65,16 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void mappingWidgets() {
+        super.mappingWidgets();
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
     }
 
     private void loadData() {
@@ -132,6 +144,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    //TODO implement validation;
     public boolean validate() {
         boolean valid = true;
         String emailText = mHeightText.getText().toString();
@@ -145,6 +158,12 @@ public class ProfileActivity extends AppCompatActivity {
         }
 */
         return valid;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sessionManager.checkLogin();
     }
 
 }

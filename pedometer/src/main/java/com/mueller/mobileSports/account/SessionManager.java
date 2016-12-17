@@ -69,14 +69,12 @@ public class SessionManager {
 
             myData.deleteAll();
             Backendless.UserService.logout(logoutResponder);
-            // After logout redirect user to Loing Activity
-            Intent i = new Intent(context, LoginActivity.class);
+            // After logout redirect user to Login Activity
+            Intent LoginIntent = new Intent(context, LoginActivity.class);
             // Closing all the Activities
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            // Add new Flag to start new Activity
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            LoginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             // Staring Login Activity
-            context.startActivity(i);
+            context.startActivity(LoginIntent);
         }
     }
 

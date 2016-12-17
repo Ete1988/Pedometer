@@ -17,61 +17,6 @@
 
 
     <RelativeLayout
-        android:id="@+id/toolbarmenucontainer"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@color/black_overlay"
-        android:orientation="?attr/colorPrimary">
-
-        <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="37dp"
-            android:layout_toEndOf="@+id/HRMSettingsBtn"
-            android:background="@null"
-            android:clickable="true"
-            android:contentDescription="@string/emptyString"
-            android:scaleType="fitXY"
-            android:src="@color/black_overlay"
-            android:visibility="visible" />
-
-        <ImageButton
-            android:id="@+id/HRMSettingsBtn"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:background="@null"
-            android:clickable="true"
-            android:contentDescription="@string/emptyString"
-            android:onClick="onClickHeartRate"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_settings"
-            android:visibility="visible" />
-
-        <ImageButton
-            android:id="@+id/HRMPedometerBtn"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="34dp"
-            android:layout_toStartOf="@+id/HRMSettingsBtn"
-            android:background="@null"
-            android:clickable="true"
-            android:contentDescription="@string/emptyString"
-            android:elevation="1dp"
-            android:onClick="onClickHeartRate"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_steps"
-            android:visibility="visible" />
-
-
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/timer_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -213,5 +158,12 @@
 
 
     </RelativeLayout>
+
+    <include
+        android:id="@+id/bottombar"
+        layout="@layout/bottom_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 
 </RelativeLayout>

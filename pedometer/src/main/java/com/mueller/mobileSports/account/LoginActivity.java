@@ -96,14 +96,15 @@ public class LoginActivity extends AppCompatActivity {
         String email = mEmailText.getText().toString();
         String password = mPasswordText.getText().toString();
 
+        //TODO Progressbar doesn't work.
+        final ProgressDialog progress = new ProgressDialog(this);
+        progress.setTitle("Loading");
+        progress.setMessage("Wait while loading...");
+        progress.setCancelable(false);
+        progress.show(); // disable dismiss by tapping outside of the dialog
+
         // Check if username, password is filled
         if (email.trim().length() > 0 && password.trim().length() > 0) {
-            final ProgressDialog progress = new ProgressDialog(this);
-
-            progress.setTitle("Loading");
-            progress.setMessage("Wait while loading...");
-            progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
-            progress.show();
 
             //Backendless Login and let user stay logged in.
             Backendless.UserService.login(email, password, loginResponder, true);
@@ -112,8 +113,11 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // user didn't entered username or password
             // Show alert asking him to enter the details
-            alert.showAlertDialog(LoginActivity.this, "Login failed..", "Please enter username and password", false);
+            progress.dismiss();
+            Toast.makeText(getBaseContext(), "Please enter username and password", Toast.LENGTH_LONG).show();
+            //alert.showAlertDialog(LoginActivity.this, "Login failed..", "Please enter username and password", false);
         }
 
     }
+
 }

@@ -2,33 +2,27 @@ package com.mueller.mobileSports.pedometer;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lylc.widget.circularprogressbar.CircularProgressBar;
 import com.mueller.mobileSports.account.SessionManager;
-import com.mueller.mobileSports.general.SettingsActivity;
-import com.mueller.mobileSports.heartRate.HeartRateActivity;
+import com.mueller.mobileSports.general.BottomBarButtonManager;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.user.UserProfileData;
 
 
-public class PedometerActivity extends AppCompatActivity implements SensorEventListener {
+public class PedometerActivity extends BottomBarButtonManager implements SensorEventListener {
 
     // Session Manager Class
-    SessionManager session;
+    SessionManager sessionManager;
     private CircularProgressBar cBar;
     private SensorManager sensorManager;
     private TextView date;
@@ -36,6 +30,10 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
     private SharedValues values;
     private UserProfileData myData;
 
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +47,16 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
         date = (TextView) findViewById(R.id.date);
         cBar = (CircularProgressBar) findViewById(R.id.circularprogressbar3);
         cBar.setSubTitle("Steps");
-        session = new SessionManager(getApplicationContext());
-        session.checkLogin();
+        sessionManager = new SessionManager(getApplicationContext());
+        sessionManager.checkLogin();
         values.checkTime();
         getData();
+        mappingWidgets();
+    }
+
+    @Override
+    protected void mappingWidgets() {
+        super.mappingWidgets();
     }
 
     private void getData() {
@@ -69,42 +73,9 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    public void onClickPedometer(View v) {
-        updateData();
-        if (v.getId() == R.id.PedometerSettingsBtn) {
-            Intent intent = new Intent(PedometerActivity.this, SettingsActivity.class);
-            startActivity(intent);
-        } else if (v.getId() == R.id.PedometerHeartBtn) {
-            Intent intent = new Intent(PedometerActivity.this, HeartRateActivity.class);
-            startActivity(intent);
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        //Only one button for now.
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent i = new Intent(PedometerActivity.this, SettingsActivity.class);
-                startActivity(i);
-                break;
-            case R.id.action_logout:
-                session.logoutUser();
-            default:
-                break;
-        }
-        return true;
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
+        sessionManager.checkLogin();
         getData();
         Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         if (countSensor != null) {

@@ -29,61 +29,6 @@
         android:textStyle="normal|bold|italic"
         android:typeface="sans" />
 
-    <RelativeLayout
-        android:id="@+id/toolbarmenucontainer"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:background="@color/black_overlay"
-        android:orientation="?attr/colorPrimary">
-
-        <ImageButton
-            android:id="@+id/PedometerHeartBtn"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="36dp"
-            android:layout_toStartOf="@+id/PedometerSettingsBtn"
-            android:background="@null"
-            android:clickable="true"
-            android:contentDescription="@string/emptyString"
-            android:onClick="onClickPedometer"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_heart"
-            android:visibility="visible" />
-
-        <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="37dp"
-            android:layout_toEndOf="@+id/PedometerSettingsBtn"
-            android:background="@null"
-            android:clickable="true"
-            android:contentDescription="@string/emptyString"
-            android:onClick="onClickPedometer"
-            android:scaleType="fitXY"
-            android:src="@color/black_overlay"
-            android:visibility="visible" />
-
-        <ImageButton
-            android:id="@+id/PedometerSettingsBtn"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:background="@null"
-            android:clickable="true"
-            android:contentDescription="@string/emptyString"
-            android:onClick="onClickPedometer"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_settings"
-            android:visibility="visible" />
-
-    </RelativeLayout>
-
     <com.lylc.widget.circularprogressbar.CircularProgressBar
         android:id="@+id/circularprogressbar3"
         style="@style/Widget.ProgressBar.CircularProgressBar"
@@ -93,6 +38,12 @@
         android:layout_centerHorizontal="true"
         circular:cpb_subtitle="subtitle"
         circular:cpb_title="Title" />
+
+    <include
+        android:id="@+id/bottombar"
+        layout="@layout/bottom_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 
 </RelativeLayout>

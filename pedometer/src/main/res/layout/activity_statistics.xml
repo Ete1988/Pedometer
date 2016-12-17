@@ -72,5 +72,12 @@
         android:textSize="18sp"
         android:textStyle="normal|bold|italic" />
 
+    <include
+        android:id="@+id/bottombar"
+        layout="@layout/bottom_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
 </RelativeLayout>
 

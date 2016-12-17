@@ -9,6 +9,8 @@ import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.SharedValues;
 import com.mueller.mobileSports.user.UserProfileData;
 
+import java.util.Locale;
+
 /**
  * Created by Ete on 8/10/2016.
  */
@@ -33,8 +35,8 @@ public class StatisticsActivity extends AppCompatActivity {
 
     private void getData() {
 
-        dayCount.setText(Integer.toString(values.getInt("dayCount")));
-        weekCount.setText(Integer.toString(myData.getWeeklyStepCount()));
+        dayCount.setText(String.format(Locale.getDefault(), "%05d", values.getInt("dayCount")));
+        weekCount.setText(String.format(Locale.getDefault(), "%05d", myData.getWeeklyStepCount()));
 
 
     }
