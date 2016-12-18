@@ -7,27 +7,26 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.mueller.mobileSports.account.SessionManager;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
-import com.mueller.mobileSports.user.UserProfileData;
+import com.mueller.mobileSports.user.SessionManager;
+import com.mueller.mobileSports.user.UserData;
 
 import java.util.Locale;
 
 /**
  * Created by Ete on 11/10/2016.
- *
+ * <p>
  * Activity that offers methods to adjust app relevant data.
- *
  */
 
 public class SettingsActivity extends BottomBarButtonManager {
 
     private int physicalActivityLevel, StepGoal;
     private TextView mActivityLevelText, mCurrentStepGoalText;
-    private UserProfileData myData;
     private SessionManager sessionManager;
     private String[] goalsValuesArray = {"5000", "6000", "7000", "8000", "9000", "10000", "Other? Please set here!"};
 
@@ -56,16 +55,25 @@ public class SettingsActivity extends BottomBarButtonManager {
         sessionManager = new SessionManager(this);
         mActivityLevelText = (TextView) findViewById(R.id.level);
         mCurrentStepGoalText = (TextView) findViewById(R.id.stepGoalView);
-        myData = new UserProfileData();
-        physicalActivityLevel = myData.getActivityLevel();
-        StepGoal = myData.getStepGoal();
+        physicalActivityLevel = sessionManager.getUserData().getActivityLevel();
+        StepGoal = sessionManager.getUserData().getStepGoal();
         mappingWidgets();
+        Button mSaveChangesBtn = (Button) findViewById(R.id.btn_saveChangesSettings);
 
         setLevel();
         setGoal();
 
         setSupportActionBar(myToolbar);
         setTitle("Settings");
+
+        mSaveChangesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                updateUserData();
+
+            }
+        });
     }
 
     @Override
@@ -126,7 +134,6 @@ public class SettingsActivity extends BottomBarButtonManager {
                 String foo = input.getText().toString();
                 StepGoal = Integer.parseInt(foo);
                 mCurrentStepGoalText.setText(input.getText());
-                myData.setStepGoal(StepGoal);
                 dialog.dismiss();
 
             }
@@ -134,17 +141,16 @@ public class SettingsActivity extends BottomBarButtonManager {
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int negativeButton) {
                 //Put actions for CANCEL button here, or leave in blank
-                mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", myData.getStepGoal()));
+                mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", sessionManager.getUserData().getStepGoal()));
                 dialog.dismiss();
 
             }
         });
         alert.show();
-
     }
 
     private void setLevel() {
-
+        UserData myData = sessionManager.getUserData();
         switch (physicalActivityLevel) {
             case 0:
                 mActivityLevelText.setText("0");
@@ -175,7 +181,7 @@ public class SettingsActivity extends BottomBarButtonManager {
                 break;
         }
 
-        myData.setActivityLevel(physicalActivityLevel);
+
     }
 
     private void setGoal() {
@@ -210,12 +216,22 @@ public class SettingsActivity extends BottomBarButtonManager {
                 editGoal();
                 break;
             default:
-                mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", myData.getStepGoal()));
+                mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", sessionManager.getUserData().getStepGoal()));
                 break;
         }
-        myData.setStepGoal(StepGoal);
+
+
     }
 
+    public void updateUserData() {
+        UserData myData = sessionManager.getUserData();
+
+        myData.setStepGoal(StepGoal);
+        myData.setActivityLevel(physicalActivityLevel);
+
+
+        sessionManager.uploadUserData(this);
+    }
 
     @Override
     protected void onResume() {

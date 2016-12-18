@@ -4,7 +4,6 @@
     <string name="app_name">Pedometer</string>
 
     <!-- Strings related to menu bar -->
-    <string name="menu_settings">Settings</string>
 
     <!-- Strings related to statistics layout -->
     <string name="steps_this_week">Steps this week:</string>
@@ -13,13 +12,9 @@
 
 
     <!-- Strings related to settings layout -->
-    <string name="accountDetails">Edit Profile</string>
-    <string name="title_activity_profile">ProfileActivity</string>
     <string name="activity_level">Activity level:</string>
     <string name="set_activity_level">set activity level</string>
-    <string name="set_goals">Set Goals</string>
     <string name="set_goal">Set goal</string>
-    <string name="log_out">Log Out</string>
     <string name="fiveTH">5000</string>
     <string name="sixTH">6000</string>
     <string name="sevenTH">7000</string>
@@ -32,9 +27,17 @@
     <string name="hint_height">Height</string>
     <string name="hint_age">Age</string>
     <string name="save">Save changes</string>
-    <string name="hint_gender">Gender</string>
     <string name="hint_weight">Weight in Kg</string>
-    <string name="err_msg_email">Enter valid height address</string>
+    <string name="hint_HRmax">HRmax</string>
+    <string name="email">EMail</string>
+    <string name="use_default">Use default</string>
+    <string name="gender">Gender:</string>
+    <string name="uploadprofilepicture">UploadProfilePicture</string>
+    <string-array name="gender_selector">
+        <item>…</item>
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
 
     <!-- Strings related to heart rate layout -->
     <string name="default_timer">00:00:00</string>
@@ -45,10 +48,12 @@
     <string name="standardValue">000</string>
     <string name="start_monitoring">Start Monitoring</string>
     <string name="stop_monitoring">Stop Monitoring</string>
+    <string name="reset_session">Reset Session</string>
+    <string name="start_stop_session">Start/Stop Session</string>
+    <string name="current_session_time">Current Session Time:</string>
+
 
     <!-- Strings related to login layout -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_register">No Account yet? Register here!</string>
 

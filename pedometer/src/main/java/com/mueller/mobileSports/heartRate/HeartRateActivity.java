@@ -8,11 +8,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mueller.mobileSports.account.SessionManager;
 import com.mueller.mobileSports.general.BottomBarButtonManager;
 import com.mueller.mobileSports.heartRate.HRMUtility.HeartRateMonitor;
 import com.mueller.mobileSports.heartRate.HRMUtility.SimulationHRM;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
+import com.mueller.mobileSports.user.SessionManager;
 
 import java.util.Locale;
 
@@ -45,7 +45,9 @@ public class HeartRateActivity extends BottomBarButtonManager {
             mHandler.postDelayed(this, 30);
         }
     };
-    private SessionManager sessionManager;
+    private HeartRateMonitor hRM;
+    private Button mHeartRateMonitoringBtn;
+    private boolean hRM_active = true;
     private int[] heartRateDataArray, averageHeartRateArray;
     public Runnable mHeartRateSimulation = new Runnable() {
         @Override
@@ -66,9 +68,7 @@ public class HeartRateActivity extends BottomBarButtonManager {
             mHandler.postDelayed(this, 4000);
         }
     };
-    private HeartRateMonitor hRM;
-    private Button test_Btn;
-    private boolean hRM_active = true;
+    private SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +78,9 @@ public class HeartRateActivity extends BottomBarButtonManager {
         setSupportActionBar(myToolbar);
         mappingWidgets();
         sessionManager = new SessionManager(this);
-        test_Btn = (Button) findViewById(R.id.test_btn);
+        mHeartRateMonitoringBtn = (Button) findViewById(R.id.heartRateMonitoringBtn);
         mTextTime = (TextView) findViewById(R.id.timeTextView);
-        mHeartRate = (TextView) findViewById(R.id.HeartRate);
+        mHeartRate = (TextView) findViewById(R.id.txtHeartRate);
         mAverageHeartRate = (TextView) findViewById(R.id.txtAvrHRView);
         mMaxHearRate = (TextView) findViewById(R.id.txtMaxHRView);
         mMinHeartRate = (TextView) findViewById(R.id.txtMinHRView);
@@ -92,16 +92,16 @@ public class HeartRateActivity extends BottomBarButtonManager {
         mHandler = new Handler();
         getHeartRateData();
 
-        test_Btn.setOnClickListener(new View.OnClickListener() {
+        mHeartRateMonitoringBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 if (hRM_active) {
-                    test_Btn.setText(R.string.stop_monitoring);
+                    mHeartRateMonitoringBtn.setText(R.string.stop_monitoring);
                     mHandler.postDelayed(mHeartRateSimulation, 10L);
                     hRM_active = false;
                 } else {
-                    test_Btn.setText(R.string.start_monitoring);
+                    mHeartRateMonitoringBtn.setText(R.string.start_monitoring);
                     mHandler.removeCallbacks(mHeartRateSimulation);
                     hRM_active = true;
                     updateCounter = 0;

@@ -1,7 +1,8 @@
-package com.mueller.mobileSports.account;
+package com.mueller.mobileSports.user;
 
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -10,7 +11,7 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.backendless.persistence.local.UserTokenStorageFactory;
-import com.mueller.mobileSports.user.UserProfileData;
+import com.mueller.mobileSports.account.LoginActivity;
 
 
 /**
@@ -21,9 +22,9 @@ import com.mueller.mobileSports.user.UserProfileData;
 
 public class SessionManager {
 
+    private static UserData userData;
     private boolean isValidLogin;
     private Context context;
-
     private AsyncCallback<Void> logoutResponder = new AsyncCallback<Void>() {
         @Override
         public void handleResponse(Void aVoid) {
@@ -36,12 +37,13 @@ public class SessionManager {
 
         }
     };
-    private UserProfileData myData;
 
     // Constructor
     public SessionManager(Context context) {
         this.context = context;
-        myData = new UserProfileData();
+        if (userData == null) {
+            userData = UserData.getInstance();
+        }
     }
 
     /**
@@ -51,15 +53,24 @@ public class SessionManager {
      */
     public void checkLogin() {
 
-
         if (!this.isLoggedIn()) {
-
             Intent i = new Intent(context, LoginActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
-
+        } else {
+            loadCurrentUser();
+            loadCurrentUserData();
         }
+    }
+
+    /**
+     * Quick check for login
+     **/
+    private boolean isLoggedIn() {
+
+        String userToken = UserTokenStorageFactory.instance().getStorage().get();
+        return userToken != null && !userToken.equals("");
     }
 
     /**
@@ -67,10 +78,9 @@ public class SessionManager {
      * Removes all userrelevant data and then redirects the user to the login screen
      */
     public void logoutUser() {
-
         if (this.isLoggedIn()) {
 
-            myData.deleteAll();
+            userData.deleteAll();
             Backendless.UserService.logout(logoutResponder);
             // After logout redirect user to Login Activity
             Intent LoginIntent = new Intent(context, LoginActivity.class);
@@ -81,32 +91,18 @@ public class SessionManager {
         }
     }
 
-    /**
-     * Quick check for login
-     *
-     **/
-    private boolean isLoggedIn() {
 
-        String userToken = UserTokenStorageFactory.instance().getStorage().get();
-        if (userToken != null && !userToken.equals("")) {
-            loadCurrentUser();
-            loadCurrentUserData();
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     //Load currentUser
     private void loadCurrentUser() {
 
-        String currentUserId = Backendless.UserService.loggedInUser();
+        final String currentUserId = Backendless.UserService.loggedInUser();
         Backendless.UserService.findById(currentUserId, new AsyncCallback<BackendlessUser>() {
             @Override
             public void handleResponse(BackendlessUser currentUser) {
                 Backendless.UserService.setCurrentUser(currentUser);
+                userData.setEmail(currentUser.getEmail());
             }
-
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
 
@@ -121,13 +117,15 @@ public class SessionManager {
         BackendlessDataQuery dataQuery = new BackendlessDataQuery();
         dataQuery.setWhereClause(whereClause);
 
-        Backendless.Persistence.of(UserProfileData.class).find(dataQuery, new AsyncCallback<BackendlessCollection<UserProfileData>>() {
+        Backendless.Persistence.of(UserData.class).find(dataQuery, new AsyncCallback<BackendlessCollection<UserData>>() {
             @Override
-            public void handleResponse(BackendlessCollection<UserProfileData> data) {
+            public void handleResponse(BackendlessCollection<UserData> data) {
                 if (data.getTotalObjects() == 0) {
-                    myData = new UserProfileData("", "", "", 0, 0, 0, 0, 0, 0, 0, 0, null);
+                    String mail = userData.getEmail();
+                    userData = UserData.getInstance("", mail);
+
                 } else {
-                    myData = data.getData().get(0);
+                    userData = UserData.getInstance(data.getData().get(0));
                 }
 
             }
@@ -140,8 +138,33 @@ public class SessionManager {
 
     }
 
-    public boolean uploadUserData() {
+    public UserData getUserData() {
 
-        return true;
+        if (isLoggedIn()) {
+            loadCurrentUserData();
+            return userData;
+        } else {
+            return null;
+        }
+    }
+
+    public void uploadUserData(final Context context) {
+
+        System.out.println("Session : " + userData.getObjectId());
+
+
+        Backendless.Persistence.of(UserData.class).save(userData, new AsyncCallback<UserData>() {
+            @Override
+            public void handleResponse(UserData updatedData) {
+                Toast.makeText(context, "Success!", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                Toast.makeText(context, "Failure!", Toast.LENGTH_LONG).show();
+                System.out.println(backendlessFault.toString());
+
+            }
+        });
     }
 }

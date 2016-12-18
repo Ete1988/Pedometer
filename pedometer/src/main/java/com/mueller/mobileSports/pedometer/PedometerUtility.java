@@ -14,11 +14,11 @@ import java.util.Locale;
  * Class meant to check whether a new day or week started to adjust date, and other data accordingly.
  */
 
-class TimeManager {
+class PedometerUtility {
 
     private SharedValues sharedValues;
 
-    public TimeManager(Context context) {
+    public PedometerUtility(Context context) {
         this.sharedValues = SharedValues.getInstance(context);
     }
 

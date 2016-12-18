@@ -17,7 +17,6 @@ import com.mueller.mobileSports.heartRate.HRMUtility.HeartRateMonitor;
 import com.mueller.mobileSports.heartRate.HRMUtility.SimulationHRM;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
-import com.mueller.mobileSports.user.UserProfileData;
 
 
 /**
@@ -29,8 +28,7 @@ public class LoginActivity extends AppCompatActivity {
 
     EditText mEmailText, mPasswordText;
     Button mLoginButton;
-    SessionManager session;
-    UserProfileData myData;
+
 
     AsyncCallback<BackendlessUser> loginResponder = new AsyncCallback<BackendlessUser>() {
         @Override
@@ -54,11 +52,9 @@ public class LoginActivity extends AppCompatActivity {
         android.support.v7.widget.Toolbar myToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         setTitle("Pedometer");
-        session = new SessionManager(getApplicationContext());
         mLoginButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailText = (EditText) findViewById(R.id.input_email);
         mPasswordText = (EditText) findViewById(R.id.password);
-        myData = new UserProfileData();
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -102,17 +98,14 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check if username, password is filled
         if (email.trim().length() > 0 && password.trim().length() > 0) {
-
             //Backendless Login and let user stay logged in.
             Backendless.UserService.login(email, password, loginResponder, true);
             progress.dismiss();
 
         } else {
             // user didn't entered username or password
-            // Show alert asking him to enter the details
             progress.dismiss();
             Toast.makeText(getBaseContext(), "Please enter username and password", Toast.LENGTH_LONG).show();
-            //alert.showAlertDialog(LoginActivity.this, "Login failed..", "Please enter username and password", false);
         }
 
     }

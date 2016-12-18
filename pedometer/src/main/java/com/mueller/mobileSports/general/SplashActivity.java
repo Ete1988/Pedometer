@@ -9,7 +9,7 @@ import com.mueller.mobileSports.pedometer.PedometerActivity;
 
 /**
  * Created by Sandra on 8/10/2016.
- *
+ * <p>
  * Just a splash screen on startup
  */
 

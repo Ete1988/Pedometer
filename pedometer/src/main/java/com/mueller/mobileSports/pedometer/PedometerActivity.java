@@ -13,10 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lylc.widget.circularprogressbar.CircularProgressBar;
-import com.mueller.mobileSports.account.SessionManager;
 import com.mueller.mobileSports.general.BottomBarButtonManager;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
-import com.mueller.mobileSports.user.UserProfileData;
+import com.mueller.mobileSports.user.SessionManager;
+import com.mueller.mobileSports.user.UserData;
 
 /**
  * Created by Ete
@@ -31,9 +31,9 @@ public class PedometerActivity extends BottomBarButtonManager implements SensorE
     private SensorManager sensorManager;
     private TextView date;
     private int stepsOverWeek, stepsOverDay;
-    private TimeManager timeManager;
+    private PedometerUtility timeManager;
     private SharedValues sharedValues;
-    private UserProfileData myData;
+    private UserData myData;
 
     @Override
     public void onClick(View v) {
@@ -47,12 +47,13 @@ public class PedometerActivity extends BottomBarButtonManager implements SensorE
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        myData = new UserProfileData();
         date = (TextView) findViewById(R.id.date);
         cBar = (CircularProgressBar) findViewById(R.id.circularprogressbar3);
         cBar.setSubTitle("Steps");
         sessionManager = new SessionManager(getApplicationContext());
         sessionManager.checkLogin();
+        myData = sessionManager.getUserData();
+        timeManager = new PedometerUtility(this);
         timeManager.checkTime();
         sharedValues = SharedValues.getInstance(this);
         getData();

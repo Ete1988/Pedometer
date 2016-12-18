@@ -14,18 +14,5 @@ public class WahooHRM implements HeartRateMonitor {
         return new int[]{0};
     }
 
-    @Override
-    public int getAverageHeartRate() {
-        return 0;
-    }
-
-    @Override
-    public int getMaxHeartRate() {
-        return 0;
-    }
-
-    @Override
-    public int getMinHeartRate() {
-        return 0;
-    }
 }
+

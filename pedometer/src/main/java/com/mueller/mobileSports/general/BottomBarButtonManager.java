@@ -9,17 +9,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.mueller.mobileSports.account.ProfileActivity;
-import com.mueller.mobileSports.account.SessionManager;
 import com.mueller.mobileSports.heartRate.HeartRateActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
+import com.mueller.mobileSports.user.ProfileActivity;
+import com.mueller.mobileSports.user.SessionManager;
 
 /**
  * Created by Ete on 17/12/2016.
- *
+ * <p>
  * Abstract base class for all activities to who include the bottom bar layout.
- *
  */
 
 public abstract class BottomBarButtonManager extends AppCompatActivity implements View.OnClickListener {

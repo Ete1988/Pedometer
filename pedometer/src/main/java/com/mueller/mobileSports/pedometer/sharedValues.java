@@ -3,15 +3,12 @@ package com.mueller.mobileSports.pedometer;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-
 /**
  * Created by Ete on 24/11/2016.
+ * <p>
+ * Class to managed shared preferences for all activities in the app
  */
+
 
 public class SharedValues {
 
@@ -22,6 +19,12 @@ public class SharedValues {
         sharedPreferences = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
     }
 
+    /**
+     * Method to get the a sharedValues instance shared by all activities within the app
+     *
+     * @param context
+     * @return Instance of SharedValues
+     */
     public static SharedValues getInstance(Context context) {
         if (myValues == null) {
             myValues = new SharedValues(context);
@@ -29,18 +32,36 @@ public class SharedValues {
         return myValues;
     }
 
-    private void saveString(String key, String value) {
+    /**
+     * Method to store an String in the shared preference
+     *
+     * @param key   String
+     * @param value String
+     */
+    void saveString(String key, String value) {
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
         prefsEditor.putString(key, value);
         prefsEditor.apply();
     }
 
-    public void saveInt(String key, int value) {
+    /**
+     * Method to store an int in the shared preference
+     *
+     * @param key   String
+     * @param value int
+     */
+    void saveInt(String key, int value) {
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
         prefsEditor.putInt(key, value);
         prefsEditor.apply();
     }
 
+    /**
+     * Method to get a stored String value from the shared preference specified by a key
+     *
+     * @param key string
+     * @return Empty string if no shared value with specified key is found
+     */
     String getString(String key) {
         if (sharedPreferences != null) {
             return sharedPreferences.getString(key, "");
@@ -48,6 +69,12 @@ public class SharedValues {
         return "";
     }
 
+    /**
+     * Method to get a stored int value from the shared preference specified by a key
+     *
+     * @param key string
+     * @return 0 if no shared value with specified key is found
+     */
     public int getInt(String key) {
         if (sharedPreferences != null) {
             return sharedPreferences.getInt(key, 0);
@@ -56,57 +83,17 @@ public class SharedValues {
 
     }
 
-    private boolean checkIfContained(String key) {
+    /**
+     * Method to check wheter a value with a specified key exists in the shared values
+     *
+     * @param key string
+     * @return true if key exists within the shared value
+     */
+    boolean checkIfContained(String key) {
         return sharedPreferences.contains(key);
     }
 
-    void checkTime() {
-        try {
-            checkIfNewDay();
-            checkIfNewWeek();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
-    }
-
-    private void checkIfNewDay() throws ParseException {
-
-        Date todayDate = new Date();
-        SimpleDateFormat currDate = new SimpleDateFormat("EE dd MMM yyyy", Locale.getDefault());
-        String currentDate = currDate.format(todayDate);
-
-        if (!(checkIfContained("checkDate"))) {
-            //First time use...
-            saveString("checkDate", currentDate);
-        } else {
-
-            Date oldDate = currDate.parse((getString("checkDate")));
-            Date now = currDate.parse(currentDate);
-            if (oldDate.before(now)) {
-                //Before today...
-                saveInt("dayCount", 0);
-                saveString("checkDate", currentDate);
-            }
-        }
-    }
-
-    private void checkIfNewWeek() {
-
-        Calendar c = Calendar.getInstance();
-        if (!checkIfContained("weekOfYear")) {
-            saveInt("weekOfYear", c.get(Calendar.WEEK_OF_YEAR));
-
-        } else {
-
-            if ((c.get(Calendar.WEEK_OF_YEAR)) > (getInt("weekOfYear"))) {
-                //New week...
-                saveInt("weekCount", 0);
-                saveInt("weekOfYear", c.get(Calendar.WEEK_OF_YEAR));
-
-            }
-        }
-    }
 }
 
 

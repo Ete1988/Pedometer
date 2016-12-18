@@ -38,8 +38,9 @@
             android:name="com.mueller.mobileSports.general.SettingsActivity"
             android:label="Settings" />
         <activity
-            android:name="com.mueller.mobileSports.account.ProfileActivity"
-            android:label="Edit Profile" />
+            android:name="com.mueller.mobileSports.user.ProfileActivity"
+            android:label="Edit Profile"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.mueller.mobileSports.account.RegisterActivity"
             android:label="Register" />

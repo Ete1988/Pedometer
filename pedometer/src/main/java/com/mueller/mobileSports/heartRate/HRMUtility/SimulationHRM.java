@@ -33,21 +33,6 @@ public class SimulationHRM implements HeartRateMonitor {
         return simulationData;
     }
 
-    @Override
-    public int getAverageHeartRate() {
-        return 0;
-    }
-
-    @Override
-    public int getMaxHeartRate() {
-        return 0;
-    }
-
-    @Override
-    public int getMinHeartRate() {
-        return 0;
-    }
-
     private void tryToReadSimulationData() {
         try {
             readSimulationFile();
@@ -55,6 +40,7 @@ public class SimulationHRM implements HeartRateMonitor {
             e.printStackTrace();
         }
     }
+
 
     private void readSimulationFile() throws IOException {
         int i = 0;

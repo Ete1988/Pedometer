@@ -7,13 +7,13 @@ import android.widget.TextView;
 
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.SharedValues;
-import com.mueller.mobileSports.user.UserProfileData;
+import com.mueller.mobileSports.user.UserData;
 
 import java.util.Locale;
 
 /**
  * Created by Ete on 8/10/2016.
- *
+ * <p>
  * Activity to display app relevant statistics.
  */
 
@@ -21,14 +21,14 @@ public class StatisticsActivity extends AppCompatActivity {
 
     private SharedValues values;
     private TextView dayCount, weekCount;
-    private UserProfileData myData;
+    private UserData myData;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        myData = new UserProfileData();
+        myData = new UserData();
         values = SharedValues.getInstance(this);
         dayCount = (TextView) findViewById(R.id.dayCountView);
         weekCount = (TextView) findViewById(R.id.weekCountView);

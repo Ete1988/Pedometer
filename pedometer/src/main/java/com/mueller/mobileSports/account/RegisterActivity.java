@@ -57,7 +57,6 @@ public class RegisterActivity extends AppCompatActivity {
                     String email = _emailText.getText().toString();
                     String password = _passwordText.getText().toString();
 
-
                     BackendlessUser user = new BackendlessUser();
                     user.setEmail(email);
                     user.setPassword(password);

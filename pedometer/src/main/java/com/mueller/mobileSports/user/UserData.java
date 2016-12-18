@@ -9,41 +9,93 @@ import java.io.File;
 /**
  *
  */
-public class UserProfileData {
+public class UserData {
 
-    private static String username, gender, objectId;
-    private static int height, age, weight, heartRate, weeklyStepCount, monthlyStepCount, activityLevel, stepGoal;
-    private static File uploadedFile;
+    private static UserData userData;
+    //Personal Data
+    private String username;
+    private String email;
+    private String gender;
+    private int height;
+    private int age;
+    private int weight;
+    private File uploadedFile;
+    //HRM-Data
+    private int heartRate;
+    private int activityLevel;
+    private int hRmax;
+    //Pedometer-Data
+    private int weeklyStepCount;
+    private int monthlyStepCount;
+    private int stepGoal;
+    //Other
+    private String objectId;
 
-    public UserProfileData() {
+    public UserData() {
     }
 
-    public UserProfileData(String username, String gender, String objectId, int age, int height, int weight, int heartRate, int weeklyStepCount, int monthlyStepCount, int activityLevel, int stepGoal, File uploadedFile) {
 
+    public UserData(String username, String email) {
         setUsername(username);
-        setGender(gender);
-        setObjectId(objectId);
-        setAge(age);
-        setHeight(height);
-        setWeight(weight);
-        setHeartRate(heartRate);
-        setWeeklyStepCount(weeklyStepCount);
-        setMonthlyStepCount(monthlyStepCount);
-        setActivityLevel(activityLevel);
-        setStepGoal(stepGoal);
-        setUploadedFile(uploadedFile);
+        setEmail(email);
     }
 
-    public UserProfileData(UserProfileData data) {
+    public UserData(UserData data) {
+
+        username = data.getUsername();
+        email = data.getEmail();
         age = data.getAge();
         gender = data.getGender();
         weight = data.getWeight();
         height = data.getHeight();
+
         heartRate = data.getHeartRate();
+        activityLevel = data.getActivityLevel();
+        hRmax = data.gethRmax();
+
         weeklyStepCount = data.getWeeklyStepCount();
         monthlyStepCount = data.getMonthlyStepCount();
+        stepGoal = data.getStepGoal();
+
         objectId = data.getObjectId();
 
+    }
+
+    public static UserData getInstance(String username, String email) {
+        //if (userData == null) {
+        userData = new UserData(username, email);
+        //}
+        return userData;
+    }
+
+    public static UserData getInstance(UserData data) {
+        // if (userData == null) {
+        userData = new UserData(data);
+        //}
+        return userData;
+    }
+
+    public static UserData getInstance() {
+        // if (userData == null) {
+        userData = new UserData();
+        //}
+        return userData;
+    }
+
+    public int gethRmax() {
+        return hRmax;
+    }
+
+    public void sethRmax(int hRmax) {
+        this.hRmax = hRmax;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public int getStepGoal() {
@@ -51,7 +103,7 @@ public class UserProfileData {
     }
 
     public void setStepGoal(int stepGoal) {
-        UserProfileData.stepGoal = stepGoal;
+        this.stepGoal = stepGoal;
     }
 
     public int getActivityLevel() {
@@ -59,16 +111,15 @@ public class UserProfileData {
     }
 
     public void setActivityLevel(int activityLevel) {
-        UserProfileData.activityLevel = activityLevel;
+        this.activityLevel = activityLevel;
     }
 
-
-    private String getObjectId() {
+    public String getObjectId() {
         return objectId;
     }
 
     private void setObjectId(String objectId) {
-        UserProfileData.objectId = objectId;
+        this.objectId = objectId;
     }
 
     public String getUsername() {
@@ -76,7 +127,7 @@ public class UserProfileData {
     }
 
     public void setUsername(String username) {
-        UserProfileData.username = username;
+        this.username = username;
     }
 
     public int getHeight() {
@@ -84,7 +135,7 @@ public class UserProfileData {
     }
 
     public void setHeight(int height) {
-        UserProfileData.height = height;
+        this.height = height;
     }
 
     public int getAge() {
@@ -92,7 +143,7 @@ public class UserProfileData {
     }
 
     public void setAge(int age) {
-        UserProfileData.age = age;
+        this.age = age;
     }
 
     public String getGender() {
@@ -100,7 +151,7 @@ public class UserProfileData {
     }
 
     public void setGender(String gender) {
-        UserProfileData.gender = gender;
+        this.gender = gender;
     }
 
     public int getWeight() {
@@ -108,7 +159,7 @@ public class UserProfileData {
     }
 
     public void setWeight(int weight) {
-        UserProfileData.weight = weight;
+        this.weight = weight;
     }
 
     private int getHeartRate() {
@@ -116,7 +167,7 @@ public class UserProfileData {
     }
 
     public void setHeartRate(int heartRate) {
-        UserProfileData.heartRate = heartRate;
+        this.heartRate = heartRate;
     }
 
     public int getWeeklyStepCount() {
@@ -124,7 +175,7 @@ public class UserProfileData {
     }
 
     public void setWeeklyStepCount(int weeklyStepCount) {
-        UserProfileData.weeklyStepCount = weeklyStepCount;
+        this.weeklyStepCount = weeklyStepCount;
     }
 
     private int getMonthlyStepCount() {
@@ -132,7 +183,7 @@ public class UserProfileData {
     }
 
     public void setMonthlyStepCount(int monthlyStepCount) {
-        UserProfileData.monthlyStepCount = monthlyStepCount;
+        this.monthlyStepCount = monthlyStepCount;
     }
 
     public File getUploadedFile() {
@@ -140,8 +191,9 @@ public class UserProfileData {
     }
 
     public void setUploadedFile(File uploadedFile) {
-        UserProfileData.uploadedFile = uploadedFile;
+        this.uploadedFile = uploadedFile;
     }
+
 
     public void deleteAll() {
         this.setAge(0);
@@ -153,23 +205,12 @@ public class UserProfileData {
         this.setHeartRate(0);
         this.setMonthlyStepCount(0);
         this.setGender("");
+        this.setEmail("");
         this.setObjectId(null);
         this.setUploadedFile(null);
-
+        userData = null;
     }
 
     //Used for some testing only
-    @Override
-    public String toString() {
-        return "UserProfileData{" +
-                ", gender='" + gender + '\'' +
-                ", height=" + height +
-                ", age=" + age +
-                ", weight=" + weight +
-                ", heartRate=" + heartRate +
-                ", weeklyStepCount=" + weeklyStepCount +
-                ", monthlyStepCount=" + monthlyStepCount +
-                ", ObjectID=" + objectId +
-                '}';
-    }
+
 }

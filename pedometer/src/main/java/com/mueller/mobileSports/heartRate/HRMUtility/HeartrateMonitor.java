@@ -9,10 +9,5 @@ public interface HeartRateMonitor {
 
     int[] getHeartRate();
 
-    int getAverageHeartRate();
-
-    int getMaxHeartRate();
-
-    int getMinHeartRate();
 
 }
