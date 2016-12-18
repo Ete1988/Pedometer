@@ -38,7 +38,6 @@
             android:textStyle="normal|bold" />
 
         <TextView
-            android:id="@+id/hrm_SessionTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -149,7 +148,6 @@
             android:textStyle="normal|bold|italic" />
 
         <TextView
-            android:id="@+id/txtHeartRateView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -172,7 +170,6 @@
     </RelativeLayout>
 
     <include
-        android:id="@+id/bottombar"
         layout="@layout/bottom_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

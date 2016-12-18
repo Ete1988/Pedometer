@@ -28,9 +28,7 @@
     <string name="hint_age">Age</string>
     <string name="save">Save changes</string>
     <string name="hint_weight">Weight in Kg</string>
-    <string name="hint_HRmax">HRmax</string>
     <string name="email">EMail</string>
-    <string name="use_default">Use default</string>
     <string name="gender">Gender:</string>
     <string name="uploadprofilepicture">UploadProfilePicture</string>
     <string-array name="gender_selector">
@@ -58,6 +56,10 @@
     <string name="action_register">No Account yet? Register here!</string>
 
     <string name="emptyString" />
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="create_account">Create Account</string>
+    <string name="already_have_an_account_login">Already have an account? Login</string>
 
 
 </resources>

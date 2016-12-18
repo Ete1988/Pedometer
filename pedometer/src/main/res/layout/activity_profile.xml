@@ -46,7 +46,6 @@
             android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_eMail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -63,7 +62,6 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -79,7 +77,6 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_age"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -94,7 +91,6 @@
             </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
-                android:id="@+id/input_layout_sex"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -102,7 +98,6 @@
                 android:paddingTop="5dp">
 
                 <TextView
-                    android:id="@+id/txtGender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="@string/gender"
@@ -119,7 +114,6 @@
 
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_weight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -134,7 +128,6 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_height"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -165,14 +158,12 @@
     </ScrollView>
 
     <LinearLayout
-        android:id="@+id/layout_dataInclude"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:isScrollContainer="false">
 
         <include
-            android:id="@+id/bottombar"
             layout="@layout/bottom_bar"
 
             android:layout_width="match_parent"

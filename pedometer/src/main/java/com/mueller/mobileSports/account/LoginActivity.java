@@ -26,11 +26,7 @@ import com.mueller.mobileSports.pedometer.PedometerActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText mEmailText, mPasswordText;
-    Button mLoginButton;
-
-
-    AsyncCallback<BackendlessUser> loginResponder = new AsyncCallback<BackendlessUser>() {
+    final AsyncCallback<BackendlessUser> loginResponder = new AsyncCallback<BackendlessUser>() {
         @Override
         public void handleResponse(BackendlessUser backendlessUser) {
             Backendless.UserService.setCurrentUser(backendlessUser);
@@ -44,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getBaseContext(), "Error logging in! Please register or check your log in details", Toast.LENGTH_LONG).show();
         }
     };
+    EditText mEmailText, mPasswordText;
+    Button mLoginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

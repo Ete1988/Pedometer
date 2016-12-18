@@ -25,12 +25,8 @@ import java.util.Locale;
 
 public class SettingsActivity extends BottomBarButtonManager {
 
-    private int physicalActivityLevel, StepGoal;
-    private TextView mActivityLevelText, mCurrentStepGoalText;
-    private SessionManager sessionManager;
-    private String[] goalsValuesArray = {"5000", "6000", "7000", "8000", "9000", "10000", "Other? Please set here!"};
-
-    private String[] activityLevelTextArray = {"0: Avoid walking or exertion, for example, always use elevator, drive " +
+    private final String[] goalsValuesArray = {"5000", "6000", "7000", "8000", "9000", "10000", "Other? Please set here!"};
+    private final String[] activityLevelTextArray = {"0: Avoid walking or exertion, for example, always use elevator, drive " +
             "whenever possible instead of walking",
             "1: Walk for pleasure, routinely use stairs, occasionally exercise " +
                     "sufficiently to cause heavy breathing or perspiration",
@@ -45,7 +41,9 @@ public class SettingsActivity extends BottomBarButtonManager {
             "7: run over 10 miles (16 km) per week or spend over 3 hours per week " +
                     "in comparable physical activity"
     };
-
+    private int physicalActivityLevel, StepGoal;
+    private TextView mActivityLevelText, mCurrentStepGoalText;
+    private SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

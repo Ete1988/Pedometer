@@ -23,12 +23,11 @@ import com.mueller.mobileSports.account.LoginActivity;
 public class SessionManager {
 
     private static UserData userData;
-    private boolean isValidLogin;
     private Context context;
     private AsyncCallback<Void> logoutResponder = new AsyncCallback<Void>() {
         @Override
         public void handleResponse(Void aVoid) {
-            isValidLogin = Backendless.UserService.isValidLogin();
+            boolean isValidLogin = Backendless.UserService.isValidLogin();
 
         }
 

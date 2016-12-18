@@ -40,7 +40,6 @@
         circular:cpb_title="Title" />
 
     <include
-        android:id="@+id/bottombar"
         layout="@layout/bottom_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

@@ -23,8 +23,6 @@ import com.mueller.mobileSports.user.SessionManager;
 
 public abstract class BottomBarButtonManager extends AppCompatActivity implements View.OnClickListener {
 
-    protected ImageButton mPedometerBtn;
-    ImageButton mSettingsBtn, mHeartRateBtn, mProfileBtn, mLogoutBtn;
     private Activity mActivity;
     private SessionManager sessionManager;
 
@@ -40,11 +38,11 @@ public abstract class BottomBarButtonManager extends AppCompatActivity implement
      */
     protected void mappingWidgets() {
 
-        mPedometerBtn = (ImageButton) findViewById(R.id.PedometerBtn);
-        mSettingsBtn = (ImageButton) findViewById(R.id.SettingsBtn);
-        mHeartRateBtn = (ImageButton) findViewById(R.id.HeartRateBtn);
-        mLogoutBtn = (ImageButton) findViewById(R.id.LogoutBtn);
-        mProfileBtn = (ImageButton) findViewById(R.id.ProfileBtn);
+        ImageButton mPedometerBtn = (ImageButton) findViewById(R.id.PedometerBtn);
+        ImageButton mSettingsBtn = (ImageButton) findViewById(R.id.SettingsBtn);
+        ImageButton mHeartRateBtn = (ImageButton) findViewById(R.id.HeartRateBtn);
+        ImageButton mLogoutBtn = (ImageButton) findViewById(R.id.LogoutBtn);
+        ImageButton mProfileBtn = (ImageButton) findViewById(R.id.ProfileBtn);
         mPedometerBtn.setOnClickListener(this);
         mSettingsBtn.setOnClickListener(this);
         mHeartRateBtn.setOnClickListener(this);

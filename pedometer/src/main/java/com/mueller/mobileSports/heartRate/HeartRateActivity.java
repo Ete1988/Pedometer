@@ -32,7 +32,7 @@ public class HeartRateActivity extends BottomBarButtonManager {
     private int updateCounter = 0, averageHeartRateCalculationCounter = 0;
     private long start_time, timeInMilliseconds, time_update, time_swapBuff;
     private Handler mHandler;
-    public Runnable mTimerRunnable = new Runnable() {
+    public final Runnable mTimerRunnable = new Runnable() {
 
         @Override
         public void run() {
@@ -49,7 +49,7 @@ public class HeartRateActivity extends BottomBarButtonManager {
     private Button mHeartRateMonitoringBtn;
     private boolean hRM_active = true;
     private int[] heartRateDataArray, averageHeartRateArray;
-    public Runnable mHeartRateSimulation = new Runnable() {
+    public final Runnable mHeartRateSimulation = new Runnable() {
         @Override
         public void run() {
             if (updateCounter == heartRateDataArray.length) {
