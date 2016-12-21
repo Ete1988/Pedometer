@@ -1,5 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,29 +6,21 @@
     android:orientation="vertical"
     tools:context="com.mueller.mobileSports.pedometer.PedometerActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        android:layout_width="fill_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
 
-
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/timer_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/my_toolbar"
-        android:layout_marginTop="25dp"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/timeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:fontFamily="sans-serif"
             android:text="@string/default_timer"
             android:textAlignment="center"
@@ -37,113 +28,78 @@
             android:textSize="30sp"
             android:textStyle="normal|bold" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
-    <ScrollView
-        android:id="@+id/heartRate_dataLayoutScrollView"
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/timer_layout"
-        android:layout_marginTop="20dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:orientation="vertical">
 
 
         <LinearLayout
-            android:id="@+id/heartRate_dataLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="@string/heart_rate"
+                android:textSize="24sp"
+                android:textStyle="normal|bold|italic" />
 
-            <RelativeLayout
-                android:id="@+id/layout_heartRate"
-                android:layout_width="match_parent"
-                android:layout_height="40dp">
+            <android.support.v4.widget.Space
+                android:layout_width="60dp"
+                android:layout_height="match_parent" />
 
-                <TextView
-                    android:id="@+id/txtHeartRate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:fontFamily="sans-serif"
-                    android:text="@string/heart_rate"
-                    android:textSize="24sp"
-                    android:textStyle="normal|bold|italic" />
+            <TextView
+                android:id="@+id/txtHeartRateView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/standardValue"
+                android:textSize="24sp"
+                android:textStyle="normal|bold" />
 
-                <TextView
-                    android:id="@+id/txtHeartRateView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignStart="@+id/txtHeartRate"
-                    android:layout_marginStart="175dp"
-                    android:text="@string/standardValue"
-                    android:textSize="30sp"
-                    android:textStyle="normal|bold" />
+            <android.support.v4.widget.Space
+                android:layout_width="5dp"
+                android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/txtHeartRateViewUnit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="5dip"
-                    android:layout_toEndOf="@id/txtHeartRateView"
-                    android:text="@string/bpm"
-                    android:textSize="12sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bpm"
+                android:textSize="12sp" />
 
-            </RelativeLayout>
+        </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/layout_heartRateAvg"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="10dp">
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/txtAverageHR"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:text="@string/average"
                     android:textSize="18sp"
+
                     android:textStyle="normal|italic" />
 
                 <TextView
-                    android:id="@+id/txtAvrHRView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/txtAverageHR"
-                    android:layout_marginStart="180dp"
-                    android:text="@string/standardValue"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/txtAvrHRViewUnit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="5dip"
-                    android:layout_toEndOf="@id/txtAvrHRView"
-                    android:text="@string/bpm"
-                    android:textSize="12sp" />
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/layout_heartRateMin"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp">
-
-                <TextView
-                    android:id="@+id/txtMinHR"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/minimum"
@@ -151,140 +107,183 @@
                     android:textStyle="normal|italic" />
 
                 <TextView
-                    android:id="@+id/txtMinHRView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/txtMinHR"
-                    android:layout_marginStart="180dp"
-                    android:text="@string/standardValue"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/txtMinHRViewUnit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="5dip"
-                    android:layout_toEndOf="@id/txtMinHRView"
-                    android:text="@string/bpm"
-                    android:textSize="12sp" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/layout_heartRateMax"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp">
-
-
-                <TextView
-                    android:id="@+id/txtMaxHR"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/maximum"
                     android:textSize="18sp"
                     android:textStyle="normal|italic" />
 
+            </LinearLayout>
+
+            <android.support.v4.widget.Space
+                android:layout_width="100dp"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
                 <TextView
-                    android:id="@+id/txtMaxHRView"
+                    android:id="@+id/txtAvrHRView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/txtMaxHR"
-                    android:layout_marginStart="180dp"
+                    android:text="@string/standardValue"
+                    android:textSize="18sp" />
+
+
+                <TextView
+                    android:id="@+id/txtMinHRView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@string/standardValue"
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/txtMaxHRViewUnit"
+                    android:id="@+id/txtMaxHRView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="5dip"
-                    android:layout_toEndOf="@id/txtMaxHRView"
+                    android:text="@string/standardValue"
+                    android:textSize="18sp" />
+
+
+            </LinearLayout>
+
+            <android.support.v4.widget.Space
+                android:layout_width="5dp"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v4.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="7dip" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bpm"
+                    android:textSize="12sp" />
+
+                <android.support.v4.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="7dip" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bpm"
+                    android:textSize="12sp" />
+
+                <android.support.v4.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="7dip" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@string/bpm"
                     android:textSize="12sp" />
 
 
-            </RelativeLayout>
+            </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/layout_hRmax"
+
+        </LinearLayout>
+
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="20dip" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/txtHRmax"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="HRmax: "
+                    android:text="@string/hrmax"
                     android:textSize="18sp"
                     android:textStyle="normal|italic" />
+
+                <android.support.v4.widget.Space
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent" />
 
                 <TextView
                     android:id="@+id/txtHRmaxView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/txtHRmax"
-                    android:layout_marginStart="180dp"
                     android:text="@string/standardValue"
                     android:textSize="18sp" />
 
+                <android.support.v4.widget.Space
+                    android:layout_width="5dip"
+                    android:layout_height="match_parent" />
+
                 <TextView
-                    android:id="@+id/txtHRmaxViewUnit"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="5dip"
-                    android:layout_toEndOf="@id/txtHRmaxView"
                     android:text="@string/bpm"
                     android:textSize="12sp" />
+            </LinearLayout>
 
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/layout_heartRateTarget"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/txtTargetHeartRate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="15dp"
                     android:text="@string/percentage_of_heart_rate"
                     android:textSize="14sp"
                     android:textStyle="normal|italic" />
+
+                <android.support.v4.widget.Space
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/txtTargetHeartRateView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/txtTargetHeartRate"
-                    android:layout_below="@+id/txtTargetHeartRate"
-                    android:layout_marginStart="180dp"
-                    android:layout_marginTop="15dp"
                     android:text="@string/xx"
                     android:textSize="18sp"
                     android:textStyle="normal|bold|italic" />
-            </RelativeLayout>
+
+                <android.support.v4.widget.Space
+                    android:layout_width="5dip"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/percentUnit"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
         </LinearLayout>
-    </ScrollView>
 
+    </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/trimp_layout"
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/heartRate_dataLayoutScrollView"
-        android:layout_marginTop="10dp"
-        android:paddingLeft="20dp">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/txtTrimpScore"
@@ -294,54 +293,54 @@
             android:textSize="24sp"
             android:textStyle="normal|bold" />
 
+        <android.support.v4.widget.Space
+            android:layout_width="40dp"
+            android:layout_height="match_parent" />
+
         <TextView
             android:id="@+id/txtTrimpScoreView"
             android:layout_width="wrap_content"
-
             android:layout_height="wrap_content"
-            android:layout_below="@id/txtTrimpScore"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="100dp"
             android:text="@string/standardValue"
             android:textAllCaps="false"
             android:textSize="30sp"
             android:textStyle="normal|bold" />
 
 
-    </RelativeLayout>
+    </LinearLayout>
 
-    <RelativeLayout
+    <android.support.v4.widget.Space
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@+id/trimp_layout"
-        android:layout_marginTop="10dp">
+        android:layout_height="60dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/iv_start_stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="100dp"
             android:contentDescription="@string/start_stop_session"
-            app:srcCompat="@mipmap/ic_start" />
+            android:src="@mipmap/ic_start" />
 
+        <android.support.v4.widget.Space
+            android:layout_width="100dp"
+            android:layout_height="match_parent" />
         <ImageView
             android:id="@+id/iv_reset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="100dp"
             android:contentDescription="@string/reset_session"
-            app:srcCompat="@mipmap/ic_reset" />
-    </RelativeLayout>
+            android:src="@mipmap/ic_reset" />
+    </LinearLayout>
 
     <include
         android:id="@+id/includeBottomBar"
         layout="@layout/bottom_bar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
+        android:layout_height="wrap_content" />
 
-</RelativeLayout>
+</LinearLayout>

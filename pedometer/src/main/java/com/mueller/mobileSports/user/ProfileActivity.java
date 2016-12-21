@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -41,8 +40,8 @@ public class ProfileActivity extends BottomBarButtonManager {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
+         /*   Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+      *  setSupportActionBar(myToolbar); */
         setTitle("Edit Profile");
         sessionManager = new SessionManager(this);
         mInputData = new EditText[5];
@@ -50,7 +49,7 @@ public class ProfileActivity extends BottomBarButtonManager {
         mInputData[1] = (EditText) findViewById(R.id.input_age);
         mInputData[2] = (EditText) findViewById(R.id.input_weight);
         mInputData[3] = (EditText) findViewById(R.id.input_height);
-        mInputData[4] = (EditText) findViewById(R.id.input_eMail);
+        mInputData[4] = (EditText) findViewById(R.id.input_email);
         spinner = (Spinner) findViewById(R.id.spinner_gender);
         Button mSaveChangesBtn = (Button) findViewById(R.id.btn_saveChangesProfile);
         mappingWidgets();

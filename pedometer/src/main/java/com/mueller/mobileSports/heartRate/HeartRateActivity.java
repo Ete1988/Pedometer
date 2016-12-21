@@ -2,7 +2,6 @@ package com.mueller.mobileSports.heartRate;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -74,8 +73,8 @@ public class HeartRateActivity extends BottomBarButtonManager {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_heart_rate);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
+         /*   Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+      *  setSupportActionBar(myToolbar); */
         mappingWidgets();
         sessionManager = new SessionManager(this);
         mTextTime = (TextView) findViewById(R.id.timeTextView);

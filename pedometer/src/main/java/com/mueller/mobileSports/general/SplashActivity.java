@@ -1,8 +1,8 @@
 package com.mueller.mobileSports.general;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.backendless.Backendless;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
@@ -13,8 +13,7 @@ import com.mueller.mobileSports.pedometer.PedometerActivity;
  * Just a splash screen on startup
  */
 
-public class SplashActivity extends AppCompatActivity {
-
+public class SplashActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

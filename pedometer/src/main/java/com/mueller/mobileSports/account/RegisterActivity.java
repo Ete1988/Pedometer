@@ -1,10 +1,9 @@
 package com.mueller.mobileSports.account;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +24,7 @@ import butterknife.ButterKnife;
  * A register screen to create a new user account
  */
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends Activity {
 
     @Bind(R.id.input_email)
     EditText _emailText;
@@ -42,11 +41,8 @@ public class RegisterActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        setTitle("Register Account");
         ButterKnife.bind(this);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-        setTitle("Register");
-
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override

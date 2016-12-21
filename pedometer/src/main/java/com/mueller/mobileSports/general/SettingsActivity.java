@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
@@ -48,8 +47,10 @@ public class SettingsActivity extends BottomBarButtonManager {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_settings);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+      /*   Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+           setSupportActionBar(myToolbar); */
         sessionManager = new SessionManager(this);
         mActivityLevelText = (TextView) findViewById(R.id.level);
         mCurrentStepGoalText = (TextView) findViewById(R.id.stepGoalView);
@@ -61,7 +62,7 @@ public class SettingsActivity extends BottomBarButtonManager {
         setLevel();
         setGoal();
 
-        setSupportActionBar(myToolbar);
+
         setTitle("Settings");
 
         mSaveChangesBtn.setOnClickListener(new View.OnClickListener() {

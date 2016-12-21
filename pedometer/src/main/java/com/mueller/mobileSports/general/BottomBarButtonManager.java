@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -21,7 +20,7 @@ import com.mueller.mobileSports.user.SessionManager;
  * Abstract base class for all activities to who include the bottom bar layout.
  */
 
-public abstract class BottomBarButtonManager extends AppCompatActivity implements View.OnClickListener {
+public abstract class BottomBarButtonManager extends Activity implements View.OnClickListener {
 
     private Activity mActivity;
     private SessionManager sessionManager;

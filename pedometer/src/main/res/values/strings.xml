@@ -61,8 +61,10 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="create_account">Create Account</string>
     <string name="already_have_an_account_login">Already have an account? Login</string>
-    <string name="xx">xx%</string>
+    <string name="xx">xx</string>
     <string name="bpm">bpm</string>
+    <string name="hrmax">HRmax:</string>
+    <string name="percentUnit">%</string>
 
 
 </resources>

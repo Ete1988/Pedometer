@@ -7,7 +7,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,8 +44,8 @@ public class PedometerActivity extends BottomBarButtonManager implements SensorE
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedometer);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
+         /*   Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+      *  setSupportActionBar(myToolbar); */
         date = (TextView) findViewById(R.id.date);
         cBar = (CircularProgressBar) findViewById(R.id.circularprogressbar3);
         cBar.setSubTitle("Steps");
