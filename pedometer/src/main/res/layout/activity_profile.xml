@@ -56,7 +56,7 @@
                     android:enabled="false"
                     android:focusable="false"
                     android:hint="@string/email"
-                    android:maxLength="20"
+                    android:maxLength="30"
                     android:text="@string/emptyString" />
 
             </android.support.design.widget.TextInputLayout>

@@ -50,7 +50,7 @@ public class PedometerActivity extends BottomBarButtonManager implements SensorE
         date = (TextView) findViewById(R.id.date);
         cBar = (CircularProgressBar) findViewById(R.id.circularprogressbar3);
         cBar.setSubTitle("Steps");
-        sessionManager = new SessionManager(getApplicationContext());
+        sessionManager = new SessionManager(this);
         sessionManager.checkLogin();
         myData = sessionManager.getUserData();
         timeManager = new PedometerUtility(this);
@@ -66,6 +66,7 @@ public class PedometerActivity extends BottomBarButtonManager implements SensorE
     }
 
     private void getData() {
+
         stepsOverDay = sharedValues.getInt("dayCount");
         stepsOverWeek = myData.getWeeklyStepCount();
         date.setText(sharedValues.getString("checkDate"));

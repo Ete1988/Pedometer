@@ -52,7 +52,7 @@ public class SessionManager {
      */
     public void checkLogin() {
 
-        if (!this.isLoggedIn()) {
+        if (!isLoggedIn()) {
             Intent i = new Intent(context, LoginActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -70,6 +70,8 @@ public class SessionManager {
 
         String userToken = UserTokenStorageFactory.instance().getStorage().get();
         return userToken != null && !userToken.equals("");
+
+
     }
 
     /**
@@ -77,7 +79,7 @@ public class SessionManager {
      * Removes all userrelevant data and then redirects the user to the login screen
      */
     public void logoutUser() {
-        if (this.isLoggedIn()) {
+        if (isLoggedIn()) {
 
             userData.deleteAll();
             Backendless.UserService.logout(logoutResponder);
@@ -143,7 +145,7 @@ public class SessionManager {
             loadCurrentUserData();
             return userData;
         } else {
-            return null;
+            return new UserData();
         }
     }
 

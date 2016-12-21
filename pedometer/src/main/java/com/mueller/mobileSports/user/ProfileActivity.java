@@ -117,7 +117,6 @@ public class ProfileActivity extends BottomBarButtonManager {
         myData.setAge(Integer.parseInt(mInputData[1].getText().toString()));
         myData.setWeight(Integer.parseInt(mInputData[2].getText().toString()));
         myData.setHeight(Integer.parseInt(mInputData[3].getText().toString()));
-        myData.sethRmax(Integer.parseInt(mInputData[4].getText().toString()));
 
         sessionManager.uploadUserData(this);
     }

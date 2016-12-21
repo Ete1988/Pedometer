@@ -78,9 +78,8 @@ public class HeartRateActivity extends BottomBarButtonManager {
         setSupportActionBar(myToolbar);
         mappingWidgets();
         sessionManager = new SessionManager(this);
-        mHeartRateMonitoringBtn = (Button) findViewById(R.id.heartRateMonitoringBtn);
         mTextTime = (TextView) findViewById(R.id.timeTextView);
-        mHeartRate = (TextView) findViewById(R.id.txtHeartRate);
+        mHeartRate = (TextView) findViewById(R.id.txtHeartRateView);
         mAverageHeartRate = (TextView) findViewById(R.id.txtAvrHRView);
         mMaxHearRate = (TextView) findViewById(R.id.txtMaxHRView);
         mMinHeartRate = (TextView) findViewById(R.id.txtMinHRView);
@@ -91,7 +90,7 @@ public class HeartRateActivity extends BottomBarButtonManager {
         btnState = 1;
         mHandler = new Handler();
         getHeartRateData();
-
+/*
         mHeartRateMonitoringBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -109,6 +108,7 @@ public class HeartRateActivity extends BottomBarButtonManager {
                 }
             }
         });
+        */
 
         iv_start.setOnClickListener(new View.OnClickListener() {
 
@@ -119,11 +119,15 @@ public class HeartRateActivity extends BottomBarButtonManager {
                     iv_start.setImageResource(R.mipmap.ic_stop);
                     start_time = System.currentTimeMillis();
                     mHandler.postDelayed(mTimerRunnable, 10L);
+                    mHandler.postDelayed(mHeartRateSimulation, 10L);
+                    hRM_active = false;
                     btnState = 0;
                 } else {
                     iv_start.setImageResource(R.mipmap.ic_start);
                     time_swapBuff += timeInMilliseconds;
                     mHandler.removeCallbacks(mTimerRunnable);
+                    mHandler.removeCallbacks(mHeartRateSimulation);
+                    hRM_active = true;
                     btnState = 1;
                 }
             }
