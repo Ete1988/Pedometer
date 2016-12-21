@@ -1,9 +1,9 @@
 package com.mueller.mobileSports.general;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +22,7 @@ import java.util.Locale;
  * Activity that offers methods to adjust app relevant data.
  */
 
-public class SettingsActivity extends BottomBarButtonManager {
+public class SettingsActivity extends GenericActivity {
 
     private final String[] goalsValuesArray = {"5000", "6000", "7000", "8000", "9000", "10000", "Other? Please set here!"};
     private final String[] activityLevelTextArray = {"0: Avoid walking or exertion, for example, always use elevator, drive " +

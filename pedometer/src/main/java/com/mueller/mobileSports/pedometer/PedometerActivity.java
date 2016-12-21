@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lylc.widget.circularprogressbar.CircularProgressBar;
-import com.mueller.mobileSports.general.BottomBarButtonManager;
+import com.mueller.mobileSports.general.GenericActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.user.SessionManager;
 import com.mueller.mobileSports.user.UserData;
@@ -22,7 +22,7 @@ import com.mueller.mobileSports.user.UserData;
  * <p>
  * Activity meant for the pedometer app mode
  */
-public class PedometerActivity extends BottomBarButtonManager implements SensorEventListener {
+public class PedometerActivity extends GenericActivity implements SensorEventListener {
 
     // Session Manager Class
     SessionManager sessionManager;

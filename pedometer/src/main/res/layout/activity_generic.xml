@@ -4,19 +4,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@color/black_overlay"
-        android:orientation="?attr/colorPrimary">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/PedometerBtn"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
             android:background="@null"
@@ -26,13 +26,15 @@
             android:src="@mipmap/ic_steps"
             android:visibility="visible" />
 
+        <android.support.v4.widget.Space
+            android:layout_width="40dp"
+            android:layout_height="match_parent" />
+
         <ImageButton
             android:id="@+id/HeartRateBtn"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
             android:layout_marginEnd="20dp"
-            android:layout_toEndOf="@id/PedometerBtn"
             android:background="@null"
             android:clickable="true"
             android:contentDescription="@string/emptyString"
@@ -40,27 +42,15 @@
             android:src="@mipmap/ic_heart"
             android:visibility="visible" />
 
-        <ImageButton
-            android:id="@+id/SettingsBtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="20dp"
-            android:layout_toEndOf="@id/HeartRateBtn"
-            android:background="@null"
-            android:clickable="true"
-            android:contentDescription="@string/emptyString"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_settings"
-            android:visibility="visible" />
+        <android.support.v4.widget.Space
+            android:layout_width="40dp"
+            android:layout_height="match_parent" />
 
         <ImageButton
             android:id="@+id/ProfileBtn"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
             android:layout_marginEnd="20dp"
-            android:layout_toEndOf="@id/SettingsBtn"
             android:background="@null"
             android:clickable="true"
             android:contentDescription="@string/emptyString"
@@ -68,22 +58,8 @@
             android:src="@mipmap/ic_profile"
             android:visibility="visible" />
 
-        <ImageButton
-            android:id="@+id/LogoutBtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="20dp"
-            android:layout_toEndOf="@id/ProfileBtn"
-            android:background="@null"
-            android:clickable="true"
-            android:contentDescription="@string/emptyString"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_logout"
-            android:visibility="visible" />
 
-
-    </RelativeLayout>
+    </LinearLayout>
 
 
 </RelativeLayout>

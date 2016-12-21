@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mueller.mobileSports.general.BottomBarButtonManager;
+import com.mueller.mobileSports.general.GenericActivity;
 import com.mueller.mobileSports.heartRate.HRMUtility.HeartRateMonitor;
 import com.mueller.mobileSports.heartRate.HRMUtility.SimulationHRM;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
@@ -21,7 +21,7 @@ import java.util.Locale;
  * Activity meant for the heart rate monitoring app mode
  */
 
-public class HeartRateActivity extends BottomBarButtonManager {
+public class HeartRateActivity extends GenericActivity {
 
     long init, paused;
     private ImageView iv_start, iv_restart;

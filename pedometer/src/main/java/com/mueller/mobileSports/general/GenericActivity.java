@@ -1,10 +1,11 @@
 package com.mueller.mobileSports.general;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -20,7 +21,7 @@ import com.mueller.mobileSports.user.SessionManager;
  * Abstract base class for all activities to who include the bottom bar layout.
  */
 
-public abstract class BottomBarButtonManager extends Activity implements View.OnClickListener {
+public abstract class GenericActivity extends Activity implements View.OnClickListener {
 
     private Activity mActivity;
     private SessionManager sessionManager;
@@ -38,14 +39,10 @@ public abstract class BottomBarButtonManager extends Activity implements View.On
     protected void mappingWidgets() {
 
         ImageButton mPedometerBtn = (ImageButton) findViewById(R.id.PedometerBtn);
-        ImageButton mSettingsBtn = (ImageButton) findViewById(R.id.SettingsBtn);
         ImageButton mHeartRateBtn = (ImageButton) findViewById(R.id.HeartRateBtn);
-        ImageButton mLogoutBtn = (ImageButton) findViewById(R.id.LogoutBtn);
         ImageButton mProfileBtn = (ImageButton) findViewById(R.id.ProfileBtn);
         mPedometerBtn.setOnClickListener(this);
-        mSettingsBtn.setOnClickListener(this);
         mHeartRateBtn.setOnClickListener(this);
-        mLogoutBtn.setOnClickListener(this);
         mProfileBtn.setOnClickListener(this);
     }
 
@@ -62,40 +59,11 @@ public abstract class BottomBarButtonManager extends Activity implements View.On
         } else if (v.getId() == R.id.ProfileBtn) {
             Intent intent = new Intent(mActivity, ProfileActivity.class);
             startActivity(intent);
-        } else if (v.getId() == R.id.SettingsBtn) {
-            Intent intent = new Intent(mActivity, SettingsActivity.class);
-            startActivity(intent);
         } else if (v.getId() == R.id.HeartRateBtn) {
             Intent intent = new Intent(mActivity, HeartRateActivity.class);
             startActivity(intent);
-        } else if (v.getId() == R.id.LogoutBtn) {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                    mActivity);
-
-            // set title
-            alertDialogBuilder.setTitle("Logout");
-
-            // set dialog message
-            alertDialogBuilder
-                    .setMessage("Are you sure you want to logout?")
-                    .setCancelable(false)
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            sessionManager.logoutUser();
-                        }
-                    })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-
-            // create alert dialog
-            AlertDialog alertDialog = alertDialogBuilder.create();
-
-            // show it
-            alertDialog.show();
         }
+
     }
 /*
 
@@ -118,5 +86,29 @@ public abstract class BottomBarButtonManager extends Activity implements View.On
     }
 
 */
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //Only one button for now.
+        switch (item.getItemId()) {
+            case R.id.menu_settings:
+                Intent i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+                break;
+            case R.id.menu_logout:
+                sessionManager.logoutUser();
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
 }
 

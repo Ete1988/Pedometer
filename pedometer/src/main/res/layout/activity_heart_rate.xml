@@ -329,6 +329,7 @@
         <android.support.v4.widget.Space
             android:layout_width="100dp"
             android:layout_height="match_parent" />
+
         <ImageView
             android:id="@+id/iv_reset"
             android:layout_width="wrap_content"
@@ -339,7 +340,7 @@
 
     <include
         android:id="@+id/includeBottomBar"
-        layout="@layout/bottom_bar"
+        layout="@layout/activity_generic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

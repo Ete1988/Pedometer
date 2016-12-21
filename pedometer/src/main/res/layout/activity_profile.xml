@@ -212,7 +212,7 @@
             android:textColor="@android:color/black" />
 
         <include
-            layout="@layout/bottom_bar"
+            layout="@layout/activity_generic"
             android:layout_width="match_parent"
             android:layout_height="60dp" />
 

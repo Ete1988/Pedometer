@@ -31,7 +31,7 @@
         circular:cpb_title="Title" />
 
     <include
-        layout="@layout/bottom_bar"
+        layout="@layout/activity_generic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

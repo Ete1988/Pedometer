@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.mueller.mobileSports.general.BottomBarButtonManager;
+import com.mueller.mobileSports.general.GenericActivity;
 import com.mueller.mobileSports.heartRate.HRMUtility.HeartRateMonitorUtility;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 
@@ -26,7 +26,7 @@ import java.util.Objects;
  * A profile screen to display and edit user profile data
  */
 
-public class ProfileActivity extends BottomBarButtonManager {
+public class ProfileActivity extends GenericActivity {
 
     public static final int GET_FROM_GALLERY = 3;
     private EditText[] mInputData;
