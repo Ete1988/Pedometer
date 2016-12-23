@@ -24,20 +24,6 @@ import com.mueller.mobileSports.pedometer.PedometerActivity;
 
 public class LoginActivity extends Activity {
 
-    final AsyncCallback<BackendlessUser> loginResponder = new AsyncCallback<BackendlessUser>() {
-        @Override
-        public void handleResponse(BackendlessUser backendlessUser) {
-            Backendless.UserService.setCurrentUser(backendlessUser);
-            Toast.makeText(getBaseContext(), "Thanks for logging in!", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(getApplicationContext(), PedometerActivity.class);
-            startActivity(intent);
-        }
-
-        @Override
-        public void handleFault(BackendlessFault backendlessFault) {
-            Toast.makeText(getBaseContext(), "Error logging in! Please register or check your log in details", Toast.LENGTH_LONG).show();
-        }
-    };
     EditText mEmailText, mPasswordText;
     Button mLoginButton;
 
@@ -63,12 +49,20 @@ public class LoginActivity extends Activity {
 
     }
 
+    public void onClickLogin(View v) {
+        if (v.getId() == R.id.register_button) {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        }
+
+    }
+
     public void login() {
         //Get username, password from EditText
         String email = mEmailText.getText().toString();
         String password = mPasswordText.getText().toString();
 
-        //TODO Progressbar doesn't work.
+
         final ProgressDialog progress = new ProgressDialog(this);
         progress.setTitle("Loading");
         progress.setMessage("Wait while loading...");
@@ -78,8 +72,22 @@ public class LoginActivity extends Activity {
         // Check if username, password is filled
         if (email.trim().length() > 0 && password.trim().length() > 0) {
             //Backendless Login and let user stay logged in.
-            Backendless.UserService.login(email, password, loginResponder, true);
-            progress.dismiss();
+            Backendless.UserService.login(email, password, new AsyncCallback<BackendlessUser>() {
+                @Override
+                public void handleResponse(BackendlessUser backendlessUser) {
+                    Backendless.UserService.setCurrentUser(backendlessUser);
+                    Toast.makeText(getBaseContext(), "Thanks for logging in!", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getApplicationContext(), PedometerActivity.class);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void handleFault(BackendlessFault backendlessFault) {
+                    Toast.makeText(getBaseContext(), "Error logging in! Please register or check your log in details", Toast.LENGTH_LONG).show();
+                    progress.dismiss();
+                }
+            }, true);
+
 
         } else {
             // user didn't entered username or password

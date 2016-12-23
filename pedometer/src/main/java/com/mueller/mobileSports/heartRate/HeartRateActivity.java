@@ -24,6 +24,7 @@ import java.util.Locale;
 
 public class HeartRateActivity extends GenericActivity {
 
+
     public Runnable mTimerRunnable;
     public Runnable mHeartRateSimulation;
     long paused;
@@ -31,11 +32,9 @@ public class HeartRateActivity extends GenericActivity {
     private ImageView iv_start, iv_restart;
     private TextView mTextTime, mHeartRate, mAverageHeartRate, mMaxHearRate, mMinHeartRate;
     private int btnState, time_seconds, time_minutes, time_milliseconds;
-    private int maxHeartRate, minHeartRate, averageHeartRate;
     private int updateCounter, averageHeartRateCalculationCounter;
     private long start_time, timeInMilliseconds, time_update, time_swapBuff;
     private Handler mHandler;
-    private HeartRateMonitor hRM;
     private int[] heartRateDataArray, averageHeartRateArray;
     private SessionManager sessionManager;
     private HeartRateMonitorUtility heartRateMonitorUtility;
@@ -54,7 +53,7 @@ public class HeartRateActivity extends GenericActivity {
                     iv_start.setImageResource(R.mipmap.ic_stop);
                     start_time = System.currentTimeMillis();
                     mHandler.postDelayed(mTimerRunnable, 10L);
-                    mHandler.postDelayed(mHeartRateSimulation, 10L);
+                    mHandler.postDelayed(mHeartRateSimulation, 0);
                     btnState = 0;
                 } else {
                     iv_start.setImageResource(R.mipmap.ic_start);
@@ -88,7 +87,6 @@ public class HeartRateActivity extends GenericActivity {
 
         updateCounter = 0;
         averageHeartRateCalculationCounter = 0;
-
         sharedValues = SharedValues.getInstance(this);
         heartRateMonitorUtility = new HeartRateMonitorUtility(this);
         sessionManager = new SessionManager(this);
@@ -134,7 +132,7 @@ public class HeartRateActivity extends GenericActivity {
                 mMaxHearRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("maxHeartRate")));
                 mMinHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("minHeartRate")));
                 mHeartRate.setText(String.format(Locale.getDefault(), "%03d", heartRateDataArray[updateCounter++]));
-                mHandler.postDelayed(this, 4000);
+                mHandler.postDelayed(this, 3000);
             }
         };
 
@@ -153,25 +151,24 @@ public class HeartRateActivity extends GenericActivity {
         super.onClick(v);
     }
 
-
-
     public void getHeartRateData() {
-        hRM = new SimulationHRM(this);
+        HeartRateMonitor hRM = new SimulationHRM(this);
         heartRateDataArray = hRM.getHeartRate();
-        System.out.println(heartRateDataArray.length);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         paused = System.currentTimeMillis();
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        sessionManager.checkUserState();
+        sessionManager.isLoginValid();
         start_time += System.currentTimeMillis() - paused;
     }
 
 }
+

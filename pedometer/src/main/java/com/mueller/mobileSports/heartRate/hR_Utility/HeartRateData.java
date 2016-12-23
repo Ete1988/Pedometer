@@ -55,7 +55,7 @@ public class HeartRateData {
         this.activityLevel = activityLevel;
     }
 
-    private int getMaxHeartRate() {
+    public int getMaxHeartRate() {
         return maxHeartRate;
     }
 

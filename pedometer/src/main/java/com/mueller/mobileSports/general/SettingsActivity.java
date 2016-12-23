@@ -2,15 +2,18 @@ package com.mueller.mobileSports.general;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.mueller.mobileSports.heartRate.HeartRateActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
+import com.mueller.mobileSports.pedometer.PedometerActivity;
+import com.mueller.mobileSports.user.ProfileActivity;
 import com.mueller.mobileSports.user.SessionManager;
 
 import java.util.Locale;
@@ -49,14 +52,7 @@ public class SettingsActivity extends GenericActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         init();
-        Button mSaveChangesBtn = (Button) findViewById(R.id.btn_saveChangesSettings);
         setTitle("Settings");
-        mSaveChangesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateUserData();
-            }
-        });
     }
 
     private void init() {
@@ -79,7 +75,17 @@ public class SettingsActivity extends GenericActivity {
 
     @Override
     public void onClick(View v) {
-        super.onClick(v);
+        if (v == null)
+            throw new NullPointerException(
+                    "You are refering null object. "
+                            + "Please check weather you had called super class method mappingWidgets() or not");
+        if (v.getId() == R.id.PedometerBtn) {
+            updateData(new Intent(this, PedometerActivity.class));
+        } else if (v.getId() == R.id.ProfileBtn) {
+            updateData(new Intent(this, ProfileActivity.class));
+        } else if (v.getId() == R.id.HeartRateBtn) {
+            updateData(new Intent(this, HeartRateActivity.class));
+        }
     }
 
     public void setActivityLevelDialog(View v) {
@@ -96,6 +102,7 @@ public class SettingsActivity extends GenericActivity {
         AlertDialog alert = activityLevelDialog.create();
         alert.show();
     }
+
     public void setGoalDialog(View v) {
         AlertDialog.Builder activityLevelDialog = new AlertDialog.Builder(this);
         activityLevelDialog.setTitle("Set your stepGoal for today");
@@ -111,6 +118,7 @@ public class SettingsActivity extends GenericActivity {
         alert.show();
 
     }
+
     public void editGoal() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Please enter daily Goal");
@@ -200,20 +208,27 @@ public class SettingsActivity extends GenericActivity {
         }
     }
 
-    public void updateUserData() {
-
-        System.out.println("StepGoal:" + stepGoal);
-        System.out.println("Activity: " + physicalActivityLevel);
+    public void updateData(Intent intent) {
         sharedValues.saveInt("stepGoal", stepGoal);
         sharedValues.saveInt("physicalActivityLevel", physicalActivityLevel);
-
-        sessionManager.uploadUserData(this);
+        sessionManager.uploadUserData(this, intent);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        sessionManager.checkUserState();
+        sessionManager.isLoginValid();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        updateData(null);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 }
 

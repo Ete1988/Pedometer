@@ -68,7 +68,6 @@ public class PedometerService extends Service implements SensorEventListener {
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("MyService", "onStartCommand");
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);          // get an instance of the SensorManager class, lets us access sensors.
         mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);    // get StepCounter sensor from the list of sensors.
 

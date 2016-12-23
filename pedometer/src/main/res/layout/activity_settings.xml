@@ -105,14 +105,6 @@
             android:layout_width="match_parent"
             android:layout_height="50dp" />
 
-        <Button
-            android:id="@+id/btn_saveChangesSettings"
-            style="@android:style/Widget.Button.Inset"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/save"
-            android:textColor="@android:color/black" />
-
     </LinearLayout>
 
     <include

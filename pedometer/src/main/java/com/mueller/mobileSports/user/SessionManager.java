@@ -1,5 +1,6 @@
 package com.mueller.mobileSports.user;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
@@ -17,8 +18,6 @@ import com.mueller.mobileSports.general.TimeManager;
 import com.mueller.mobileSports.heartRate.hR_Utility.HeartRateData;
 import com.mueller.mobileSports.pedometer.pedometerUtility.PedometerData;
 
-
-
 /**
  * Created by Ete on 10/12/2016.
  * Class to store the current session of the user.
@@ -29,15 +28,13 @@ import com.mueller.mobileSports.pedometer.pedometerUtility.PedometerData;
 public class SessionManager {
 
     private static UserData userData;
+    ProgressDialog progress;
     private SharedValues sharedValues;
     private Context context;
 
     // Constructor
     public SessionManager(Context context) {
         this.context = context;
-        if (userData == null) {
-            userData = new UserData();
-        }
         sharedValues = SharedValues.getInstance(context);
         TimeManager timeManager = new TimeManager(context);
         timeManager.checkTime();
@@ -58,14 +55,20 @@ public class SessionManager {
             return true;
         }
     }
+
+    public boolean checkIfUserDataAvailable() {
+        return java.util.Objects.equals(userData, null);
+    }
+
     /**
      * Quick check for login user token
      * @return true if user token is stored
      */
-    private boolean isUserTokenAvailable() {
+    public boolean isUserTokenAvailable() {
         String userToken = UserTokenStorageFactory.instance().getStorage().get();
         return userToken != null && !userToken.equals("");
     }
+
     /**
      * Method to logout the current user.
      * Removes all userrelevant data and then redirects the user to the login screen
@@ -92,8 +95,16 @@ public class SessionManager {
     }
 
     // save userdata to backendless server
-    public void uploadUserData(final Context context) {
+    public void uploadUserData(final Context context, final Intent intent) {
         sharedValues.saveBool("loading", true);
+
+        if (!(intent == null)) {
+            progress = new ProgressDialog(context);
+            progress.setTitle("Loading");
+            progress.setMessage("Wait while loading...");
+            progress.setCancelable(false);
+            progress.show(); // disable dismiss by tapping outside of the dialog
+        }
 
         PedometerData pedometerData = userData.getPedometerData();
         HeartRateData heartRateData = userData.getHeartRateData();
@@ -117,7 +128,12 @@ public class SessionManager {
         heartRateData.setSessionDay(sharedValues.getString("sessionDay"));
         heartRateData.setMaxHeartRate(sharedValues.getInt("maxHeartRate"));
         heartRateData.setMinHeartRate(sharedValues.getInt("minHeartRate"));
-        heartRateData.setAverageHeartRate(sharedValues.getInt("physicalActivityLevel"));
+        heartRateData.setActivityLevel(sharedValues.getInt("physicalActivityLevel"));
+
+        System.out.println(heartRateData.getMinHeartRate());
+        System.out.println(heartRateData.getMaxHeartRate());
+        System.out.println(heartRateData.getAverageHeartRate());
+
 
         userData.setHeartRateData(heartRateData);
         userData.setPedometerData(pedometerData);
@@ -125,11 +141,16 @@ public class SessionManager {
         Backendless.Persistence.of(UserData.class).save(userData, new AsyncCallback<UserData>() {
             @Override
             public void handleResponse(UserData updatedData) {
-                Toast.makeText(context, "Success!", Toast.LENGTH_LONG).show();
+                // Toast.makeText(context, "Success!", Toast.LENGTH_LONG).show();
                 HeartRateData heartRateData = updatedData.getHeartRateData();
                 PedometerData pedometerData = updatedData.getPedometerData();
                 userData.setPedometerData(pedometerData);
                 userData.setHeartRateData(heartRateData);
+
+                if (!(intent == null)) {
+                    context.startActivity(intent);
+                }
+
 
                 System.out.println(userData.getObjectId());
                 System.out.println(userData.getPedometerData().getObjectId());
@@ -140,7 +161,8 @@ public class SessionManager {
 
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
-                Toast.makeText(context, "Failure!", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Ooops!", Toast.LENGTH_LONG).show();
+                progress.dismiss();
                 System.out.println(backendlessFault.toString());
             }
         });
@@ -156,26 +178,29 @@ public class SessionManager {
     }
 
     //Check if loginToken is stil valid
-    private boolean isLoginValid() {
-        final boolean[] isLoginValid = new boolean[1];
+    public void isLoginValid() {
         Backendless.UserService.isValidLogin(new AsyncCallback<Boolean>() {
             @Override
             public void handleResponse(Boolean response) {
-                isLoginValid[0] = response;
+
+                if (!response) {
+                    logoutUser();
+                    System.out.println("[ASYNC] Is login valid? - " + response);
+                }
                 System.out.println("[ASYNC] Is login valid? - " + response);
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
+                logoutUser();
                 System.err.println("Error - " + fault);
             }
 
         });
-
-        return isLoginValid[0];
     }
+
     // Load current userData
-    private void getUserDataFromServer() {
+    public void getUserDataFromServer() {
         String currentUserId = Backendless.UserService.loggedInUser();
         String whereClause = "ownerID = '" + currentUserId + "'";
         BackendlessDataQuery dataQuery = new BackendlessDataQuery();
@@ -193,7 +218,7 @@ public class SessionManager {
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                // an error has occurred, the error code can be retrieved with fault.getCode()
+                System.err.println("Error - " + fault);
             }
         });
 
@@ -201,14 +226,21 @@ public class SessionManager {
 
     //Load currentUser
     private void getUserFromServer() {
+
+        progress = new ProgressDialog(context);
+        progress.setTitle("Loading");
+        progress.setMessage("Wait while loading...");
+        progress.setCancelable(false);
+        progress.show(); // disable dismiss by tapping outside of the dialog
+
         String currentUserId = Backendless.UserService.loggedInUser();
         Backendless.UserService.findById(currentUserId, new AsyncCallback<BackendlessUser>() {
             @Override
             public void handleResponse(BackendlessUser currentUser) {
                 Backendless.UserService.setCurrentUser(currentUser);
                 sharedValues.saveString("email", currentUser.getEmail());
-                getUserDataFromServer();
                 System.out.println("First Step!");
+                getUserDataFromServer();
             }
 
             @Override
@@ -276,11 +308,11 @@ public class SessionManager {
     //just for testing
     private void check() {
 
+        progress.dismiss();
         System.out.println(userData.getObjectId());
         System.out.println(userData.getPedometerData().getObjectId());
         System.out.println(userData.getHeartRateData().getObjectId());
 
     }
-
 
 }

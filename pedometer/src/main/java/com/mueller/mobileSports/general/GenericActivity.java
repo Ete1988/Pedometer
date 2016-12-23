@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -73,14 +72,16 @@ public abstract class GenericActivity extends Activity implements View.OnClickLi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         loading = sharedValues.getBool("loading");
-        MenuInflater inflater = getMenuInflater();
         getMenuInflater().inflate(R.menu.main_menu, menu);
+       /*
         if (!loading) {
             menu.findItem(R.id.menu_refresh).setActionView(null);
         } else {
             menu.findItem(R.id.menu_refresh).setActionView(
                     R.layout.progress_action_bar);
         }
+        */
+
         return true;
     }
 
@@ -99,6 +100,20 @@ public abstract class GenericActivity extends Activity implements View.OnClickLi
                 break;
         }
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        boolean loading = sharedValues.getBool("loading");
+       /*
+        if (loading) {
+            menu.findItem(R.id.menu_refresh).setActionView(
+                    R.layout.progress_action_bar);
+        }else{
+            menu.findItem(R.id.menu_refresh).setActionView(null);
+        }
+        */
+        return super.onPrepareOptionsMenu(menu);
     }
 
 }

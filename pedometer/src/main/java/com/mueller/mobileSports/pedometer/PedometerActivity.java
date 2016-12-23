@@ -13,9 +13,10 @@ import com.lylc.widget.circularprogressbar.CircularProgressBar;
 import com.mueller.mobileSports.general.GenericActivity;
 import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.general.TimeManager;
+import com.mueller.mobileSports.heartRate.HeartRateActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
-import com.mueller.mobileSports.pedometer.pedometerUtility.PedometerData;
 import com.mueller.mobileSports.pedometer.pedometerUtility.PedometerService;
+import com.mueller.mobileSports.user.ProfileActivity;
 import com.mueller.mobileSports.user.SessionManager;
 
 /**
@@ -30,8 +31,6 @@ public class PedometerActivity extends GenericActivity {
     private CircularProgressBar cBar;
     private TextView date;
     private int stepsOverWeek, stepsOverDay;
-    private TimeManager timeManager;
-    private PedometerData userData;
     private SharedValues sharedValues;
 
     @Override
@@ -41,11 +40,11 @@ public class PedometerActivity extends GenericActivity {
         sharedValues = SharedValues.getInstance(this);
         init();
         sessionManager = new SessionManager(this);
-        if (sessionManager.checkUserState()) {
-            invalidateOptionsMenu();
+        if (sessionManager.checkIfUserDataAvailable()) {
+            sessionManager.checkUserState();
             startService();
-
         }
+
     }
 
     private void startService() {
@@ -57,9 +56,9 @@ public class PedometerActivity extends GenericActivity {
 
     private void init() {
 
-        myReceiver = new MyReceiver();
-        timeManager = new TimeManager(this);
 
+        myReceiver = new MyReceiver();
+        TimeManager timeManager = new TimeManager(this);
         date = (TextView) findViewById(R.id.date);
         cBar = (CircularProgressBar) findViewById(R.id.circularprogressbar3);
         cBar.setSubTitle("Steps");
@@ -82,40 +81,47 @@ public class PedometerActivity extends GenericActivity {
 
     }
 
-    private void updateData() {
-        invalidateOptionsMenu();
+    private void updateData(Intent intent) {
         sharedValues.saveInt("stepsOverDay", stepsOverDay);
         sharedValues.saveInt("stepsOverWeek", stepsOverWeek);
-
-        sessionManager.uploadUserData(this);
-
+        sessionManager.uploadUserData(this, intent);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        invalidateOptionsMenu();
         getData();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        updateData();
+        sharedValues.saveBool("notFirstTimePedo", false);
+        if (sessionManager.isUserTokenAvailable()) {
+            updateData(null);
+        }
         unregisterReceiver(myReceiver);
         stopService(new Intent(this, PedometerService.class));
+        super.onDestroy();
     }
 
     @Override
     protected void onPause() {
-        updateData();
-        invalidateOptionsMenu();
         super.onPause();
     }
 
     @Override
     public void onClick(View v) {
-        super.onClick(v);
+        if (v == null)
+            throw new NullPointerException(
+                    "You are refering null object. "
+                            + "Please check weather you had called super class method mappingWidgets() or not");
+        if (v.getId() == R.id.PedometerBtn) {
+            updateData(new Intent(this, PedometerActivity.class));
+        } else if (v.getId() == R.id.ProfileBtn) {
+            updateData(new Intent(this, ProfileActivity.class));
+        } else if (v.getId() == R.id.HeartRateBtn) {
+            updateData(new Intent(this, HeartRateActivity.class));
+        }
     }
 
     @Override

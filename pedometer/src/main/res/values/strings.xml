@@ -32,7 +32,6 @@
     <string name="gender">Gender:</string>
     <string name="uploadprofilepicture">UploadProfilePicture</string>
     <string-array name="gender_selector">
-        <item>…</item>
         <item>Male</item>
         <item>Female</item>
     </string-array>

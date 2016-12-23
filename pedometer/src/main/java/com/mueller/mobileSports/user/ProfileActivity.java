@@ -11,11 +11,12 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.mueller.mobileSports.general.GenericActivity;
 import com.mueller.mobileSports.general.SharedValues;
+import com.mueller.mobileSports.heartRate.HeartRateActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
+import com.mueller.mobileSports.pedometer.PedometerActivity;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -42,31 +43,20 @@ public class ProfileActivity extends GenericActivity {
         setTitle("Edit Profile");
         Button mSaveChangesBtn = (Button) findViewById(R.id.btn_saveChangesProfile);
         init();
-        prepareView();
-        mSaveChangesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean check = validateInput();
-                if (check) {
-                    updateUserData();
-                }
-            }
-        });
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    Toast.makeText(getBaseContext(), "Please set your gender!", Toast.LENGTH_LONG).show();
-                } else if (position == 1) {
                     gender = "Male";
-                } else if (position == 2) {
+                } else if (position == 1) {
                     gender = "Female";
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                //DoNothing.
+
             }
         });
     }
@@ -82,20 +72,12 @@ public class ProfileActivity extends GenericActivity {
         mInputData[3] = (EditText) findViewById(R.id.input_height);
         mInputData[4] = (EditText) findViewById(R.id.input_email);
         spinner = (Spinner) findViewById(R.id.spinner_gender);
-
-
         mappingWidgets();
-
-
-    }
-
-    private void prepareView() {
-
         loadUserData();
         if (Objects.equals(sharedValues.getString("gender"), "Female")) {
-            spinner.setSelection(2);
-        } else if (Objects.equals(sharedValues.getString("gender"), "Male")) {
             spinner.setSelection(1);
+        } else if (Objects.equals(sharedValues.getString("gender"), "Male")) {
+            spinner.setSelection(0);
         } else {
             spinner.setSelection(0);
         }
@@ -106,19 +88,19 @@ public class ProfileActivity extends GenericActivity {
         mInputData[0].setText(sharedValues.getString("username"));
         mInputData[1].setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("age")));
         mInputData[2].setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("weight")));
-        mInputData[3].setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("heigth")));
+        mInputData[3].setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("height")));
         mInputData[4].setText(sharedValues.getString("email"));
     }
 
-    public void updateUserData() {
-        validateInput();
-        sharedValues.saveString("gender", gender);
-        sharedValues.saveString("username", mInputData[0].getText().toString());
-        sharedValues.saveInt("age", Integer.parseInt(mInputData[1].getText().toString()));
-        sharedValues.saveInt("weight", Integer.parseInt(mInputData[2].getText().toString()));
-        sharedValues.saveInt("height", Integer.parseInt(mInputData[3].getText().toString()));
-
-        sessionManager.uploadUserData(this);
+    public void updateData(Intent intent) {
+        if (validateInput()) {
+            sharedValues.saveString("gender", gender);
+            sharedValues.saveString("username", mInputData[0].getText().toString());
+            sharedValues.saveInt("age", Integer.parseInt(mInputData[1].getText().toString()));
+            sharedValues.saveInt("weight", Integer.parseInt(mInputData[2].getText().toString()));
+            sharedValues.saveInt("height", Integer.parseInt(mInputData[3].getText().toString()));
+            sessionManager.uploadUserData(this, intent);
+        }
     }
 
     public void onClickProfile(View v) {
@@ -147,7 +129,7 @@ public class ProfileActivity extends GenericActivity {
     //TODO implement validation;
     public boolean validateInput() {
         boolean valid = true;
-
+/*
         if (mInputData[1].length() == 0 || mInputData[1].toString().equals("0")) {
             Toast.makeText(this, "Please set your age!", Toast.LENGTH_LONG).show();
             valid = false;
@@ -155,7 +137,7 @@ public class ProfileActivity extends GenericActivity {
             Toast.makeText(this, "Please set your gender!", Toast.LENGTH_LONG).show();
             valid = false;
         }
-
+*/
         return valid;
     }
 
@@ -166,13 +148,32 @@ public class ProfileActivity extends GenericActivity {
 
     @Override
     public void onClick(View v) {
-        super.onClick(v);
+        if (v == null)
+            throw new NullPointerException(
+                    "You are refering null object. "
+                            + "Please check weather you had called super class method mappingWidgets() or not");
+        if (v.getId() == R.id.PedometerBtn) {
+            updateData(new Intent(this, PedometerActivity.class));
+        } else if (v.getId() == R.id.ProfileBtn) {
+            updateData(new Intent(this, ProfileActivity.class));
+        } else if (v.getId() == R.id.HeartRateBtn) {
+            updateData(new Intent(this, HeartRateActivity.class));
+        }
     }
     @Override
     protected void onResume() {
         super.onResume();
-        sessionManager.checkUserState();
+        sessionManager.isLoginValid();
     }
 
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        updateData(null);
+        super.onDestroy();
+    }
 }
 
