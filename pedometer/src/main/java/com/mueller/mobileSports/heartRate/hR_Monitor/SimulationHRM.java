@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.heartRate.HRMUtility;
+package com.mueller.mobileSports.heartRate.hR_Monitor;
 
 import android.content.Context;
 import android.content.res.AssetManager;

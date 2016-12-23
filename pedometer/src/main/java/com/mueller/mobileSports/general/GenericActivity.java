@@ -23,6 +23,8 @@ import com.mueller.mobileSports.user.SessionManager;
 
 public abstract class GenericActivity extends Activity implements View.OnClickListener {
 
+    SharedValues sharedValues;
+    boolean loading;
     private Activity mActivity;
     private SessionManager sessionManager;
 
@@ -30,7 +32,9 @@ public abstract class GenericActivity extends Activity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = this;
+        sharedValues = SharedValues.getInstance(this);
         sessionManager = new SessionManager(this);
+        loading = sharedValues.getBool("loading");
     }
 
     /**
@@ -65,38 +69,24 @@ public abstract class GenericActivity extends Activity implements View.OnClickLi
         }
 
     }
-/*
-
-    protected void handleBackgrounds(View v) {
-        if (v == mPedometerBtn) {
-            mPedometerBtn.setBackgroundResource(R.drawable.bottom_btn_hover);
-            mSettingsBtn.setBackgroundResource(R.drawable.bottom_btn_active);
-            mHeartRateBtn.setBackgroundResource(R.drawable.bottom_btn_active);
-
-        } else if (v == mSettingsBtn) {
-            mPedometerBtn.setBackgroundResource(R.drawable.bottom_btn_active);
-            mSettingsBtn.setBackgroundResource(R.drawable.bottom_btn_hover);
-            mHeartRateBtn.setBackgroundResource(R.drawable.bottom_btn_active);
-
-        } else if (v == mHeartRateBtn) {
-            mPedometerBtn.setBackgroundResource(R.drawable.bottom_btn_active);
-            mSettingsBtn.setBackgroundResource(R.drawable.bottom_btn_active);
-            mHeartRateBtn.setBackgroundResource(R.drawable.bottom_btn_hover);
-        }
-    }
-
-*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        loading = sharedValues.getBool("loading");
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        if (!loading) {
+            menu.findItem(R.id.menu_refresh).setActionView(null);
+        } else {
+            menu.findItem(R.id.menu_refresh).setActionView(
+                    R.layout.progress_action_bar);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //Only one button for now.
+
         switch (item.getItemId()) {
             case R.id.menu_settings:
                 Intent i = new Intent(this, SettingsActivity.class);
@@ -110,5 +100,6 @@ public abstract class GenericActivity extends Activity implements View.OnClickLi
         }
         return true;
     }
+
 }
 

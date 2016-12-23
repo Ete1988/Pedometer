@@ -45,11 +45,16 @@
             android:name="com.mueller.mobileSports.account.RegisterActivity"
             android:label="Register" />
         <activity
-            android:name="com.mueller.mobileSports.general.StatisticsActivity"
-            android:label="Statistics" />
-        <activity
             android:name="com.mueller.mobileSports.heartRate.HeartRateActivity"
             android:label="Heart-Rate Monitor" />
+
+
+        <service
+            android:name="com.mueller.mobileSports.pedometer.pedometerUtility.PedometerService"
+            android:enabled="true"
+            android:exported="true">
+            <!-- exported determines whether or not the service can be executed by other applications. -->
+        </service>
     </application>
 
 </manifest>

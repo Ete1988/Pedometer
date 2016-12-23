@@ -14,7 +14,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.mueller.mobileSports.general.GenericActivity;
-import com.mueller.mobileSports.heartRate.HRMUtility.HeartRateMonitorUtility;
+import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 
 import java.io.IOException;
@@ -30,32 +30,19 @@ public class ProfileActivity extends GenericActivity {
 
     public static final int GET_FROM_GALLERY = 3;
     private EditText[] mInputData;
+    private SharedValues sharedValues;
     private SessionManager sessionManager;
     private String gender;
     private Spinner spinner;
-    private HeartRateMonitorUtility util = new HeartRateMonitorUtility();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-         /*   Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-      *  setSupportActionBar(myToolbar); */
         setTitle("Edit Profile");
-        sessionManager = new SessionManager(this);
-        mInputData = new EditText[5];
-        mInputData[0] = (EditText) findViewById(R.id.input_name);
-        mInputData[1] = (EditText) findViewById(R.id.input_age);
-        mInputData[2] = (EditText) findViewById(R.id.input_weight);
-        mInputData[3] = (EditText) findViewById(R.id.input_height);
-        mInputData[4] = (EditText) findViewById(R.id.input_email);
-        spinner = (Spinner) findViewById(R.id.spinner_gender);
         Button mSaveChangesBtn = (Button) findViewById(R.id.btn_saveChangesProfile);
-        mappingWidgets();
+        init();
         prepareView();
-
-
         mSaveChangesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +52,6 @@ public class ProfileActivity extends GenericActivity {
                 }
             }
         });
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -85,12 +71,30 @@ public class ProfileActivity extends GenericActivity {
         });
     }
 
+    private void init() {
+
+        sessionManager = new SessionManager(this);
+        sharedValues = SharedValues.getInstance(this);
+        mInputData = new EditText[5];
+        mInputData[0] = (EditText) findViewById(R.id.input_name);
+        mInputData[1] = (EditText) findViewById(R.id.input_age);
+        mInputData[2] = (EditText) findViewById(R.id.input_weight);
+        mInputData[3] = (EditText) findViewById(R.id.input_height);
+        mInputData[4] = (EditText) findViewById(R.id.input_email);
+        spinner = (Spinner) findViewById(R.id.spinner_gender);
+
+
+        mappingWidgets();
+
+
+    }
+
     private void prepareView() {
 
         loadUserData();
-        if (Objects.equals(sessionManager.getUserData().getGender(), "Female")) {
+        if (Objects.equals(sharedValues.getString("gender"), "Female")) {
             spinner.setSelection(2);
-        } else if (Objects.equals(sessionManager.getUserData().getGender(), "Male")) {
+        } else if (Objects.equals(sharedValues.getString("gender"), "Male")) {
             spinner.setSelection(1);
         } else {
             spinner.setSelection(0);
@@ -98,28 +102,24 @@ public class ProfileActivity extends GenericActivity {
     }
 
     private void loadUserData() {
-        UserData myData = sessionManager.getUserData();
 
-        mInputData[0].setText(myData.getUsername());
-        mInputData[1].setText(String.format(Locale.getDefault(), "%d", myData.getAge()));
-        mInputData[2].setText(String.format(Locale.getDefault(), "%d", myData.getWeight()));
-        mInputData[3].setText(String.format(Locale.getDefault(), "%d", myData.getHeight()));
-        mInputData[4].setText(myData.getEmail());
+        mInputData[0].setText(sharedValues.getString("username"));
+        mInputData[1].setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("age")));
+        mInputData[2].setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("weight")));
+        mInputData[3].setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("heigth")));
+        mInputData[4].setText(sharedValues.getString("email"));
     }
 
     public void updateUserData() {
-        UserData myData = sessionManager.getUserData();
-
         validateInput();
-        myData.setGender(gender);
-        myData.setUsername(mInputData[0].getText().toString());
-        myData.setAge(Integer.parseInt(mInputData[1].getText().toString()));
-        myData.setWeight(Integer.parseInt(mInputData[2].getText().toString()));
-        myData.setHeight(Integer.parseInt(mInputData[3].getText().toString()));
+        sharedValues.saveString("gender", gender);
+        sharedValues.saveString("username", mInputData[0].getText().toString());
+        sharedValues.saveInt("age", Integer.parseInt(mInputData[1].getText().toString()));
+        sharedValues.saveInt("weight", Integer.parseInt(mInputData[2].getText().toString()));
+        sharedValues.saveInt("height", Integer.parseInt(mInputData[3].getText().toString()));
 
         sessionManager.uploadUserData(this);
     }
-
 
     public void onClickProfile(View v) {
         if (v.getId() == R.id.imageButton) {
@@ -171,7 +171,7 @@ public class ProfileActivity extends GenericActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        sessionManager.checkLogin();
+        sessionManager.checkUserState();
     }
 
 }

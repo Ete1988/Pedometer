@@ -1,6 +1,7 @@
 package com.mueller.mobileSports.user;
 
-import java.io.File;
+import com.mueller.mobileSports.heartRate.hR_Utility.HeartRateData;
+import com.mueller.mobileSports.pedometer.pedometerUtility.PedometerData;
 
 /**
  * Created by Sandra on 24.11.2016.
@@ -11,83 +12,58 @@ import java.io.File;
  */
 public class UserData {
 
-    private static UserData userData;
-    //Personal Data
+
+    private static PedometerData pedometerData;
+    private static HeartRateData heartRateData;
+
     private String username;
     private String email;
     private String gender;
     private int height;
     private int age;
     private int weight;
-    private File uploadedFile;
-    //HRM-Data
-    private int heartRate;
-    private int activityLevel;
-    private int hRmax;
-    //Pedometer-Data
-    private int weeklyStepCount;
-    private int monthlyStepCount;
-    private int stepGoal;
-    //Other
+
     private String objectId;
 
     public UserData() {
-    }
-
-
-    public UserData(String username, String email) {
-        setUsername(username);
-        setEmail(email);
+        pedometerData = new PedometerData();
+        heartRateData = new HeartRateData();
     }
 
     public UserData(UserData data) {
-
         username = data.getUsername();
         email = data.getEmail();
         age = data.getAge();
         gender = data.getGender();
         weight = data.getWeight();
         height = data.getHeight();
-
-        heartRate = data.getHeartRate();
-        activityLevel = data.getActivityLevel();
-        hRmax = data.gethRmax();
-
-        weeklyStepCount = data.getWeeklyStepCount();
-        monthlyStepCount = data.getMonthlyStepCount();
-        stepGoal = data.getStepGoal();
-
+        heartRateData = data.getHeartRateData();
+        pedometerData = data.getPedometerData();
         objectId = data.getObjectId();
+    }
+
+    public PedometerData getPedometerData() {
+        if (pedometerData == null) {
+            return new PedometerData();
+        } else {
+            return pedometerData;
+        }
 
     }
 
-    public static UserData getInstance(String username, String email) {
-        //if (userData == null) {
-        userData = new UserData(username, email);
-        //}
-        return userData;
+    public void setPedometerData(PedometerData pedometerData) {
+        UserData.pedometerData = pedometerData;
     }
 
-    public static UserData getInstance(UserData data) {
-        // if (userData == null) {
-        userData = new UserData(data);
-        //}
-        return userData;
+    public HeartRateData getHeartRateData() {
+        if (heartRateData == null) {
+            return new HeartRateData();
+        }
+        return heartRateData;
     }
 
-    public static UserData getInstance() {
-        // if (userData == null) {
-        userData = new UserData();
-        //}
-        return userData;
-    }
-
-    public int gethRmax() {
-        return hRmax;
-    }
-
-    public void sethRmax(int hRmax) {
-        this.hRmax = hRmax;
+    public void setHeartRateData(HeartRateData heartRateData) {
+        UserData.heartRateData = heartRateData;
     }
 
     public String getEmail() {
@@ -96,22 +72,6 @@ public class UserData {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public int getStepGoal() {
-        return stepGoal;
-    }
-
-    public void setStepGoal(int stepGoal) {
-        this.stepGoal = stepGoal;
-    }
-
-    public int getActivityLevel() {
-        return activityLevel;
-    }
-
-    public void setActivityLevel(int activityLevel) {
-        this.activityLevel = activityLevel;
     }
 
     public String getObjectId() {
@@ -162,53 +122,16 @@ public class UserData {
         this.weight = weight;
     }
 
-    private int getHeartRate() {
-        return heartRate;
-    }
-
-    public void setHeartRate(int heartRate) {
-        this.heartRate = heartRate;
-    }
-
-    public int getWeeklyStepCount() {
-        return weeklyStepCount;
-    }
-
-    public void setWeeklyStepCount(int weeklyStepCount) {
-        this.weeklyStepCount = weeklyStepCount;
-    }
-
-    private int getMonthlyStepCount() {
-        return monthlyStepCount;
-    }
-
-    public void setMonthlyStepCount(int monthlyStepCount) {
-        this.monthlyStepCount = monthlyStepCount;
-    }
-
-    public File getUploadedFile() {
-        return uploadedFile;
-    }
-
-    public void setUploadedFile(File uploadedFile) {
-        this.uploadedFile = uploadedFile;
-    }
-
-
     public void deleteAll() {
-        this.setAge(0);
-        this.setHeight(0);
-        this.setUsername("");
-        this.setWeight(0);
-        this.setStepGoal(0);
-        this.setActivityLevel(0);
-        this.setHeartRate(0);
-        this.setMonthlyStepCount(0);
-        this.setGender("");
-        this.setEmail("");
-        this.setObjectId(null);
-        this.setUploadedFile(null);
-        userData = null;
+        setAge(0);
+        setHeight(0);
+        setUsername("");
+        setWeight(0);
+        setGender("");
+        setEmail("");
+        setObjectId(null);
+        setHeartRateData(null);
+        setPedometerData(null);
     }
 
     //Used for some testing only

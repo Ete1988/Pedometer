@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.user.SessionManager;
-import com.mueller.mobileSports.user.UserData;
 
 import java.util.Locale;
 
@@ -40,39 +39,37 @@ public class SettingsActivity extends GenericActivity {
             "7: run over 10 miles (16 km) per week or spend over 3 hours per week " +
                     "in comparable physical activity"
     };
-    private int physicalActivityLevel, StepGoal;
+    private int physicalActivityLevel, stepGoal;
     private TextView mActivityLevelText, mCurrentStepGoalText;
     private SessionManager sessionManager;
+    private SharedValues sharedValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_settings);
-      /*   Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-           setSupportActionBar(myToolbar); */
-        sessionManager = new SessionManager(this);
-        mActivityLevelText = (TextView) findViewById(R.id.level);
-        mCurrentStepGoalText = (TextView) findViewById(R.id.stepGoalView);
-        physicalActivityLevel = sessionManager.getUserData().getActivityLevel();
-        StepGoal = sessionManager.getUserData().getStepGoal();
-        mappingWidgets();
+        init();
         Button mSaveChangesBtn = (Button) findViewById(R.id.btn_saveChangesSettings);
-
-        setLevel();
-        setGoal();
-
-
         setTitle("Settings");
-
         mSaveChangesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 updateUserData();
-
             }
         });
+    }
+
+    private void init() {
+        sharedValues = SharedValues.getInstance(this);
+        sessionManager = new SessionManager(this);
+        mappingWidgets();
+        mActivityLevelText = (TextView) findViewById(R.id.level);
+        mCurrentStepGoalText = (TextView) findViewById(R.id.stepGoalView);
+        physicalActivityLevel = sharedValues.getInt("physicalActivityLevel");
+        stepGoal = sharedValues.getInt("stepGoal");
+        setLevel();
+        setGoal();
+
     }
 
     @Override
@@ -86,7 +83,6 @@ public class SettingsActivity extends GenericActivity {
     }
 
     public void setActivityLevelDialog(View v) {
-
         AlertDialog.Builder activityLevelDialog = new AlertDialog.Builder(this);
         activityLevelDialog.setTitle("Select your activity mActivityLevelText");
         activityLevelDialog.setSingleChoiceItems(activityLevelTextArray, -1, new DialogInterface
@@ -95,31 +91,26 @@ public class SettingsActivity extends GenericActivity {
                 physicalActivityLevel = item;
                 setLevel();
                 dialog.dismiss();
-
             }
         });
         AlertDialog alert = activityLevelDialog.create();
         alert.show();
     }
-
     public void setGoalDialog(View v) {
-
         AlertDialog.Builder activityLevelDialog = new AlertDialog.Builder(this);
-        activityLevelDialog.setTitle("Set your StepGoal for today");
+        activityLevelDialog.setTitle("Set your stepGoal for today");
         activityLevelDialog.setSingleChoiceItems(goalsValuesArray, -1, new DialogInterface
                 .OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
-                StepGoal = item;
+                stepGoal = item;
                 setGoal();
                 dialog.dismiss();
-
             }
         });
         AlertDialog alert = activityLevelDialog.create();
         alert.show();
 
     }
-
     public void editGoal() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Please enter daily Goal");
@@ -127,29 +118,25 @@ public class SettingsActivity extends GenericActivity {
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         input.setRawInputType(Configuration.KEYBOARD_12KEY);
         alert.setView(input);
-
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int positiveButton) {
                 String foo = input.getText().toString();
-                StepGoal = Integer.parseInt(foo);
+                stepGoal = Integer.parseInt(foo);
                 mCurrentStepGoalText.setText(input.getText());
                 dialog.dismiss();
-
             }
         });
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int negativeButton) {
                 //Put actions for CANCEL button here, or leave in blank
-                mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", sessionManager.getUserData().getStepGoal()));
+                mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("stepGoal")));
                 dialog.dismiss();
-
             }
         });
         alert.show();
     }
 
     private void setLevel() {
-        UserData myData = sessionManager.getUserData();
         switch (physicalActivityLevel) {
             case 0:
                 mActivityLevelText.setText("0");
@@ -175,59 +162,50 @@ public class SettingsActivity extends GenericActivity {
             case 7:
                 mActivityLevelText.setText("7");
                 break;
-            default:
-                mActivityLevelText.setText(" ");
-                break;
         }
-
-
     }
 
     private void setGoal() {
-
-        switch (StepGoal) {
-
+        switch (stepGoal) {
             case 0:
-                StepGoal = 5000;
+                stepGoal = 5000;
                 mCurrentStepGoalText.setText(R.string.fiveTH);
                 break;
             case 1:
-                StepGoal = 6000;
+                stepGoal = 6000;
                 mCurrentStepGoalText.setText(R.string.sixTH);
                 break;
             case 2:
-                StepGoal = 7000;
+                stepGoal = 7000;
                 mCurrentStepGoalText.setText(R.string.sevenTH);
                 break;
             case 3:
-                StepGoal = 8000;
+                stepGoal = 8000;
                 mCurrentStepGoalText.setText(R.string.eigthTH);
                 break;
             case 4:
-                StepGoal = 9000;
+                stepGoal = 9000;
                 mCurrentStepGoalText.setText(R.string.itsOverNineTHousand);
                 break;
             case 5:
-                StepGoal = 10000;
+                stepGoal = 10000;
                 mCurrentStepGoalText.setText(R.string.tenTH);
                 break;
             case 6:
                 editGoal();
                 break;
             default:
-                mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", sessionManager.getUserData().getStepGoal()));
+                mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("stepGoal")));
                 break;
         }
-
-
     }
 
     public void updateUserData() {
-        UserData myData = sessionManager.getUserData();
 
-        myData.setStepGoal(StepGoal);
-        myData.setActivityLevel(physicalActivityLevel);
-
+        System.out.println("StepGoal:" + stepGoal);
+        System.out.println("Activity: " + physicalActivityLevel);
+        sharedValues.saveInt("stepGoal", stepGoal);
+        sharedValues.saveInt("physicalActivityLevel", physicalActivityLevel);
 
         sessionManager.uploadUserData(this);
     }
@@ -235,7 +213,7 @@ public class SettingsActivity extends GenericActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        sessionManager.checkLogin();
+        sessionManager.checkUserState();
     }
 }
 

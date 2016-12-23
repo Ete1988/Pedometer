@@ -13,8 +13,6 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.mueller.mobileSports.heartRate.HRMUtility.HeartRateMonitor;
-import com.mueller.mobileSports.heartRate.HRMUtility.SimulationHRM;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
 
@@ -62,21 +60,6 @@ public class LoginActivity extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
-
-    }
-
-    public void onClickLogin(View v) {
-        if (v.getId() == R.id.register_button) {
-            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-            startActivity(intent);
-        }
-
-        if (v.getId() == R.id.test_button) {
-            HeartRateMonitor hrm = new SimulationHRM(this);
-
-            hrm.getHeartRate();
-
-        }
 
     }
 

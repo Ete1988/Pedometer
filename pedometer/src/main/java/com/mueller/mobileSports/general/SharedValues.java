@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.pedometer;
+package com.mueller.mobileSports.general;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -38,7 +38,7 @@ public class SharedValues {
      * @param key   String
      * @param value String
      */
-    void saveString(String key, String value) {
+    public void saveString(String key, String value) {
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
         prefsEditor.putString(key, value);
         prefsEditor.apply();
@@ -50,7 +50,7 @@ public class SharedValues {
      * @param key   String
      * @param value int
      */
-    void saveInt(String key, int value) {
+    public void saveInt(String key, int value) {
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
         prefsEditor.putInt(key, value);
         prefsEditor.apply();
@@ -62,7 +62,7 @@ public class SharedValues {
      * @param key string
      * @return Empty string if no shared value with specified key is found
      */
-    String getString(String key) {
+    public String getString(String key) {
         if (sharedPreferences != null) {
             return sharedPreferences.getString(key, "");
         }
@@ -83,13 +83,26 @@ public class SharedValues {
 
     }
 
+    public void saveBool(String key, boolean bool) {
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        prefsEditor.putBoolean(key, bool);
+        prefsEditor.apply();
+    }
+
+    public boolean getBool(String key) {
+        if (sharedPreferences != null) {
+            return sharedPreferences.getBoolean(key, false);
+        }
+        return false;
+    }
+
     /**
      * Method to check wheter a value with a specified key exists in the shared values
      *
      * @param key string
      * @return true if key exists within the shared value
      */
-    boolean checkIfContained(String key) {
+    public boolean checkIfContained(String key) {
         return sharedPreferences.contains(key);
     }
 

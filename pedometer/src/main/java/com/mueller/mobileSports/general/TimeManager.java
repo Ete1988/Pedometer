@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.pedometer;
+package com.mueller.mobileSports.general;
 
 import android.content.Context;
 
@@ -14,18 +14,18 @@ import java.util.Locale;
  * Class meant to check whether a new day or week started to adjust date, and other data accordingly.
  */
 
-class PedometerUtility {
+public class TimeManager {
 
     private SharedValues sharedValues;
 
-    public PedometerUtility(Context context) {
+    public TimeManager(Context context) {
         this.sharedValues = SharedValues.getInstance(context);
     }
 
     /**
      * Method to check wheter a new week or day has began
      */
-    void checkTime() {
+    public void checkTime() {
         try {
             checkIfNewDay();
             checkIfNewWeek();
@@ -40,22 +40,18 @@ class PedometerUtility {
      * @throws ParseException
      */
     private void checkIfNewDay() throws ParseException {
-
-        Date todayDate = new Date();
         SimpleDateFormat currDate = new SimpleDateFormat("EE dd MMM yyyy", Locale.getDefault());
-        String currentDate = currDate.format(todayDate);
 
-        if (!(sharedValues.checkIfContained("checkDate"))) {
+        if (!(sharedValues.checkIfContained("sessionDay"))) {
             //First time use...
-            sharedValues.saveString("checkDate", currentDate);
+            sharedValues.saveString("sessionDay", getCurrentDateAsString());
         } else {
-
-            Date oldDate = currDate.parse((sharedValues.getString("checkDate")));
-            Date now = currDate.parse(currentDate);
+            Date oldDate = currDate.parse((sharedValues.getString("sessionDay")));
+            Date now = currDate.parse(getCurrentDateAsString());
             if (oldDate.before(now)) {
                 //Before today...
-                sharedValues.saveInt("dayCount", 0);
-                sharedValues.saveString("checkDate", currentDate);
+                sharedValues.saveInt("stepsOverDay", 0);
+                sharedValues.saveString("sessionDay", getCurrentDateAsString());
             }
         }
     }
@@ -73,10 +69,20 @@ class PedometerUtility {
 
             if ((c.get(Calendar.WEEK_OF_YEAR)) > (sharedValues.getInt("weekOfYear"))) {
                 //New week...
-                sharedValues.saveInt("weekCount", 0);
+                sharedValues.saveInt("stepsOverWeek", 0);
                 sharedValues.saveInt("weekOfYear", c.get(Calendar.WEEK_OF_YEAR));
 
             }
         }
+    }
+
+    public String getCurrentDateAsString() {
+        Date todayDate = new Date();
+        SimpleDateFormat currDate = new SimpleDateFormat("EE dd MMM yyyy", Locale.getDefault());
+        return currDate.format(todayDate);
+    }
+
+    public Date getCurrentDate() {
+        return new Date();
     }
 }
