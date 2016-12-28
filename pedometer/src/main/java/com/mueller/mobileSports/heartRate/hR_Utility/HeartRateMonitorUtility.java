@@ -30,7 +30,6 @@ public class HeartRateMonitorUtility {
         }
         int averageHeartRate = sum / 3;
         sharedValues.saveInt("averageHeartRate", averageHeartRate);
-        System.out.println("HR: " + averageHeartRate);
     }
 
     public int calculateHRmax(int age) {

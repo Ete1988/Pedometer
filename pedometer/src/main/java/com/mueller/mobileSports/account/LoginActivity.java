@@ -1,9 +1,9 @@
 package com.mueller.mobileSports.account;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +22,7 @@ import com.mueller.mobileSports.pedometer.PedometerActivity;
  * A login screen that offers login via email/password.
  */
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends AppCompatActivity {
 
     EditText mEmailText, mPasswordText;
     Button mLoginButton;

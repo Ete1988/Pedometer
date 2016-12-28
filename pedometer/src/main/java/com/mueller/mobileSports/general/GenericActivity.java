@@ -47,6 +47,7 @@ public abstract class GenericActivity extends Activity implements View.OnClickLi
         mPedometerBtn.setOnClickListener(this);
         mHeartRateBtn.setOnClickListener(this);
         mProfileBtn.setOnClickListener(this);
+
     }
 
     @Override
@@ -115,6 +116,5 @@ public abstract class GenericActivity extends Activity implements View.OnClickLi
         */
         return super.onPrepareOptionsMenu(menu);
     }
-
 }
 

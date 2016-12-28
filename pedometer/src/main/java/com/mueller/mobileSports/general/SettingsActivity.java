@@ -5,15 +5,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.mueller.mobileSports.heartRate.HeartRateActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
-import com.mueller.mobileSports.pedometer.PedometerActivity;
-import com.mueller.mobileSports.user.ProfileActivity;
 import com.mueller.mobileSports.user.SessionManager;
 
 import java.util.Locale;
@@ -24,7 +24,7 @@ import java.util.Locale;
  * Activity that offers methods to adjust app relevant data.
  */
 
-public class SettingsActivity extends GenericActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     private final String[] goalsValuesArray = {"5000", "6000", "7000", "8000", "9000", "10000", "Other? Please set here!"};
     private final String[] activityLevelTextArray = {"0: Avoid walking or exertion, for example, always use elevator, drive " +
@@ -46,6 +46,7 @@ public class SettingsActivity extends GenericActivity {
     private TextView mActivityLevelText, mCurrentStepGoalText;
     private SessionManager sessionManager;
     private SharedValues sharedValues;
+    private Button mSaveBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +57,12 @@ public class SettingsActivity extends GenericActivity {
     }
 
     private void init() {
+
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
         sharedValues = SharedValues.getInstance(this);
         sessionManager = new SessionManager(this);
-        mappingWidgets();
         mActivityLevelText = (TextView) findViewById(R.id.level);
         mCurrentStepGoalText = (TextView) findViewById(R.id.stepGoalView);
         physicalActivityLevel = sharedValues.getInt("physicalActivityLevel");
@@ -66,26 +70,6 @@ public class SettingsActivity extends GenericActivity {
         setLevel();
         setGoal();
 
-    }
-
-    @Override
-    protected void mappingWidgets() {
-        super.mappingWidgets();
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v == null)
-            throw new NullPointerException(
-                    "You are refering null object. "
-                            + "Please check weather you had called super class method mappingWidgets() or not");
-        if (v.getId() == R.id.PedometerBtn) {
-            updateData(new Intent(this, PedometerActivity.class));
-        } else if (v.getId() == R.id.ProfileBtn) {
-            updateData(new Intent(this, ProfileActivity.class));
-        } else if (v.getId() == R.id.HeartRateBtn) {
-            updateData(new Intent(this, HeartRateActivity.class));
-        }
     }
 
     public void setActivityLevelDialog(View v) {
@@ -211,7 +195,7 @@ public class SettingsActivity extends GenericActivity {
     public void updateData(Intent intent) {
         sharedValues.saveInt("stepGoal", stepGoal);
         sharedValues.saveInt("physicalActivityLevel", physicalActivityLevel);
-        sessionManager.uploadUserData(this, intent);
+        sessionManager.uploadUserData(this, intent, true);
     }
 
     @Override
@@ -223,7 +207,6 @@ public class SettingsActivity extends GenericActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        updateData(null);
     }
 
     @Override

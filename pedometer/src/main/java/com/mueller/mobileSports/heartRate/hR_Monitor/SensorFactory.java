@@ -6,7 +6,6 @@ package com.mueller.mobileSports.heartRate.hR_Monitor;
 
 public interface SensorFactory {
 
-    HeartRateMonitor createHRM();
-
+    void createHRM();
 
 }

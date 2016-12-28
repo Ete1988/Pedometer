@@ -13,7 +13,7 @@ public class PedometerData {
     private int daylyStepCount;
     private int weeklyStepCount;
     private int monthlyStepCount;
-    private int stepGoal;
+
     private String sessionDay;
 
     private String objectId;
@@ -45,14 +45,6 @@ public class PedometerData {
 
     public void setDaylyStepCount(int daylyStepCount) {
         this.daylyStepCount = daylyStepCount;
-    }
-
-    public int getStepGoal() {
-        return stepGoal;
-    }
-
-    public void setStepGoal(int stepGoal) {
-        this.stepGoal = stepGoal;
     }
 
     public int getWeeklyStepCount() {

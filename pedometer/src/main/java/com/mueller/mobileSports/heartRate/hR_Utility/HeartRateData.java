@@ -13,8 +13,6 @@ public class HeartRateData {
     private int maxHeartRate;
     private int minHeartRate;
     private int averageHeartRate;
-    private int activityLevel;
-    private int hRmax;
     private String sessionDay;
     private String objectId;
 
@@ -37,22 +35,6 @@ public class HeartRateData {
 
     public void setSessionDay(String sessionDay) {
         this.sessionDay = sessionDay;
-    }
-
-    public int gethRmax() {
-        return hRmax;
-    }
-
-    public void sethRmax(int hRmax) {
-        this.hRmax = hRmax;
-    }
-
-    public int getActivityLevel() {
-        return activityLevel;
-    }
-
-    public void setActivityLevel(int activityLevel) {
-        this.activityLevel = activityLevel;
     }
 
     public int getMaxHeartRate() {

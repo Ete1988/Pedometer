@@ -7,7 +7,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.lylc.widget.circularprogressbar.CircularProgressBar;
 import com.mueller.mobileSports.general.SharedValues;
@@ -19,13 +18,12 @@ import com.mueller.mobileSports.user.SessionManager;
 
 public class PedometerService extends Service implements SensorEventListener {
 
-    static final public String STEP_MESSAGE = "com.mueller.mobileSPorts.pedometer..COPAService.STEP_VALUE";
+    static final public String STEP_MESSAGE = "com.mueller.mobileSPorts.pedometer.pedometerUtility.PedometerService.STEP_VALUE";
     SessionManager sessionManager;
     PedometerData userData;
     private CircularProgressBar cBar;
     private SensorManager sensorManager;
     private Sensor mSensor;
-    private int mCounterSteps;
     private int mStepsDay, mStepsWeek;
     private SharedValues sharedValues;
 
@@ -53,8 +51,6 @@ public class PedometerService extends Service implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        Log.d("sensorService", "onSensorChanged.");
-
         sendMessage("");
     }
 

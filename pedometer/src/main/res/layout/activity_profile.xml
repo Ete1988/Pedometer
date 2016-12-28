@@ -1,210 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:orientation="vertical">
+    android:background="@color/background">
 
-    <android.support.v4.widget.Space
-        android:layout_width="match_parent"
-        android:layout_height="15dp" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="fill_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
 
     <LinearLayout
-        android:id="@+id/layout_profilepicture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:contentDescription="@string/uploadprofilepicture"
-            android:onClick="onClickProfile"
-            android:src="@mipmap/ic_profile" />
-    </LinearLayout>
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/my_toolbar"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
 
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/layout_profilepicture"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/input_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:enabled="false"
+                android:focusable="false"
+                android:hint="@string/email"
+                android:inputType="text" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/input_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_name"
+                android:inputType="text" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:text="Gender:"
+                android:textSize="12sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Email: " />
+            <android.support.v4.widget.Space
+                android:layout_width="5dp"
+                android:layout_height="wrap_content" />
 
-                <android.support.v4.widget.Space
-                    android:layout_width="5dp"
-                    android:layout_height="wrap_content" />
 
-                <EditText
-                    android:id="@+id/input_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:enabled="false"
-                    android:focusable="false"
-                    android:maxLength="30"
-                    android:text="@string/emptyString" />
-
-            </LinearLayout>
-
-            <LinearLayout
+            <Spinner
+                android:id="@+id/spinner_gender"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="UserName:" />
-
-                <android.support.v4.widget.Space
-                    android:layout_width="5dp"
-                    android:layout_height="wrap_content" />
-
-                <EditText
-                    android:id="@+id/input_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_name"
-                    android:inputType="text"
-                    android:maxLength="20"
-                    android:text="@string/emptyString" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Age:" />
-
-                <android.support.v4.widget.Space
-                    android:layout_width="5dp"
-                    android:layout_height="wrap_content" />
-
-                <EditText
-                    android:id="@+id/input_age"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_age"
-                    android:inputType="number"
-                    android:maxLength="3" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Gender:" />
-
-                <android.support.v4.widget.Space
-                    android:layout_width="5dp"
-                    android:layout_height="wrap_content" />
-
-
-                <Spinner
-                    android:id="@+id/spinner_gender"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:entries="@array/gender_selector" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Weight:" />
-
-                <android.support.v4.widget.Space
-                    android:layout_width="5dp"
-                    android:layout_height="wrap_content" />
-
-                <EditText
-                    android:id="@+id/input_weight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_weight"
-                    android:inputType="number"
-                    android:maxLength="3"
-                    android:text="@string/emptyString" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Height:" />
-
-                <android.support.v4.widget.Space
-                    android:layout_width="5dp"
-                    android:layout_height="wrap_content" />
-
-                <EditText
-                    android:id="@+id/input_height"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:hint="@string/hint_height"
-                    android:inputType="number"
-                    android:maxLength="3"
-                    android:text="@string/emptyString" />
-
-
-            </LinearLayout>
-
+                android:layout_height="35dp"
+                android:entries="@array/gender_selector" />
 
         </LinearLayout>
-    </ScrollView>
+
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/input_age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_age"
+                android:inputType="number" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_weight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/input_weight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_weight"
+                android:inputType="number" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_height"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/input_height"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_height"
+                android:inputType="number" />
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <Button
+            android:id="@+id/PF_saveChangesBtn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickProfile"
+            android:text="@string/save"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:orientation="vertical">
+        android:layout_centerHorizontal="true"
+        android:background="@color/black_overlay"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <include
-            layout="@layout/activity_generic"
-            android:layout_width="match_parent"
-            android:layout_height="60dp" />
+        <ImageButton
+            android:id="@+id/PF_PedometerBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:background="@null"
+            android:clickable="true"
+            android:contentDescription="@string/emptyString"
+            android:onClick="onClickProfile"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_steps"
+            android:visibility="visible" />
 
+        <android.support.v4.widget.Space
+            android:layout_width="40dp"
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:id="@+id/PF_HeartRateBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="20dp"
+            android:background="@null"
+            android:clickable="true"
+            android:contentDescription="@string/emptyString"
+            android:onClick="onClickProfile"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_heart"
+            android:visibility="visible" />
 
     </LinearLayout>
 </RelativeLayout>
+

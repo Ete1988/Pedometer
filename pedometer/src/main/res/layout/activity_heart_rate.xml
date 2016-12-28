@@ -1,16 +1,28 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:orientation="vertical"
-    tools:context="com.mueller.mobileSports.pedometer.PedometerActivity">
+    android:background="@color/background">
 
-    <android.support.v4.widget.Space
-        android:layout_width="match_parent"
-        android:layout_height="20dp" />
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="fill_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <LinearLayout
         android:id="@+id/timer_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -338,10 +350,50 @@
             android:src="@mipmap/ic_reset" />
     </LinearLayout>
 
-    <include
-        android:id="@+id/includeBottomBar"
-        layout="@layout/activity_generic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    </LinearLayout>
 
-</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black_overlay"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/HRM_PedometerBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:background="@null"
+            android:clickable="true"
+            android:contentDescription="@string/emptyString"
+            android:onClick="onClickHeartRateMeter"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_steps"
+            android:visibility="visible" />
+
+        <android.support.v4.widget.Space
+            android:layout_width="40dp"
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:id="@+id/HRM_ProfileBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="20dp"
+            android:background="@null"
+            android:clickable="true"
+            android:contentDescription="@string/emptyString"
+            android:onClick="onClickHeartRateMeter"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_profile"
+            android:visibility="visible" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

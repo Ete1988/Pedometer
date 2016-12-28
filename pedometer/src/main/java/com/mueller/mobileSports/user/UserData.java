@@ -22,12 +22,15 @@ public class UserData {
     private int height;
     private int age;
     private int weight;
-
+    private int stepGoal;
+    private int activityLevel;
+    private int hRmax;
     private String objectId;
 
     public UserData() {
         pedometerData = new PedometerData();
         heartRateData = new HeartRateData();
+        this.gender = "Male";
     }
 
     public UserData(UserData data) {
@@ -122,6 +125,31 @@ public class UserData {
         this.weight = weight;
     }
 
+    public int getStepGoal() {
+        return stepGoal;
+    }
+
+    public void setStepGoal(int stepGoal) {
+        this.stepGoal = stepGoal;
+    }
+
+    public int gethRmax() {
+        return hRmax;
+    }
+
+    public void sethRmax(int hRmax) {
+        this.hRmax = hRmax;
+    }
+
+    public int getActivityLevel() {
+        return activityLevel;
+    }
+
+    public void setActivityLevel(int activityLevel) {
+        this.activityLevel = activityLevel;
+    }
+
+
     public void deleteAll() {
         setAge(0);
         setHeight(0);
@@ -130,6 +158,9 @@ public class UserData {
         setGender("");
         setEmail("");
         setObjectId(null);
+        setStepGoal(0);
+        setActivityLevel(0);
+        sethRmax(0);
         setHeartRateData(null);
         setPedometerData(null);
     }
