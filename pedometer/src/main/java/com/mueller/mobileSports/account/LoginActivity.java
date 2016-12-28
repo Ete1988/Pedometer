@@ -24,15 +24,14 @@ import com.mueller.mobileSports.pedometer.PedometerActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText mEmailText, mPasswordText;
-    Button mLoginButton;
+    private EditText mEmailText, mPasswordText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setTitle("Login");
-        mLoginButton = (Button) findViewById(R.id.email_sign_in_button);
+        Button mLoginButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailText = (EditText) findViewById(R.id.input_email);
         mPasswordText = (EditText) findViewById(R.id.password);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void login() {
+    private void login() {
         //Get username, password from EditText
         String email = mEmailText.getText().toString();
         String password = mPasswordText.getText().toString();

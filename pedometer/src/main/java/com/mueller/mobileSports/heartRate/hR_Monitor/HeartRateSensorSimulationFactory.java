@@ -7,19 +7,17 @@ import android.content.Intent;
  * Created by Ete on 17/11/2016.
  */
 
-public class SimulationFactory implements SensorFactory {
+public class HeartRateSensorSimulationFactory implements SensorFactory {
 
-    Context context;
+    private Context context;
 
-    public SimulationFactory(Context context) {
+    public HeartRateSensorSimulationFactory(Context context) {
         this.context = context;
     }
 
     @Override
     public void createHRM() {
-        System.out.println("SimuFac");
-        Intent i = new Intent(context, HeartRateSimulationService.class);
+        Intent i = new Intent(context, HeartRateSensorSimulationService.class);
         context.startService(i);
     }
-
 }

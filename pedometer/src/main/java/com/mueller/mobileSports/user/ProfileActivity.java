@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.mueller.mobileSports.general.SettingsActivity;
@@ -34,8 +33,7 @@ import java.util.Objects;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    public static final int GET_FROM_GALLERY = 3;
-    ImageButton mPedometerBtn, mHeartRateBtn;
+    private static final int GET_FROM_GALLERY = 3;
     private EditText[] mInputData;
     private SharedValues sharedValues;
     private SessionManager sessionManager;
@@ -73,8 +71,6 @@ public class ProfileActivity extends AppCompatActivity {
         mInputData = new EditText[5];
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        mPedometerBtn = (ImageButton) findViewById(R.id.PF_PedometerBtn);
-        mHeartRateBtn = (ImageButton) findViewById(R.id.PF_HeartRateBtn);
         mInputData[0] = (EditText) findViewById(R.id.input_name);
         mInputData[1] = (EditText) findViewById(R.id.input_age);
         mInputData[2] = (EditText) findViewById(R.id.input_weight);
@@ -100,7 +96,7 @@ public class ProfileActivity extends AppCompatActivity {
         mInputData[4].setText(sharedValues.getString("email"));
     }
 
-    public void updateData() {
+    private void updateData() {
         if (validateInput()) {
             sharedValues.saveString("gender", gender);
             sharedValues.saveString("username", mInputData[0].getText().toString());
@@ -111,6 +107,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    //TODO remove, not used!?
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -128,8 +125,8 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    //TODO implement validation;
-    public boolean validateInput() {
+    //TODO implement validation
+    private boolean validateInput() {
         boolean valid = true;
 /*
         if (mInputData[1].length() == 0 || mInputData[1].toString().equals("0")) {
@@ -171,14 +168,10 @@ public class ProfileActivity extends AppCompatActivity {
         sessionManager.isLoginValid();
     }
 
-    protected void onPause() {
-        super.onPause();
-    }
-
     public void onClickProfile(View v) {
         if (v == null)
             throw new NullPointerException(
-                    "You are refering null object. "
+                    "You are referring null object. "
                             + "Please check weather you had called super class method mappingWidgets() or not");
         if (v.getId() == R.id.PF_PedometerBtn) {
             Intent i = new Intent(this, PedometerActivity.class);
@@ -189,11 +182,6 @@ public class ProfileActivity extends AppCompatActivity {
         } else if (v.getId() == R.id.PF_saveChangesBtn) {
             updateData();
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 }
 

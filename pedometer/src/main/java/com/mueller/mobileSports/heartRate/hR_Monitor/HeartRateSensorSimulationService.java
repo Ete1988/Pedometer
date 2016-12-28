@@ -20,7 +20,7 @@ import java.io.InputStreamReader;
  * Created by Ete on 15/12/2016.
  */
 
-public class HeartRateSimulationService extends Service implements HeartRateMonitor {
+public class HeartRateSensorSimulationService extends Service implements HeartRateMonitor {
 
 
     static final public String HRM_SIMULATION_MESSAGE = "com.mueller.mobileSPorts.pedometer.heartRate.hR_Monitor.HeartRateSimulationService.STEP_VALUE";
@@ -43,7 +43,7 @@ public class HeartRateSimulationService extends Service implements HeartRateMoni
             }
             heartRateMonitorUtility.storeMinAndMaxHeartRate(arraySimulationData[updateCounter]);
             sharedValues.saveInt("currentHeartRate", arraySimulationData[updateCounter++]);
-            sendMessage("");
+            sendMessage();
             mHandler.postDelayed(this, 3000);
         }
     };
@@ -78,7 +78,6 @@ public class HeartRateSimulationService extends Service implements HeartRateMoni
         int i = 0;
         AssetManager assetManager = getAssets();
 
-        try {
             InputStream csvStream = assetManager.open("simulationData.csv");
             InputStreamReader csvStreamReader = new InputStreamReader(csvStream);
             CSVReader csvReader = new CSVReader(csvStreamReader, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, 1);
@@ -88,9 +87,6 @@ public class HeartRateSimulationService extends Service implements HeartRateMoni
                 arraySimulationData[i] = Integer.parseInt(line[1]);
                 i++;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -98,11 +94,11 @@ public class HeartRateSimulationService extends Service implements HeartRateMoni
         return START_STICKY;
     }
 
-    public void sendMessage(String msg) {
+    private void sendMessage() {
 
         Intent intent = new Intent();
         intent.setAction(HRM_SIMULATION_MESSAGE);
-        intent.putExtra("DATAPASSED", msg);
+        intent.putExtra("DATA_PASSED", "");
         sendBroadcast(intent);
     }
 

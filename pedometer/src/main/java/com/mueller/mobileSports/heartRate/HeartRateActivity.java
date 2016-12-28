@@ -15,12 +15,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mueller.mobileSports.general.BluetoothScanActivity;
 import com.mueller.mobileSports.general.SettingsActivity;
 import com.mueller.mobileSports.general.SharedValues;
-import com.mueller.mobileSports.heartRate.hR_Monitor.HeartRateMonitor;
-import com.mueller.mobileSports.heartRate.hR_Monitor.HeartRateSimulationService;
+import com.mueller.mobileSports.heartRate.hR_Monitor.HeartRateSensorSimulationFactory;
+import com.mueller.mobileSports.heartRate.hR_Monitor.HeartRateSensorSimulationService;
 import com.mueller.mobileSports.heartRate.hR_Monitor.SensorFactory;
-import com.mueller.mobileSports.heartRate.hR_Monitor.SimulationFactory;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
 import com.mueller.mobileSports.user.ProfileActivity;
@@ -47,9 +47,8 @@ public class HeartRateActivity extends AppCompatActivity {
     private int btnState, time_seconds, time_minutes, time_milliseconds;
     private long start_time, timeInMilliseconds, time_update, time_swapBuff;
     private Handler mHandler;
+    private int serviceState = 0;
     private SessionManager sessionManager;
-    private SensorFactory sensorFactory;
-    private HeartRateMonitor heartRateMonitor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +79,9 @@ public class HeartRateActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                startHRM();
+                Intent i = new Intent(HeartRateActivity.this, BluetoothScanActivity.class);
+                startActivity(i);
+                // startHRM();
                 /*
                 start_time = 0L;
                 timeInMilliseconds = 0L;
@@ -131,15 +132,13 @@ public class HeartRateActivity extends AppCompatActivity {
 
     private void startHRM() {
 
-        HeartRateMonitor heartRateMonitor;
         System.out.println("startHRM");
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(HeartRateSimulationService.HRM_SIMULATION_MESSAGE);
+        intentFilter.addAction(HeartRateSensorSimulationService.HRM_SIMULATION_MESSAGE);
         registerReceiver(myReceiver, intentFilter);
-        sensorFactory = new SimulationFactory(this);
+        SensorFactory sensorFactory = new HeartRateSensorSimulationFactory(this);
         sensorFactory.createHRM();
-
-        //startService(new Intent(HeartRateActivity.this, HeartRateSimulationService.class));
+        serviceState = 1;
     }
 
     public void calculateTRIMP() {
@@ -164,7 +163,7 @@ public class HeartRateActivity extends AppCompatActivity {
     public void onClickHeartRateMeter(View v) {
         if (v == null) {
             throw new NullPointerException(
-                    "You are refering null object. "
+                    "You are referring null object. "
                             + "Please check weather you had called super class method mappingWidgets() or not");
         } else if (v.getId() == R.id.HRM_ProfileBtn) {
             Intent i = new Intent(this, ProfileActivity.class);
@@ -173,6 +172,17 @@ public class HeartRateActivity extends AppCompatActivity {
             Intent i = new Intent(this, PedometerActivity.class);
             startActivity(i);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        sessionManager.uploadUserData(this, null, false);
+        if (serviceState != 0) {
+            unregisterReceiver(myReceiver);
+            stopService(new Intent(this, HeartRateSensorSimulationService.class));
+        }
+        super.onDestroy();
+
     }
 
     @Override

@@ -97,7 +97,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    public boolean validate() {
+    private boolean validate() {
         boolean valid = true;
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();

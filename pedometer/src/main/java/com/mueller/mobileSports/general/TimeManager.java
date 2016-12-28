@@ -23,7 +23,7 @@ public class TimeManager {
     }
 
     /**
-     * Method to check wheter a new week or day has began
+     * Method to check whether a new week or day has began
      */
     public void checkTime() {
         try {

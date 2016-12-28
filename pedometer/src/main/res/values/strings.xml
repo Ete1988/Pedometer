@@ -3,14 +3,6 @@
 
     <string name="app_name">Pedometer</string>
 
-    <!-- Strings related to menu bar -->
-
-    <!-- Strings related to statistics layout -->
-    <string name="steps_this_week">Steps this week:</string>
-    <string name="step_goal">Step goal:</string>
-    <string name="steps_today">Steps today</string>
-
-
     <!-- Strings related to settings layout -->
     <string name="activity_level">Activity level:</string>
     <string name="set_activity_level">set activity level</string>
@@ -30,7 +22,6 @@
     <string name="hint_weight">Weight in Kg</string>
     <string name="email">EMail</string>
     <string name="gender">Gender:</string>
-    <string name="uploadprofilepicture">UploadProfilePicture</string>
     <string-array name="gender_selector">
         <item>Male</item>
         <item>Female</item>
@@ -43,11 +34,8 @@
     <string name="maximum">Maximum:</string>
     <string name="heart_rate">Heart Rate:</string>
     <string name="standardValue">XXX</string>
-    <string name="start_monitoring">Start Monitoring</string>
-    <string name="stop_monitoring">Stop Monitoring</string>
     <string name="reset_session">Reset Session</string>
     <string name="start_stop_session">Start/Stop Session</string>
-    <string name="current_session_time">Current Session Time:</string>
     <string name="trimp_score">TRIMP Score:</string>
     <string name="percentage_of_heart_rate">Percentage of Heart Rate:</string>
 
@@ -64,6 +52,10 @@
     <string name="bpm">bpm</string>
     <string name="hrmax">HRmax:</string>
     <string name="percentUnit">%</string>
+
+    <!-- HRM -->
+    <string name="ble_not_supported">BLE is not supported</string>
+    <string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
 
 
 </resources>

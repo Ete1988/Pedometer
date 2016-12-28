@@ -15,8 +15,6 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
-    <style name="mySpinner" parent="@android:style/Widget.DropDownItem.Spinner">
-        <item name="android:textColor">@color/mySpinnerColor</item>
-    </style>
+    <style name="mySpinner" parent="@android:style/Widget.DropDownItem.Spinner"></style>
 
 </resources>

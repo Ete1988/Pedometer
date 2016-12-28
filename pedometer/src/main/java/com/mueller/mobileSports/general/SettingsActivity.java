@@ -57,8 +57,6 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void init() {
-
-
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         sharedValues = SharedValues.getInstance(this);
@@ -103,7 +101,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
-    public void editGoal() {
+    private void editGoal() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Please enter daily Goal");
         final EditText input = new EditText(this);
@@ -204,15 +202,6 @@ public class SettingsActivity extends AppCompatActivity {
         sessionManager.isLoginValid();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
 }
 
 

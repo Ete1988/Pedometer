@@ -18,17 +18,18 @@ import com.mueller.mobileSports.general.TimeManager;
 import com.mueller.mobileSports.heartRate.hR_Utility.HeartRateData;
 import com.mueller.mobileSports.pedometer.pedometerUtility.PedometerData;
 
+import java.util.Objects;
+
 /**
  * Created by Ete on 10/12/2016.
  * Class to store the current session of the user.
  * Data is persisted even if the app is closed and will only be cleared if the user decides to log out.
- *
  */
 //TODO check all methods
 public class SessionManager {
 
     private static UserData userData;
-    ProgressDialog progress;
+    private ProgressDialog progress;
     private SharedValues sharedValues;
     private Context context;
 
@@ -43,16 +44,13 @@ public class SessionManager {
     /**
      * Method to check if the User is still logged in
      * If user is not logged is, the current User will be redirected to the login activity
-     *
      */
-    public boolean checkUserState() {
+    public void checkUserState() {
 
         if (!isUserTokenAvailable()) {
             goToLogin();
-            return false;
         } else {
             getUserFromServer();
-            return true;
         }
     }
 
@@ -62,6 +60,7 @@ public class SessionManager {
 
     /**
      * Quick check for login user token
+     *
      * @return true if user token is stored
      */
     public boolean isUserTokenAvailable() {
@@ -71,12 +70,12 @@ public class SessionManager {
 
     /**
      * Method to logout the current user.
-     * Removes all userrelevant data and then redirects the user to the login screen
+     * Removes all user relevant data and then redirects the user to the login screen
      */
     public void logoutUser() {
 
         if (isUserTokenAvailable()) {
-            userData.deleteAll();
+            userData = null;
             Backendless.UserService.logout(new AsyncCallback<Void>() {
 
                 @Override
@@ -96,7 +95,8 @@ public class SessionManager {
 
     // save userdata to backendless server
     public void uploadUserData(final Context context, final Intent intent, final boolean showProgressBar) {
-        sharedValues.saveBool("loading", true);
+        PedometerData pedometerData;
+        HeartRateData heartRateData;
 
         if (showProgressBar) {
             progress = new ProgressDialog(context);
@@ -106,8 +106,10 @@ public class SessionManager {
             progress.show(); // disable dismiss by tapping outside of the dialog
         }
 
-        PedometerData pedometerData = userData.getPedometerData();
-        HeartRateData heartRateData = userData.getHeartRateData();
+
+//TODO nullpointer exception
+        pedometerData = userData.getPedometerData();
+        heartRateData = userData.getHeartRateData();
 
         //UserData
         userData.setUsername(sharedValues.getString("username"));
@@ -121,7 +123,7 @@ public class SessionManager {
 
         //PedometerData
         pedometerData.setSessionDay(sharedValues.getString("sessionDay"));
-        pedometerData.setDaylyStepCount(sharedValues.getInt("stepsOverDay"));
+        pedometerData.setDailyStepCount(sharedValues.getInt("stepsOverDay"));
         pedometerData.setWeeklyStepCount(sharedValues.getInt("stepsOverWeek"));
 
 
@@ -174,7 +176,7 @@ public class SessionManager {
         context.startActivity(i);
     }
 
-    //Check if loginToken is stil valid
+    //Check if loginToken is still valid
     public void isLoginValid() {
         Backendless.UserService.isValidLogin(new AsyncCallback<Boolean>() {
             @Override
@@ -239,16 +241,24 @@ public class SessionManager {
                     getUserPedometerDataFromServer();
                     System.out.println("Second Step!");
                 } else {
+                    System.out.println("Second Step!");
                     userData = new UserData();
                     userData.setEmail(sharedValues.getString("email"));
                     progress.dismiss();
                 }
             }
+
             @Override
             public void handleFault(BackendlessFault fault) {
                 progress.dismiss();
                 System.err.println("Error - " + fault);
-            }
+                if (Objects.equals(fault.getCode(), "1009")) {
+                    userData = new UserData();
+                    userData.setEmail(sharedValues.getString("email"));
+                    createTables();
+
+                }
+    }
         });
     }
 
@@ -269,6 +279,7 @@ public class SessionManager {
                     getUserHeartRateDataFromServer();
                     System.out.println("Third Step!");
                 } else {
+                    System.out.println("Third Step!");
                     PedometerData pedometerData = new PedometerData();
                     pedometerData.setSessionDay(sharedValues.getString("sessionDay"));
                     userData.setPedometerData(pedometerData);
@@ -299,10 +310,9 @@ public class SessionManager {
                 if (!(heartRateDataBackendlessCollection.getTotalObjects() == 0)) {
                     userData.setHeartRateData(heartRateDataBackendlessCollection.getData().get(0));
                     System.out.println("Finished Step!");
-                    sharedValues.saveBool("loading", false);
                     check();
                 } else {
-
+                    System.out.println("Finished Step!");
                     HeartRateData heartRateData = new HeartRateData();
                     heartRateData.setSessionDay(sharedValues.getString("sessionDay"));
                     userData.setHeartRateData(heartRateData);
@@ -327,4 +337,18 @@ public class SessionManager {
 
     }
 
+    //FOR FIRST TIME TESTING
+    private void createTables() {
+        Backendless.Persistence.of(UserData.class).save(userData, new AsyncCallback<UserData>() {
+            @Override
+            public void handleResponse(UserData updatedData) {
+                System.out.println("Tables Created");
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                System.err.println("Error - " + backendlessFault);
+            }
+        });
+    }
 }

@@ -10,7 +10,7 @@ import java.util.Locale;
 
 public class PedometerData {
 
-    private int daylyStepCount;
+    private int dailyStepCount;
     private int weeklyStepCount;
     private int monthlyStepCount;
 
@@ -39,12 +39,12 @@ public class PedometerData {
         this.sessionDay = sessionDay;
     }
 
-    public int getDaylyStepCount() {
-        return daylyStepCount;
+    public int getDailyStepCount() {
+        return dailyStepCount;
     }
 
-    public void setDaylyStepCount(int daylyStepCount) {
-        this.daylyStepCount = daylyStepCount;
+    public void setDailyStepCount(int dailyStepCount) {
+        this.dailyStepCount = dailyStepCount;
     }
 
     public int getWeeklyStepCount() {

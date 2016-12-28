@@ -31,10 +31,10 @@ import com.mueller.mobileSports.user.SessionManager;
  */
 public class PedometerActivity extends AppCompatActivity {
 
-    SessionManager sessionManager;
     MyReceiver myReceiver;
+    private SessionManager sessionManager;
     //TODO test this
-    boolean service_started = false;
+    private boolean service_started = false;
     private CircularProgressBar cBar;
     private TextView date;
     private SharedValues sharedValues;
@@ -78,8 +78,6 @@ public class PedometerActivity extends AppCompatActivity {
 
     private void getData() {
 
-        int stepsOverDay = sharedValues.getInt("stepsOverDay");
-        int stepsOverWeek = sharedValues.getInt("stepsOverWeek");
         date.setText(sharedValues.getString("sessionDay"));
         cBar.setMax(sharedValues.getInt("stepGoal"));
         cBar.setTitle(Integer.toString(sharedValues.getInt("stepsOverDay")));
@@ -90,11 +88,11 @@ public class PedometerActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        sessionManager.isLoginValid();
     }
 
     @Override
     protected void onDestroy() {
-        sharedValues.saveBool("notFirstTimePedo", false);
         sessionManager.uploadUserData(this, null, false);
 
         if (service_started) {
@@ -116,7 +114,7 @@ public class PedometerActivity extends AppCompatActivity {
     public void onClickPedometer(View v) {
         if (v == null) {
             throw new NullPointerException(
-                    "You are refering null object. "
+                    "You are referring null object. "
                             + "Please check weather you had called super class method mappingWidgets() or not");
         } else if (v.getId() == R.id.PM_ProfileBtn) {
             Intent i = new Intent(this, ProfileActivity.class);

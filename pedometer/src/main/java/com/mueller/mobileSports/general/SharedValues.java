@@ -22,7 +22,7 @@ public class SharedValues {
     /**
      * Method to get the a sharedValues instance shared by all activities within the app
      *
-     * @param context
+     * @param context Context
      * @return Instance of SharedValues
      */
     public static SharedValues getInstance(Context context) {
@@ -90,14 +90,11 @@ public class SharedValues {
     }
 
     public boolean getBool(String key) {
-        if (sharedPreferences != null) {
-            return sharedPreferences.getBoolean(key, false);
-        }
-        return false;
+        return sharedPreferences != null && sharedPreferences.getBoolean(key, false);
     }
 
     /**
-     * Method to check wheter a value with a specified key exists in the shared values
+     * Method to check whether a value with a specified key exists in the shared values
      *
      * @param key string
      * @return true if key exists within the shared value
@@ -105,7 +102,6 @@ public class SharedValues {
     public boolean checkIfContained(String key) {
         return sharedPreferences.contains(key);
     }
-
 
 }
 

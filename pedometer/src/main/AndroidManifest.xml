@@ -5,6 +5,14 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!-- Bluetooth , only availabe for BLE supported devices -->
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
     <!-- To auto-complete  the height text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -46,19 +54,18 @@
         <activity
             android:name="com.mueller.mobileSports.heartRate.HeartRateActivity"
             android:label="Heart-Rate Monitor" />
-
+        <activity android:name="com.mueller.mobileSports.general.BluetoothScanActivity" />
 
         <service
             android:name="com.mueller.mobileSports.pedometer.pedometerUtility.PedometerService"
             android:enabled="true">
+
             <!-- exported determines whether or not the service can be executed by other applications. -->
         </service>
         <service
-            android:name="com.mueller.mobileSports.heartRate.hR_Monitor.HeartRateSimulationService"
-            android:enabled="true">
+            android:name="com.mueller.mobileSports.heartRate.hR_Monitor.HeartRateSensorSimulationService"
+            android:enabled="true" />
 
-
-        </service>
     </application>
 
 </manifest>

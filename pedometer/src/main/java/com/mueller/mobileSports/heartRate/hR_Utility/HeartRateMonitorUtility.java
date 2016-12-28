@@ -10,9 +10,7 @@ import com.mueller.mobileSports.general.SharedValues;
 
 public class HeartRateMonitorUtility {
 
-    private Context context;
     private SharedValues sharedValues;
-
 
     public HeartRateMonitorUtility(Context context) {
         this.sharedValues = SharedValues.getInstance(context);

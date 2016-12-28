@@ -149,22 +149,6 @@ public class UserData {
         this.activityLevel = activityLevel;
     }
 
-
-    public void deleteAll() {
-        setAge(0);
-        setHeight(0);
-        setUsername("");
-        setWeight(0);
-        setGender("");
-        setEmail("");
-        setObjectId(null);
-        setStepGoal(0);
-        setActivityLevel(0);
-        sethRmax(0);
-        setHeartRateData(null);
-        setPedometerData(null);
-    }
-
     //Used for some testing only
 
 }

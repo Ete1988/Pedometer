@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,109 +8,98 @@
     android:orientation="vertical"
     tools:context="com.mueller.mobileSports.general.SettingsActivity">
 
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="fill_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/my_toolbar"
-            android:layout_width="fill_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/stepGoal"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/stepGoal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/step_goal"
-                android:textAlignment="textStart"
-                android:textSize="24sp"
-                android:textStyle="normal|bold|italic" />
-
-            <android.support.v4.widget.Space
-                android:layout_width="50dp"
-                android:layout_height="match_parent" />
-
-            <TextView
-                android:id="@+id/stepGoalView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:fontFamily="serif"
-                android:textSize="30sp"
-                android:textStyle="normal|bold|italic" />
-
-            <android.support.v4.widget.Space
-                android:layout_width="5dip"
-                android:layout_height="match_parent" />
-
-            <ImageButton
-                android:id="@+id/goalSelector"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@null"
-                android:clickable="true"
-                android:contentDescription="@string/set_activity_level"
-                android:onClick="setGoalDialog"
-                android:scaleType="fitXY"
-                android:src="@mipmap/ic_edit" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/actLevel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:text="@string/activity_level"
-                android:textSize="24sp"
-                android:textStyle="normal|bold|italic" />
-
-            <android.support.v4.widget.Space
-                android:layout_width="50dp"
-                android:layout_height="match_parent" />
-
-            <TextView
-                android:id="@+id/level"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="serif"
-                android:textSize="30sp"
-                android:textStyle="normal|bold|italic" />
-
-            <android.support.v4.widget.Space
-                android:layout_width="5dip"
-                android:layout_height="match_parent" />
-
-            <ImageButton
-                android:id="@+id/levelSelector"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@null"
-                android:clickable="true"
-                android:contentDescription="@string/set_goal"
-                android:onClick="setActivityLevelDialog"
-                android:scaleType="fitXY"
-                android:src="@mipmap/ic_edit" />
-        </LinearLayout>
+            android:text="Step Goal: "
+            android:textAlignment="textStart"
+            android:textSize="24sp"
+            android:textStyle="normal|bold|italic" />
 
         <android.support.v4.widget.Space
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_width="50dp"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/stepGoalView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fontFamily="serif"
+            android:textSize="30sp"
+            android:textStyle="normal|bold|italic" />
+
+        <android.support.v4.widget.Space
+            android:layout_width="5dip"
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:id="@+id/goalSelector"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@null"
+            android:clickable="true"
+            android:contentDescription="@string/set_activity_level"
+            android:onClick="setGoalDialog"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_edit" />
 
     </LinearLayout>
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/actLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="@string/activity_level"
+            android:textSize="24sp"
+            android:textStyle="normal|bold|italic" />
+
+        <android.support.v4.widget.Space
+            android:layout_width="50dp"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="serif"
+            android:textSize="30sp"
+            android:textStyle="normal|bold|italic" />
+
+        <android.support.v4.widget.Space
+            android:layout_width="5dip"
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:id="@+id/levelSelector"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@null"
+            android:clickable="true"
+            android:contentDescription="@string/set_goal"
+            android:onClick="setActivityLevelDialog"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_edit" />
+    </LinearLayout>
+
+</LinearLayout>

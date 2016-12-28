@@ -33,7 +33,7 @@
                 android:id="@+id/input_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Name"
+                android:hint="@string/hint_name"
                 android:inputType="text" />
         </android.support.design.widget.TextInputLayout>
 
@@ -45,7 +45,7 @@
                 android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email"
+                android:hint="@string/email"
                 android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
 
@@ -57,7 +57,7 @@
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"
+                android:hint="@string/password"
                 android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
@@ -69,7 +69,7 @@
                 android:id="@+id/confirmpassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Confirm Password"
+                android:hint="@string/confirm_password"
                 android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
@@ -82,7 +82,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="40dp"
             android:fontFamily="sans-serif-medium"
-            android:text="Create Account"
+            android:text="@string/create_account"
             android:textColor="@android:color/black"
             android:textStyle="normal|bold" />
 
@@ -94,7 +94,7 @@
             android:gravity="center"
             android:onClick="onClick"
             android:paddingTop="20dp"
-            android:text="Already have an account? Login"
+            android:text="@string/already_have_an_account_login"
             android:textSize="16sp" />
 
     </LinearLayout>

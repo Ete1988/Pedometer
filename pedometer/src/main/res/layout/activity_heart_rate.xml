@@ -23,69 +23,268 @@
             android:layout_height="20dp" />
 
         <LinearLayout
-        android:id="@+id/timer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/timeTextView"
-            android:layout_width="wrap_content"
+            android:id="@+id/timer_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:text="@string/default_timer"
-            android:textAlignment="center"
-            android:textAllCaps="false"
-            android:textSize="30sp"
-            android:textStyle="normal|bold" />
+            android:gravity="center"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/timeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="@string/default_timer"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textSize="30sp"
+                android:textStyle="normal|bold" />
 
-    <android.support.v4.widget.Space
-        android:layout_width="match_parent"
-        android:layout_height="20dp" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:text="@string/heart_rate"
-                android:textSize="24sp"
-                android:textStyle="normal|bold|italic" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/heart_rate"
+                    android:textSize="24sp"
+                    android:textStyle="normal|bold|italic" />
+
+                <android.support.v4.widget.Space
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/txtHeartRateView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/standardValue"
+                    android:textSize="24sp"
+                    android:textStyle="normal|bold" />
+
+                <android.support.v4.widget.Space
+                    android:layout_width="5dp"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bpm"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
 
             <android.support.v4.widget.Space
-                android:layout_width="60dp"
-                android:layout_height="match_parent" />
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
 
-            <TextView
-                android:id="@+id/txtHeartRateView"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/standardValue"
-                android:textSize="24sp"
-                android:textStyle="normal|bold" />
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/average"
+                        android:textSize="18sp"
+
+                        android:textStyle="normal|italic" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/minimum"
+                        android:textSize="18sp"
+                        android:textStyle="normal|italic" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/maximum"
+                        android:textSize="18sp"
+                        android:textStyle="normal|italic" />
+
+                </LinearLayout>
+
+                <android.support.v4.widget.Space
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txtAvrHRView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/standardValue"
+                        android:textSize="18sp" />
+
+
+                    <TextView
+                        android:id="@+id/txtMinHRView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/standardValue"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/txtMaxHRView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/standardValue"
+                        android:textSize="18sp" />
+
+
+                </LinearLayout>
+
+                <android.support.v4.widget.Space
+                    android:layout_width="5dp"
+                    android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <android.support.v4.widget.Space
+                        android:layout_width="match_parent"
+                        android:layout_height="7dip" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/bpm"
+                        android:textSize="12sp" />
+
+                    <android.support.v4.widget.Space
+                        android:layout_width="match_parent"
+                        android:layout_height="7dip" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/bpm"
+                        android:textSize="12sp" />
+
+                    <android.support.v4.widget.Space
+                        android:layout_width="match_parent"
+                        android:layout_height="7dip" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/bpm"
+                        android:textSize="12sp" />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
 
             <android.support.v4.widget.Space
-                android:layout_width="5dp"
-                android:layout_height="wrap_content" />
+                android:layout_width="match_parent"
+                android:layout_height="20dip" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/bpm"
-                android:textSize="12sp" />
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hrmax"
+                        android:textSize="18sp"
+                        android:textStyle="normal|italic" />
+
+                    <android.support.v4.widget.Space
+                        android:layout_width="120dp"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:id="@+id/txtHRmaxView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/standardValue"
+                        android:textSize="18sp" />
+
+                    <android.support.v4.widget.Space
+                        android:layout_width="5dip"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/bpm"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/percentage_of_heart_rate"
+                        android:textSize="14sp"
+                        android:textStyle="normal|italic" />
+
+                    <android.support.v4.widget.Space
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/txtTargetHeartRateView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/xx"
+                        android:textSize="18sp"
+                        android:textStyle="normal|bold|italic" />
+
+                    <android.support.v4.widget.Space
+                        android:layout_width="5dip"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/percentUnit"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -98,257 +297,58 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/txtTrimpScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:text="@string/trimp_score"
+                android:textSize="24sp"
+                android:textStyle="normal|bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/average"
-                    android:textSize="18sp"
+            <android.support.v4.widget.Space
+                android:layout_width="40dp"
+                android:layout_height="match_parent" />
 
-                    android:textStyle="normal|italic" />
+            <TextView
+                android:id="@+id/txtTrimpScoreView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/standardValue"
+                android:textAllCaps="false"
+                android:textSize="30sp"
+                android:textStyle="normal|bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/minimum"
-                    android:textSize="18sp"
-                    android:textStyle="normal|italic" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/maximum"
-                    android:textSize="18sp"
-                    android:textStyle="normal|italic" />
+        </LinearLayout>
 
-            </LinearLayout>
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_start_stop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/start_stop_session"
+                android:src="@mipmap/ic_start" />
 
             <android.support.v4.widget.Space
                 android:layout_width="100dp"
                 android:layout_height="match_parent" />
 
-            <LinearLayout
+            <ImageView
+                android:id="@+id/iv_reset"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/txtAvrHRView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/standardValue"
-                    android:textSize="18sp" />
-
-
-                <TextView
-                    android:id="@+id/txtMinHRView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/standardValue"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/txtMaxHRView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/standardValue"
-                    android:textSize="18sp" />
-
-
-            </LinearLayout>
-
-            <android.support.v4.widget.Space
-                android:layout_width="5dp"
-                android:layout_height="match_parent" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <android.support.v4.widget.Space
-                    android:layout_width="match_parent"
-                    android:layout_height="7dip" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/bpm"
-                    android:textSize="12sp" />
-
-                <android.support.v4.widget.Space
-                    android:layout_width="match_parent"
-                    android:layout_height="7dip" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/bpm"
-                    android:textSize="12sp" />
-
-                <android.support.v4.widget.Space
-                    android:layout_width="match_parent"
-                    android:layout_height="7dip" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/bpm"
-                    android:textSize="12sp" />
-
-
-            </LinearLayout>
-
-
-        </LinearLayout>
-
-        <android.support.v4.widget.Space
-            android:layout_width="match_parent"
-            android:layout_height="20dip" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/hrmax"
-                    android:textSize="18sp"
-                    android:textStyle="normal|italic" />
-
-                <android.support.v4.widget.Space
-                    android:layout_width="120dp"
-                    android:layout_height="match_parent" />
-
-                <TextView
-                    android:id="@+id/txtHRmaxView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/standardValue"
-                    android:textSize="18sp" />
-
-                <android.support.v4.widget.Space
-                    android:layout_width="5dip"
-                    android:layout_height="match_parent" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/bpm"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/percentage_of_heart_rate"
-                    android:textSize="14sp"
-                    android:textStyle="normal|italic" />
-
-                <android.support.v4.widget.Space
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/txtTargetHeartRateView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/xx"
-                    android:textSize="18sp"
-                    android:textStyle="normal|bold|italic" />
-
-                <android.support.v4.widget.Space
-                    android:layout_width="5dip"
-                    android:layout_height="match_parent" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/percentUnit"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
+                android:contentDescription="@string/reset_session"
+                android:src="@mipmap/ic_reset" />
         </LinearLayout>
-
-    </LinearLayout>
-
-    <android.support.v4.widget.Space
-        android:layout_width="match_parent"
-        android:layout_height="20dp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/txtTrimpScore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/trimp_score"
-            android:textSize="24sp"
-            android:textStyle="normal|bold" />
-
-        <android.support.v4.widget.Space
-            android:layout_width="40dp"
-            android:layout_height="match_parent" />
-
-        <TextView
-            android:id="@+id/txtTrimpScoreView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/standardValue"
-            android:textAllCaps="false"
-            android:textSize="30sp"
-            android:textStyle="normal|bold" />
-
-
-    </LinearLayout>
-
-    <android.support.v4.widget.Space
-        android:layout_width="match_parent"
-        android:layout_height="60dp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/iv_start_stop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/start_stop_session"
-            android:src="@mipmap/ic_start" />
-
-        <android.support.v4.widget.Space
-            android:layout_width="100dp"
-            android:layout_height="match_parent" />
-
-        <ImageView
-            android:id="@+id/iv_reset"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/reset_session"
-            android:src="@mipmap/ic_reset" />
-    </LinearLayout>
 
     </LinearLayout>
 
