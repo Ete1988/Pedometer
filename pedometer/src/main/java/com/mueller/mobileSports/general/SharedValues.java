@@ -93,6 +93,12 @@ public class SharedValues {
         return sharedPreferences != null && sharedPreferences.getBoolean(key, false);
     }
 
+    public void clearData() {
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        prefsEditor.clear();
+        prefsEditor.apply();
+    }
+
     /**
      * Method to check whether a value with a specified key exists in the shared values
      *

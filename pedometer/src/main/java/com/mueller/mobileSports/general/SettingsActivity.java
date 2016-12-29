@@ -42,6 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
             "7: run over 10 miles (16 km) per week or spend over 3 hours per week " +
                     "in comparable physical activity"
     };
+
     private int physicalActivityLevel, stepGoal;
     private TextView mActivityLevelText, mCurrentStepGoalText;
     private SessionManager sessionManager;
@@ -70,6 +71,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
+    //TODO cleanup
     public void setActivityLevelDialog(View v) {
         AlertDialog.Builder activityLevelDialog = new AlertDialog.Builder(this);
         activityLevelDialog.setTitle("Select your activity mActivityLevelText");

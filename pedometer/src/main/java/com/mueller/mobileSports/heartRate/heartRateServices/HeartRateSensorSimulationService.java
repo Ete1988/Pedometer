@@ -1,11 +1,12 @@
-package com.mueller.mobileSports.heartRate.hR_Monitor;
+package com.mueller.mobileSports.heartRate.heartRateServices;
 
 import android.app.Service;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.heartRate.hR_Utility.HeartRateMonitorUtility;
@@ -20,10 +21,13 @@ import java.io.InputStreamReader;
  * Created by Ete on 15/12/2016.
  */
 
-public class HeartRateSensorSimulationService extends Service implements HeartRateMonitor {
+public class HeartRateSensorSimulationService extends Service {
 
-
-    static final public String HRM_SIMULATION_MESSAGE = "com.mueller.mobileSPorts.pedometer.heartRate.hR_Monitor.HeartRateSimulationService.STEP_VALUE";
+    public final static String HRM_SIMULATION_MESSAGE = "com.mueller.mobileSPorts.pedometer.heartRate.hR_Monitor.HeartRateSimulationService.STEP_VALUE";
+    private final static String TAG = HeartRateSensorSimulationService.class.getSimpleName();
+    private final static int SIZE_OF_SIMULATION_DATA = 541;
+    private final static int TIME_DELAY = 3000;
+    private final IBinder mBinder = new LocalBinder();
     private int[] arraySimulationData, arrayAverageHeartRate;
     private int updateCounter, averageHeartRateCalculationCounter;
     private Handler mHandler;
@@ -44,25 +48,13 @@ public class HeartRateSensorSimulationService extends Service implements HeartRa
             heartRateMonitorUtility.storeMinAndMaxHeartRate(arraySimulationData[updateCounter]);
             sharedValues.saveInt("currentHeartRate", arraySimulationData[updateCounter++]);
             sendMessage();
-            mHandler.postDelayed(this, 3000);
+            mHandler.postDelayed(this, TIME_DELAY);
         }
     };
 
     @Override
     public void onCreate() {
-        int SIZE_OF_SIMULATION_DATA = 541;
-        arraySimulationData = new int[SIZE_OF_SIMULATION_DATA];
-        arrayAverageHeartRate = new int[3];
         sharedValues = SharedValues.getInstance(this);
-        heartRateMonitorUtility = new HeartRateMonitorUtility(this);
-        mHandler = new Handler();
-        tryToReadSimulationData();
-    }
-
-    @Override
-    public int[] getHeartRate() {
-        tryToReadSimulationData();
-        return arraySimulationData;
     }
 
     private void tryToReadSimulationData() {
@@ -89,13 +81,7 @@ public class HeartRateSensorSimulationService extends Service implements HeartRa
             }
     }
 
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        mHandler.postDelayed(mHeartRateSimulation, 0);
-        return START_STICKY;
-    }
-
     private void sendMessage() {
-
         Intent intent = new Intent();
         intent.setAction(HRM_SIMULATION_MESSAGE);
         intent.putExtra("DATA_PASSED", "");
@@ -103,16 +89,38 @@ public class HeartRateSensorSimulationService extends Service implements HeartRa
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        stopSelf();
-    }
-
-    @Nullable
-    @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
-
+        return mBinder;
     }
+
+    public boolean initialize() {
+        if (arraySimulationData == null) {
+            arraySimulationData = new int[SIZE_OF_SIMULATION_DATA];
+            tryToReadSimulationData();
+        }
+        if (arrayAverageHeartRate == null) {
+            arrayAverageHeartRate = new int[3];
+        }
+        if (heartRateMonitorUtility == null) {
+            heartRateMonitorUtility = new HeartRateMonitorUtility(this);
+        }
+        if (mHandler == null) {
+            mHandler = new Handler();
+        }
+        mHandler.postDelayed(mHeartRateSimulation, 0);
+        Log.e(TAG, "HeartRateSensorSimulation started.");
+        return true;
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        return super.onUnbind(intent);
+    }
+
+    public class LocalBinder extends Binder {
+        public HeartRateSensorSimulationService getService() {
+            return HeartRateSensorSimulationService.this;
+        }
+    }
+
 }

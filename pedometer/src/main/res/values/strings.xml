@@ -56,6 +56,8 @@
     <!-- HRM -->
     <string name="ble_not_supported">BLE is not supported</string>
     <string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
 
 
 </resources>

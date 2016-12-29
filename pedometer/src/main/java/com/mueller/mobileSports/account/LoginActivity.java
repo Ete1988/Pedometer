@@ -1,6 +1,5 @@
 package com.mueller.mobileSports.account;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,12 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.backendless.Backendless;
-import com.backendless.BackendlessUser;
-import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessFault;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
+import com.mueller.mobileSports.user.SessionManager;
 
 
 /**
@@ -25,12 +21,13 @@ import com.mueller.mobileSports.pedometer.PedometerActivity;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText mEmailText, mPasswordText;
-
+    private SessionManager sessionManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setTitle("Login");
+        sessionManager = new SessionManager(this);
         Button mLoginButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailText = (EditText) findViewById(R.id.input_email);
         mPasswordText = (EditText) findViewById(R.id.password);
@@ -45,52 +42,30 @@ public class LoginActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
-
     }
 
     public void onClickLogin(View v) {
         if (v.getId() == R.id.register_button) {
-            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class); //???
             startActivity(intent);
         }
 
     }
 
+    //TODO add user logged in check to skip
     private void login() {
         //Get username, password from EditText
         String email = mEmailText.getText().toString();
         String password = mPasswordText.getText().toString();
 
 
-        final ProgressDialog progress = new ProgressDialog(this);
-        progress.setTitle("Loading");
-        progress.setMessage("Wait while loading...");
-        progress.setCancelable(false);
-        progress.show(); // disable dismiss by tapping outside of the dialog
-
         // Check if username, password is filled
         if (email.trim().length() > 0 && password.trim().length() > 0) {
             //Backendless Login and let user stay logged in.
-            Backendless.UserService.login(email, password, new AsyncCallback<BackendlessUser>() {
-                @Override
-                public void handleResponse(BackendlessUser backendlessUser) {
-                    Backendless.UserService.setCurrentUser(backendlessUser);
-                    Toast.makeText(getBaseContext(), "Thanks for logging in!", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(getApplicationContext(), PedometerActivity.class);
-                    startActivity(intent);
-                }
-
-                @Override
-                public void handleFault(BackendlessFault backendlessFault) {
-                    Toast.makeText(getBaseContext(), "Error logging in! Please register or check your log in details", Toast.LENGTH_LONG).show();
-                    progress.dismiss();
-                }
-            }, true);
-
-
+            Intent intent = new Intent(getApplicationContext(), PedometerActivity.class);
+            sessionManager.userLogin(email, password, intent);
         } else {
-            // user didn't entered username or password
-            progress.dismiss();
+            // user didn't enter username or password
             Toast.makeText(getBaseContext(), "Please enter username and password", Toast.LENGTH_LONG).show();
         }
 

@@ -25,7 +25,7 @@ import java.util.Objects;
  * Class to store the current session of the user.
  * Data is persisted even if the app is closed and will only be cleared if the user decides to log out.
  */
-//TODO check all methods
+//TODO mapDataToSharedValue all methods
 public class SessionManager {
 
     private static UserData userData;
@@ -42,7 +42,6 @@ public class SessionManager {
     }
 
     /**
-     * Method to check if the User is still logged in
      * If user is not logged is, the current User will be redirected to the login activity
      */
     public void checkUserState() {
@@ -50,16 +49,18 @@ public class SessionManager {
         if (!isUserTokenAvailable()) {
             goToLogin();
         } else {
-            getUserFromServer();
+            //getUserFromServer();
         }
     }
 
     public boolean checkIfUserDataAvailable() {
-        return java.util.Objects.equals(userData, null);
+        boolean check = !java.util.Objects.equals(userData, null);
+        System.out.println("Check : " + check);
+        return check;
     }
 
     /**
-     * Quick check for login user token
+     * Quick mapDataToSharedValue for login user token
      *
      * @return true if user token is stored
      */
@@ -75,41 +76,89 @@ public class SessionManager {
     public void logoutUser() {
 
         if (isUserTokenAvailable()) {
-            userData = null;
             Backendless.UserService.logout(new AsyncCallback<Void>() {
 
                 @Override
                 public void handleResponse(Void aVoid) {
                     Toast.makeText(context, "GoodBye!", Toast.LENGTH_LONG).show();
+                    progress.dismiss();
+                    Intent i = new Intent(context, LoginActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(i);
                 }
 
                 @Override
                 public void handleFault(BackendlessFault backendlessFault) {
                     System.err.println("Error - " + backendlessFault);
+                    progress.dismiss();
                 }
             });
-
-            goToLogin();
         }
     }
 
     // save userdata to backendless server
-    public void uploadUserData(final Context context, final Intent intent, final boolean showProgressBar) {
-        PedometerData pedometerData;
-        HeartRateData heartRateData;
-
+    public void uploadUserData(final Context context, final boolean showProgressBar, final boolean logout) {
         if (showProgressBar) {
             progress = new ProgressDialog(context);
-            progress.setTitle("Loading");
-            progress.setMessage("Loading...");
+            progress.setTitle("Saving Data");
+            progress.setMessage("Please wait...");
             progress.setCancelable(false);
             progress.show(); // disable dismiss by tapping outside of the dialog
         }
 
+        saveDataToObjects();
 
-//TODO nullpointer exception
-        pedometerData = userData.getPedometerData();
-        heartRateData = userData.getHeartRateData();
+        Backendless.Persistence.of(UserData.class).save(userData, new AsyncCallback<UserData>() {
+            @Override
+            public void handleResponse(UserData updatedData) {
+                HeartRateData heartRateData = updatedData.getHeartRateData();
+                PedometerData pedometerData = updatedData.getPedometerData();
+                userData.setPedometerData(pedometerData);
+                userData.setHeartRateData(heartRateData);
+
+                if (logout) {
+                    logoutUser();
+                } else if (showProgressBar) {
+                    progress.dismiss();
+                    Toast.makeText(context, "Success!", Toast.LENGTH_LONG).show();
+                }
+
+                System.out.println(userData.getObjectId());
+                System.out.println(userData.getPedometerData().getObjectId());
+                System.out.println(userData.getHeartRateData().getObjectId());
+                System.out.println(userData.getHeartRateData().getObjectId());
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                Toast.makeText(context, "Ooops!", Toast.LENGTH_LONG).show();
+                if (showProgressBar) {
+                    progress.dismiss();
+                }
+                System.out.println(backendlessFault.toString());
+            }
+        });
+    }
+
+    private void saveDataToObjects() {
+        PedometerData pedometerData;
+        HeartRateData heartRateData;
+
+        try {
+            pedometerData = userData.getPedometerData();
+        } catch (NullPointerException e) {
+            System.err.println("Error" + e);
+            pedometerData = new PedometerData();
+        }
+
+        try {
+            heartRateData = userData.getHeartRateData();
+        } catch (NullPointerException e) {
+            System.err.println("Error" + e);
+            heartRateData = new HeartRateData();
+        }
 
         //UserData
         userData.setUsername(sharedValues.getString("username"));
@@ -136,42 +185,13 @@ public class SessionManager {
         userData.setHeartRateData(heartRateData);
         userData.setPedometerData(pedometerData);
 
-        Backendless.Persistence.of(UserData.class).save(userData, new AsyncCallback<UserData>() {
-            @Override
-            public void handleResponse(UserData updatedData) {
-                HeartRateData heartRateData = updatedData.getHeartRateData();
-                PedometerData pedometerData = updatedData.getPedometerData();
-                userData.setPedometerData(pedometerData);
-                userData.setHeartRateData(heartRateData);
-
-                if (!(intent == null)) {
-                    context.startActivity(intent);
-                }
-                if (showProgressBar) {
-                    progress.dismiss();
-                    Toast.makeText(context, "Success!", Toast.LENGTH_LONG).show();
-                }
-
-                System.out.println(userData.getObjectId());
-                System.out.println(userData.getPedometerData().getObjectId());
-                System.out.println(userData.getHeartRateData().getObjectId());
-                System.out.println(userData.getHeartRateData().getObjectId());
-                sharedValues.saveBool("loading", false);
-            }
-
-            @Override
-            public void handleFault(BackendlessFault backendlessFault) {
-                Toast.makeText(context, "Ooops!", Toast.LENGTH_LONG).show();
-                progress.dismiss();
-                System.out.println(backendlessFault.toString());
-            }
-        });
     }
 
     // return to login activity
     private void goToLogin() {
         Intent i = new Intent(context, LoginActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
     }
@@ -198,24 +218,43 @@ public class SessionManager {
         });
     }
 
-    //Load currentUser
-    private void getUserFromServer() {
+    public void userLogin(String email, String password, final Intent intent) {
 
         progress = new ProgressDialog(context);
         progress.setTitle("Loading");
-        progress.setMessage("Wait while loading...");
+        progress.setMessage("Please wait...");
         progress.setCancelable(false);
         progress.show(); // disable dismiss by tapping outside of the dialog
+        sharedValues.saveString("email", email);
+
+        Backendless.UserService.login(email, password, new AsyncCallback<BackendlessUser>() {
+            @Override
+            public void handleResponse(BackendlessUser backendlessUser) {
+                Backendless.UserService.setCurrentUser(backendlessUser);
+
+                getUserFromServer(intent);
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                Toast.makeText(context, "Error logging in! Please register or check your log in details", Toast.LENGTH_LONG).show();
+                progress.dismiss();
+            }
+        }, true);
+
+
+    }
+
+    //Load currentUser
+    public void getUserFromServer(final Intent intent) {
 
         String currentUserId = Backendless.UserService.loggedInUser();
         Backendless.UserService.findById(currentUserId, new AsyncCallback<BackendlessUser>() {
             @Override
             public void handleResponse(BackendlessUser currentUser) {
-                Backendless.UserService.setCurrentUser(currentUser);
-                sharedValues.saveString("email", currentUser.getEmail());
                 System.out.println("First Step!");
                 System.out.println("User: " + currentUser);
-                getUserDataFromServer();
+                getUserDataFromServer(intent);
             }
 
             @Override
@@ -228,7 +267,7 @@ public class SessionManager {
     }
 
     // Load current userData
-    private void getUserDataFromServer() {
+    private void getUserDataFromServer(final Intent intent) {
         String currentUserId = Backendless.UserService.loggedInUser();
         String whereClause = "ownerID = '" + currentUserId + "'";
         BackendlessDataQuery dataQuery = new BackendlessDataQuery();
@@ -238,12 +277,14 @@ public class SessionManager {
             public void handleResponse(BackendlessCollection<UserData> data) {
                 if (!(data.getTotalObjects() == 0)) {
                     userData = new UserData(data.getData().get(0));
-                    getUserPedometerDataFromServer();
-                    System.out.println("Second Step!");
+                    getUserPedometerDataFromServer(intent);
+                    userData.setEmail(sharedValues.getString("email"));
+                    System.out.println("Second Step! Got UserData");
                 } else {
-                    System.out.println("Second Step!");
+                    System.out.println("Second Step! No UserData");
                     userData = new UserData();
                     userData.setEmail(sharedValues.getString("email"));
+                    getUserPedometerDataFromServer(intent);
                     progress.dismiss();
                 }
             }
@@ -256,14 +297,13 @@ public class SessionManager {
                     userData = new UserData();
                     userData.setEmail(sharedValues.getString("email"));
                     createTables();
-
                 }
     }
         });
     }
 
     //get pedometerData
-    private void getUserPedometerDataFromServer() {
+    private void getUserPedometerDataFromServer(final Intent intent) {
         String whereClausePedometerData = "UserData[pedometerData]" +
                 ".objectId='" + userData.getObjectId() + "'" +
                 " and " +
@@ -276,14 +316,14 @@ public class SessionManager {
             public void handleResponse(BackendlessCollection<PedometerData> pedometerDataBackendlessCollection) {
                 if (!(pedometerDataBackendlessCollection.getTotalObjects() == 0)) {
                     userData.setPedometerData(pedometerDataBackendlessCollection.getData().get(0));
-                    getUserHeartRateDataFromServer();
+                    getUserHeartRateDataFromServer(intent);
                     System.out.println("Third Step!");
                 } else {
                     System.out.println("Third Step!");
                     PedometerData pedometerData = new PedometerData();
                     pedometerData.setSessionDay(sharedValues.getString("sessionDay"));
                     userData.setPedometerData(pedometerData);
-                    getUserHeartRateDataFromServer();
+                    getUserHeartRateDataFromServer(intent);
                 }
             }
 
@@ -295,7 +335,7 @@ public class SessionManager {
     }
 
     //Get heartRateData
-    private void getUserHeartRateDataFromServer() {
+    private void getUserHeartRateDataFromServer(final Intent intent) {
 
         String whereClauseHeartRateData = "UserData[heartRateData]" +
                 ".objectId='" + userData.getObjectId() + "'" +
@@ -310,13 +350,13 @@ public class SessionManager {
                 if (!(heartRateDataBackendlessCollection.getTotalObjects() == 0)) {
                     userData.setHeartRateData(heartRateDataBackendlessCollection.getData().get(0));
                     System.out.println("Finished Step!");
-                    check();
+                    mapDataToSharedValue(intent);
                 } else {
                     System.out.println("Finished Step!");
                     HeartRateData heartRateData = new HeartRateData();
                     heartRateData.setSessionDay(sharedValues.getString("sessionDay"));
                     userData.setHeartRateData(heartRateData);
-                    check();
+                    mapDataToSharedValue(intent);
                 }
             }
 
@@ -327,14 +367,29 @@ public class SessionManager {
         });
     }
 
-    //just for testing
-    private void check() {
+    private void mapDataToSharedValue(final Intent intent) {
+        PedometerData pedometerData = userData.getPedometerData();
+        HeartRateData heartRateData = userData.getHeartRateData();
 
-        progress.dismiss();
+        //UserData
+        sharedValues.saveString("username", userData.getUsername());
+        sharedValues.saveString("gender", userData.getGender());
+        sharedValues.saveInt("age", userData.getAge());
+        sharedValues.saveInt("weight", userData.getWeight());
+        sharedValues.saveInt("height", userData.getHeight());
+        sharedValues.saveInt("stepGoal", userData.getStepGoal());
+        sharedValues.saveInt("physicalActivityLevel", userData.getActivityLevel());
+        sharedValues.saveInt("weight", userData.getWeight());
+
+        //PedometerData
+        sharedValues.saveInt("stepsOverDay", pedometerData.getDailyStepCount());
+        sharedValues.saveInt("stepsOverWeek", pedometerData.getWeeklyStepCount());
+
         System.out.println(userData.getObjectId());
         System.out.println(userData.getPedometerData().getObjectId());
         System.out.println(userData.getHeartRateData().getObjectId());
-
+        progress.dismiss();
+        context.startActivity(intent);
     }
 
     //FOR FIRST TIME TESTING
@@ -351,4 +406,6 @@ public class SessionManager {
             }
         });
     }
+
 }
+

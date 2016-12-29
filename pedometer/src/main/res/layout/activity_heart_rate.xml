@@ -22,6 +22,12 @@
             android:layout_width="match_parent"
             android:layout_height="20dp" />
 
+        <TextView
+            android:id="@+id/txtConnectionStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Disconnected" />
+
         <LinearLayout
             android:id="@+id/timer_layout"
             android:layout_width="match_parent"

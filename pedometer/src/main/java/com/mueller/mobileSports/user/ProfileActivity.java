@@ -103,11 +103,11 @@ public class ProfileActivity extends AppCompatActivity {
             sharedValues.saveInt("age", Integer.parseInt(mInputData[1].getText().toString()));
             sharedValues.saveInt("weight", Integer.parseInt(mInputData[2].getText().toString()));
             sharedValues.saveInt("height", Integer.parseInt(mInputData[3].getText().toString()));
-            sessionManager.uploadUserData(this, null, true);
+            sessionManager.uploadUserData(this, true, false);
         }
     }
 
-    //TODO remove, not used!?
+    //TODO remove, not used!?--> Sandra  Why??
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

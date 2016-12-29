@@ -47,7 +47,8 @@ public class UserData {
 
     public PedometerData getPedometerData() {
         if (pedometerData == null) {
-            return new PedometerData();
+            pedometerData = new PedometerData();
+            return pedometerData;
         } else {
             return pedometerData;
         }
@@ -60,7 +61,8 @@ public class UserData {
 
     public HeartRateData getHeartRateData() {
         if (heartRateData == null) {
-            return new HeartRateData();
+            heartRateData = new HeartRateData();
+            return heartRateData;
         }
         return heartRateData;
     }
@@ -149,6 +151,18 @@ public class UserData {
         this.activityLevel = activityLevel;
     }
 
-    //Used for some testing only
+    public void deleteAll() {
+        setAge(0);
+        setHeight(0);
+        setUsername("");
+        setWeight(0);
+        setGender("");
+        setEmail("");
+        setObjectId(null);
+        setActivityLevel(0);
+        sethRmax(0);
+        setHeartRateData(null);
+        setPedometerData(null);
+    }
 
 }

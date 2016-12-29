@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.backendless.Backendless;
-import com.mueller.mobileSports.pedometer.PedometerActivity;
+import com.mueller.mobileSports.account.LoginActivity;
+import com.mueller.mobileSports.user.SessionManager;
 
 /**
  * Created by Sandra on 8/10/2016.
@@ -22,7 +23,11 @@ public class SplashActivity extends AppCompatActivity {
         String APPVERSION = "v1";
         String SECRET_KEY = "76967CB3-F1DE-308D-FF0F-6BA915A44300";
         Backendless.initApp(this, APP_ID, SECRET_KEY, APPVERSION);
-        Intent intent = new Intent(this, PedometerActivity.class);
+        SessionManager sessionManager = new SessionManager(this);
+        if (sessionManager.checkIfUserDataAvailable()) {
+            sessionManager.checkUserState();
+        }
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
