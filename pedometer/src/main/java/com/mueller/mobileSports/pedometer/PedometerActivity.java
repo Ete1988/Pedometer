@@ -179,7 +179,7 @@ public class PedometerActivity extends AppCompatActivity {
         try {
             unregisterReceiver(myReceiver);
         } catch (IllegalArgumentException e) {
-            System.err.println(e);
+            // System.err.println(e);
         }
     }
 

@@ -58,7 +58,6 @@ public class LoginActivity extends AppCompatActivity {
         String email = mEmailText.getText().toString();
         String password = mPasswordText.getText().toString();
 
-
         // Check if username, password is filled
         if (email.trim().length() > 0 && password.trim().length() > 0) {
             //Backendless Login and let user stay logged in.

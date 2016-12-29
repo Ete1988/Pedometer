@@ -45,7 +45,6 @@ public class HeartRateActivity extends AppCompatActivity {
     public static final String EXTRAS_BIND_SERVICE = "BIND_SERVICE";
     private final static String TAG = HeartRateActivity.class.getSimpleName();
     MyReceiver myReceiver;
-    private String mDeviceName;
     private String mDeviceAddress;
     private boolean bindSensorService = false;
     private boolean bindSimulationHeartRate;
@@ -65,7 +64,7 @@ public class HeartRateActivity extends AppCompatActivity {
             } else if (HeartRateSensorService.ACTION_DATA_AVAILABLE.equals(action)) {
                 displayData(intent.getStringExtra(HeartRateSensorService.EXTRA_DATA));
             } else if (HeartRateSensorSimulationService.HRM_SIMULATION_MESSAGE.equals(action)) {
-
+                displayData(intent.getStringExtra(HeartRateSensorSimulationService.HRM_SIMULATION_MESSAGE));
             }
         }
     };
@@ -295,7 +294,6 @@ public class HeartRateActivity extends AppCompatActivity {
         registerReceiver(myReceiver, updateIntentFilter());
         registerReceiver(mGattUpdateReceiver, updateIntentFilter());
         final Intent receiveIntent = getIntent();
-        mDeviceName = receiveIntent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = receiveIntent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
         bindSensorService = receiveIntent.getBooleanExtra(EXTRAS_BIND_SERVICE, false);
         if (bindSensorService) {
@@ -332,7 +330,7 @@ public class HeartRateActivity extends AppCompatActivity {
         try {
             unregisterReceiver(myReceiver);
         } catch (IllegalArgumentException e) {
-            System.err.println(e);
+            // System.err.println(e);
         }
     }
 

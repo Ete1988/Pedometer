@@ -369,7 +369,6 @@ public class SessionManager {
 
     private void mapDataToSharedValue(final Intent intent) {
         PedometerData pedometerData = userData.getPedometerData();
-        HeartRateData heartRateData = userData.getHeartRateData();
 
         //UserData
         sharedValues.saveString("username", userData.getUsername());
