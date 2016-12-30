@@ -43,13 +43,13 @@ public class PedometerService extends Service implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        sharedValues.saveInt("stepsOverWeek", mStepsWeek++);
+        sharedValues.saveInt("stepsOverDay", mStepsDay++);
         sendMessage();
         Log.e(TAG, "Sensor Listener Change.");
     }
 
     private void sendMessage() {
-        sharedValues.saveInt("stepsOverWeek", mStepsWeek++);
-        sharedValues.saveInt("stepsOverDay", mStepsDay++);
         Intent intent = new Intent();
         intent.setAction(STEP_MESSAGE);
         intent.putExtra("DATA_PASSED", "");
@@ -92,6 +92,11 @@ public class PedometerService extends Service implements SensorEventListener {
         else
             sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
         return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     public class LocalBinder extends Binder {

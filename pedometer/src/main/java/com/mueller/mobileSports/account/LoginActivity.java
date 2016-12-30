@@ -22,12 +22,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText mEmailText, mPasswordText;
     private SessionManager sessionManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setTitle("Login");
         sessionManager = new SessionManager(this);
+        sessionManager.isUserLoggedIn();
         Button mLoginButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailText = (EditText) findViewById(R.id.input_email);
         mPasswordText = (EditText) findViewById(R.id.password);
@@ -46,13 +48,12 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onClickLogin(View v) {
         if (v.getId() == R.id.register_button) {
-            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class); //???
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
         }
 
     }
 
-    //TODO add user logged in check to skip
     private void login() {
         //Get username, password from EditText
         String email = mEmailText.getText().toString();

@@ -17,89 +17,302 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/stepGoal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Step Goal: "
-            android:textAlignment="textStart"
-            android:textSize="24sp"
-            android:textStyle="normal|bold|italic" />
-
-        <android.support.v4.widget.Space
-            android:layout_width="50dp"
-            android:layout_height="match_parent" />
-
-        <TextView
-            android:id="@+id/stepGoalView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:fontFamily="serif"
-            android:textSize="30sp"
-            android:textStyle="normal|bold|italic" />
-
-        <android.support.v4.widget.Space
-            android:layout_width="5dip"
-            android:layout_height="match_parent" />
-
-        <ImageButton
-            android:id="@+id/goalSelector"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@null"
-            android:clickable="true"
-            android:contentDescription="@string/set_activity_level"
-            android:onClick="setGoalDialog"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_edit" />
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp">
 
         <TextView
-            android:id="@+id/actLevel"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:text="@string/activity_level"
+            android:text="General"
             android:textSize="24sp"
             android:textStyle="normal|bold|italic" />
 
-        <android.support.v4.widget.Space
-            android:layout_width="50dp"
-            android:layout_height="match_parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:orientation="horizontal"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="@string/activity_level"
+                android:textSize="18sp"
+                android:textStyle="normal|italic" />
+
+            <android.support.v4.widget.Space
+                android:layout_width="100dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/SE_TextActivityLevelView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:text="X"
+                android:textSize="18sp"
+                android:textStyle="normal|italic" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    android:id="@+id/SE_LevelSelector"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:background="@null"
+                    android:clickable="true"
+                    android:contentDescription="@string/set_goal"
+                    android:onClick="onClickSettingsActivity"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/ic_edit" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/mySpinnerColor" />
 
         <TextView
-            android:id="@+id/level"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="serif"
-            android:textSize="30sp"
+            android:text="Pedometer"
+            android:textSize="24sp"
             android:textStyle="normal|bold|italic" />
 
-        <android.support.v4.widget.Space
-            android:layout_width="5dip"
-            android:layout_height="match_parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:orientation="horizontal"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp">
 
-        <ImageButton
-            android:id="@+id/levelSelector"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@null"
-            android:clickable="true"
-            android:contentDescription="@string/set_goal"
-            android:onClick="setActivityLevelDialog"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_edit" />
+            <TextView
+                android:id="@+id/stepGoal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Step Goal: "
+                android:textAlignment="textStart"
+                android:textSize="18sp"
+                android:textStyle="normal|italic" />
+
+            <android.support.v4.widget.Space
+                android:layout_width="80dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/SE_TextStepGoalView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="serif"
+                android:text="XXXX"
+                android:textSize="18sp"
+                android:textStyle="normal|italic" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    android:id="@+id/SE_GoalSelector"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@null"
+                    android:clickable="true"
+                    android:contentDescription="@string/set_activity_level"
+                    android:onClick="onClickSettingsActivity"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/ic_edit" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/mySpinnerColor" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HeartRate"
+            android:textSize="24sp"
+            android:textStyle="normal|bold|italic" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Resting Heart Rate:"
+                    android:textSize="18sp"
+
+                    android:textStyle="normal|italic" />
+
+                <android.support.v4.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Maximum Heart Rate:"
+                    android:textSize="18sp"
+                    android:textStyle="normal|italic" />
+
+            </LinearLayout>
+
+            <android.support.v4.widget.Space
+                android:layout_width="20dp"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/SE_TextRestingHeartRateView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/standardValue"
+                    android:textSize="18sp" />
+
+                <android.support.v4.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <TextView
+                    android:id="@+id/SE_TextHeartRateMaxView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/standardValue"
+                    android:textSize="18sp" />
+
+
+            </LinearLayout>
+
+            <android.support.v4.widget.Space
+                android:layout_width="5dp"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <android.support.v4.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bpm"
+                    android:textSize="12sp" />
+
+                <android.support.v4.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bpm"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end">
+
+                    <ImageButton
+                        android:id="@+id/SE_RestingHeartRateSelector"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@null"
+                        android:clickable="true"
+                        android:contentDescription="@string/set_activity_level"
+                        android:onClick="onClickSettingsActivity"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/ic_edit" />
+
+                </LinearLayout>
+
+                <android.support.v4.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end">
+
+                    <ImageButton
+                        android:id="@+id/SE_HeartRateMaxSelector"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@null"
+                        android:clickable="true"
+                        android:contentDescription="@string/set_activity_level"
+                        android:onClick="onClickSettingsActivity"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/ic_edit" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/SE_SaveChangesBtn"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickSettingsActivity"
+            android:text="@string/save" />
+
     </LinearLayout>
+
 
 </LinearLayout>

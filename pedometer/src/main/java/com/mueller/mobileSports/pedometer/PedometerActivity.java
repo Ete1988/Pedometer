@@ -93,7 +93,6 @@ public class PedometerActivity extends AppCompatActivity {
 
     private void getData() {
         date.setText(sharedValues.getString("sessionDay"));
-        cBar.setMax(sharedValues.getInt("stepGoal"));
         cBar.setTitle(Integer.toString(sharedValues.getInt("stepsOverDay")));
         cBar.setProgress(sharedValues.getInt("stepsOverDay"));
         cBar.setMax(sharedValues.getInt("stepGoal"));
@@ -102,29 +101,25 @@ public class PedometerActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        sessionManager.checkUserState();
         getData();
         registerReceiver(myReceiver, updateIntentFilter());
-        sessionManager.isLoginValid();
     }
 
     @Override
     protected void onDestroy() {
         Log.e(TAG, "Destroyed!");
-        if (sessionManager.isUserTokenAvailable() && sessionManager.checkIfUserDataAvailable()) {
-            sessionManager.uploadUserData(this, false, false);
-        }
-
         tryToUnregisterReceiver(myReceiver);
         if (isMyServiceRunning(PedometerService.class)) {
-            System.out.println("Removed ALL");
-
-            unbindService(mServiceConnection);
+            tryToUnbindService(mServiceConnection);
         }
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
+        Log.e(TAG, "Paused");
+        sessionManager.uploadUserData(this, false, false);
         tryToUnregisterReceiver(myReceiver);
         super.onPause();
     }
@@ -179,13 +174,23 @@ public class PedometerActivity extends AppCompatActivity {
         try {
             unregisterReceiver(myReceiver);
         } catch (IllegalArgumentException e) {
-            // System.err.println(e);
+            e.printStackTrace();
+        }
+    }
+
+    private void tryToUnbindService(ServiceConnection myService) {
+        try {
+            unbindService(myService);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         }
     }
 
     private class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context arg0, Intent arg1) {
+            sharedValues.saveInt("stepsOverWeek", sharedValues.getInt("stepsOverWeek"));
+            sharedValues.saveInt("stepsOverDay", sharedValues.getInt("stepsOverDay"));
             System.out.println("Got message!");
             cBar.setProgress(sharedValues.getInt("stepsOverDay"));
             cBar.setTitle(Integer.toString(sharedValues.getInt("stepsOverDay")));

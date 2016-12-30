@@ -7,7 +7,6 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
-import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
@@ -19,7 +18,6 @@ import android.util.Log;
 import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.heartRate.hR_Utility.HeartRateMonitorUtility;
 
-import java.util.List;
 import java.util.UUID;
 
 
@@ -31,9 +29,9 @@ public class HeartRateSensorService extends Service {
 
 
     public final static String ACTION_GATT_CONNECTED =
-            "com.mueller.mobileSports.heartRate.ACTION_GATT_CONNECTED";
+            "com.mueller.mobileSports.heartRate.ACTION_HRM_SIMULATION_CONNECTED";
     public final static String ACTION_GATT_DISCONNECTED =
-            "com.mueller.mobileSports.heartRate.ACTION_GATT_DISCONNECTED";
+            "com.mueller.mobileSports.heartRate.ACTION_HRM_SIMULATION_DISCONNECTED";
     public final static String ACTION_GATT_SERVICES_DISCOVERED =
             "com.mueller.mobileSports.heartRate.ACTION_GATT_SERVICES_DISCOVERED";
     public final static String ACTION_DATA_AVAILABLE =
@@ -115,9 +113,6 @@ public class HeartRateSensorService extends Service {
                                  final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
 
-        // This is special handling for the Heart Rate Measurement profile.  Data parsing is
-        // carried out as per profile specifications:
-        // http://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.heart_rate_measurement.xml
         if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
             int flag = characteristic.getProperties();
             int format = -1;
@@ -164,9 +159,6 @@ public class HeartRateSensorService extends Service {
 
     @Override
     public boolean onUnbind(Intent intent) {
-        // After using a given device, you should make sure that BluetoothGatt.close() is called
-        // such that resources are cleaned up properly.  In this particular example, close() is
-        // invoked when the UI is disconnected from the Service.
         close();
         return super.onUnbind(intent);
     }
@@ -276,22 +268,6 @@ public class HeartRateSensorService extends Service {
     }
 
     /**
-     * Request a read on a given {@code BluetoothGattCharacteristic}. The read result is reported
-     * asynchronously through the {@code BluetoothGattCallback#onCharacteristicRead(android.bluetooth.BluetoothGatt, android.bluetooth.BluetoothGattCharacteristic, int)}
-     * callback.
-     *
-     * @param characteristic The characteristic to read from.
-     */
-    public void readCharacteristic(BluetoothGattCharacteristic characteristic) {
-        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothAdapter not initialized");
-            return;
-        }
-        mBluetoothGatt.readCharacteristic(characteristic);
-
-    }
-
-    /**
      * Enables or disables notification on a give characteristic.
      *
      * @param characteristic Characteristic to act on.
@@ -312,18 +288,6 @@ public class HeartRateSensorService extends Service {
             descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
             mBluetoothGatt.writeDescriptor(descriptor);
         }
-    }
-
-    /**
-     * Retrieves a list of supported GATT services on the connected device. This should be
-     * invoked only after {@code BluetoothGatt#discoverServices()} completes successfully.
-     *
-     * @return A {@code List} of supported services.
-     */
-    public List<BluetoothGattService> getSupportedGattServices() {
-        if (mBluetoothGatt == null) return null;
-
-        return mBluetoothGatt.getServices();
     }
 
     public class LocalBinder extends Binder {

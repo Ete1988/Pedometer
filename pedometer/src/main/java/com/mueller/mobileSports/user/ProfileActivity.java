@@ -119,7 +119,6 @@ public class ProfileActivity extends AppCompatActivity {
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -156,7 +155,7 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(i);
                 break;
             case R.id.menu_logout:
-                sessionManager.logoutUser();
+                sessionManager.uploadUserData(this, true, true);
                 break;
         }
         return true;
@@ -164,8 +163,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        sessionManager.checkUserState();
         super.onResume();
-        sessionManager.isLoginValid();
     }
 
     public void onClickProfile(View v) {

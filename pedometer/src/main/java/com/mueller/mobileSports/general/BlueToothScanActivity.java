@@ -72,14 +72,13 @@ public class BluetoothScanActivity extends AppCompatActivity {
         checkCompability();
 
 
-
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final BluetoothDevice device = mLeDeviceListAdapter.getDevice(position);
                 if (device == null) return;
 
-               createDialog(device);
+                createDialog(device);
 
                 if (mScanning) {
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
@@ -90,7 +89,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
         });
     }
 
-    private void createDialog(final BluetoothDevice device){
+    private void createDialog(final BluetoothDevice device) {
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Connect");
@@ -111,7 +110,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
         alert.show();
     }
 
-    private void startService(BluetoothDevice device){
+    private void startService(BluetoothDevice device) {
         final Intent intent = new Intent(this, HeartRateActivity.class);
         intent.putExtra(HeartRateActivity.EXTRAS_DEVICE_NAME, device.getName());
         intent.putExtra(HeartRateActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
@@ -120,7 +119,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
     }
 
 
-    private void checkCompability(){
+    private void checkCompability() {
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -191,7 +190,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     mScanning = false;
-                   mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
 
                 }
             }, SCAN_PERIOD);
@@ -201,18 +200,18 @@ public class BluetoothScanActivity extends AppCompatActivity {
 
         } else {
             mScanning = false;
-           mBluetoothAdapter.stopLeScan(mLeScanCallback);
+            mBluetoothAdapter.stopLeScan(mLeScanCallback);
         }
     }
 
-    protected ListView getListView(){
-        if(mListView == null){
+    protected ListView getListView() {
+        if (mListView == null) {
             mListView = (ListView) findViewById(R.id.HRM_listview);
         }
         return mListView;
     }
 
-    protected void setListAdapter(ListAdapter listAdapter){
+    protected void setListAdapter(ListAdapter listAdapter) {
         getListView().setAdapter(listAdapter);
     }
 
@@ -233,7 +232,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
         }
 
         public void addDevice(BluetoothDevice device) {
-            if(!mLeDevices.contains(device)) {
+            if (!mLeDevices.contains(device)) {
                 mLeDevices.add(device);
             }
         }

@@ -24,9 +24,6 @@ public class SplashActivity extends AppCompatActivity {
         String SECRET_KEY = "76967CB3-F1DE-308D-FF0F-6BA915A44300";
         Backendless.initApp(this, APP_ID, SECRET_KEY, APPVERSION);
         SessionManager sessionManager = new SessionManager(this);
-        if (sessionManager.checkIfUserDataAvailable()) {
-            sessionManager.checkUserState();
-        }
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();

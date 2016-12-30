@@ -24,28 +24,34 @@ public class UserData {
     private int weight;
     private int stepGoal;
     private int activityLevel;
-    private int hRmax;
+    private int heartRateMax;
+    private int restingHeartRate;
     private String objectId;
 
-    public UserData() {
+    UserData() {
         pedometerData = new PedometerData();
         heartRateData = new HeartRateData();
         this.gender = "Male";
     }
 
-    public UserData(UserData data) {
+
+    UserData(UserData data) {
         username = data.getUsername();
         email = data.getEmail();
         age = data.getAge();
         gender = data.getGender();
         weight = data.getWeight();
         height = data.getHeight();
+        restingHeartRate = data.getRestingHeartRate();
+        heartRateMax = data.getHeartRateMax();
+        activityLevel = data.getActivityLevel();
+        stepGoal = data.getStepGoal();
         heartRateData = data.getHeartRateData();
         pedometerData = data.getPedometerData();
         objectId = data.getObjectId();
     }
 
-    public PedometerData getPedometerData() {
+    PedometerData getPedometerData() {
         if (pedometerData == null) {
             pedometerData = new PedometerData();
             return pedometerData;
@@ -55,11 +61,11 @@ public class UserData {
 
     }
 
-    public void setPedometerData(PedometerData pedometerData) {
+    void setPedometerData(PedometerData pedometerData) {
         UserData.pedometerData = pedometerData;
     }
 
-    public HeartRateData getHeartRateData() {
+    HeartRateData getHeartRateData() {
         if (heartRateData == null) {
             heartRateData = new HeartRateData();
             return heartRateData;
@@ -67,8 +73,24 @@ public class UserData {
         return heartRateData;
     }
 
-    public void setHeartRateData(HeartRateData heartRateData) {
+    void setHeartRateData(HeartRateData heartRateData) {
         UserData.heartRateData = heartRateData;
+    }
+
+    int getRestingHeartRate() {
+        return restingHeartRate;
+    }
+
+    void setRestingHeartRate(int restingHeartRate) {
+        this.restingHeartRate = restingHeartRate;
+    }
+
+    int getHeartRateMax() {
+        return heartRateMax;
+    }
+
+    void setHeartRateMax(int heartRateMax) {
+        this.heartRateMax = heartRateMax;
     }
 
     public String getEmail() {
@@ -79,7 +101,7 @@ public class UserData {
         this.email = email;
     }
 
-    public String getObjectId() {
+    String getObjectId() {
         return objectId;
     }
 
@@ -87,11 +109,11 @@ public class UserData {
         this.objectId = objectId;
     }
 
-    public String getUsername() {
+    String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    void setUsername(String username) {
         this.username = username;
     }
 
@@ -103,51 +125,43 @@ public class UserData {
         this.height = height;
     }
 
-    public int getAge() {
+    int getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    void setAge(int age) {
         this.age = age;
     }
 
-    public String getGender() {
+    String getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    void setGender(String gender) {
         this.gender = gender;
     }
 
-    public int getWeight() {
+    int getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    void setWeight(int weight) {
         this.weight = weight;
     }
 
-    public int getStepGoal() {
+    int getStepGoal() {
         return stepGoal;
     }
 
-    public void setStepGoal(int stepGoal) {
+    void setStepGoal(int stepGoal) {
         this.stepGoal = stepGoal;
     }
 
-    public int gethRmax() {
-        return hRmax;
-    }
-
-    public void sethRmax(int hRmax) {
-        this.hRmax = hRmax;
-    }
-
-    public int getActivityLevel() {
+    int getActivityLevel() {
         return activityLevel;
     }
 
-    public void setActivityLevel(int activityLevel) {
+    void setActivityLevel(int activityLevel) {
         this.activityLevel = activityLevel;
     }
 
@@ -160,7 +174,8 @@ public class UserData {
         setEmail("");
         setObjectId(null);
         setActivityLevel(0);
-        sethRmax(0);
+        setHeartRateMax(0);
+        setRestingHeartRate(0);
         setHeartRateData(null);
         setPedometerData(null);
     }

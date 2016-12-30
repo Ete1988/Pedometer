@@ -3,6 +3,7 @@ package com.mueller.mobileSports.user;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -16,6 +17,7 @@ import com.mueller.mobileSports.account.LoginActivity;
 import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.general.TimeManager;
 import com.mueller.mobileSports.heartRate.hR_Utility.HeartRateData;
+import com.mueller.mobileSports.pedometer.PedometerActivity;
 import com.mueller.mobileSports.pedometer.pedometerUtility.PedometerData;
 
 import java.util.Objects;
@@ -25,9 +27,9 @@ import java.util.Objects;
  * Class to store the current session of the user.
  * Data is persisted even if the app is closed and will only be cleared if the user decides to log out.
  */
-//TODO mapDataToSharedValue all methods
 public class SessionManager {
 
+    private final static String TAG = SessionManager.class.getSimpleName();
     private static UserData userData;
     private ProgressDialog progress;
     private SharedValues sharedValues;
@@ -49,14 +51,42 @@ public class SessionManager {
         if (!isUserTokenAvailable()) {
             goToLogin();
         } else {
-            //getUserFromServer();
+            isLoginValid();
         }
     }
 
-    public boolean checkIfUserDataAvailable() {
-        boolean check = !java.util.Objects.equals(userData, null);
-        System.out.println("Check : " + check);
-        return check;
+    public boolean isUserLoggedIn() {
+        if (isUserTokenAvailable()) {
+            progress = new ProgressDialog(context);
+            progress.setTitle("Loading Data");
+            progress.setMessage("Please wait...");
+            progress.setCancelable(false);
+            progress.show(); // disable dismiss by tapping outside of the dialog
+            final Intent intent = new Intent(context, PedometerActivity.class);
+            Backendless.UserService.isValidLogin(new AsyncCallback<Boolean>() {
+                @Override
+                public void handleResponse(Boolean response) {
+
+                    if (!response) {
+                        logoutUser(true);
+                        System.out.println("[ASYNC] Is login valid? - " + response);
+                    } else {
+                        getUserDataFromServer(intent);
+                    }
+                    System.out.println("[ASYNC] Is login valid? - " + response);
+                }
+
+                @Override
+                public void handleFault(BackendlessFault fault) {
+                    logoutUser(true);
+                    System.err.println("Error - " + fault);
+                }
+
+            });
+
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -64,7 +94,7 @@ public class SessionManager {
      *
      * @return true if user token is stored
      */
-    public boolean isUserTokenAvailable() {
+    private boolean isUserTokenAvailable() {
         String userToken = UserTokenStorageFactory.instance().getStorage().get();
         return userToken != null && !userToken.equals("");
     }
@@ -73,29 +103,33 @@ public class SessionManager {
      * Method to logout the current user.
      * Removes all user relevant data and then redirects the user to the login screen
      */
-    public void logoutUser() {
+    private void logoutUser(final boolean progressBarActive) {
 
-        if (isUserTokenAvailable()) {
-            Backendless.UserService.logout(new AsyncCallback<Void>() {
+        Backendless.UserService.logout(new AsyncCallback<Void>() {
 
-                @Override
-                public void handleResponse(Void aVoid) {
-                    Toast.makeText(context, "GoodBye!", Toast.LENGTH_LONG).show();
-                    progress.dismiss();
-                    Intent i = new Intent(context, LoginActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(i);
-                }
-
-                @Override
-                public void handleFault(BackendlessFault backendlessFault) {
-                    System.err.println("Error - " + backendlessFault);
+            @Override
+            public void handleResponse(Void aVoid) {
+                if (progressBarActive) {
                     progress.dismiss();
                 }
-            });
-        }
+                sharedValues.clearData();
+                Log.e(TAG, "UserLogout successful");
+                Intent i = new Intent(context, LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                Log.e(TAG, "Error User Logout: " + backendlessFault);
+                if (progressBarActive) {
+                    progress.dismiss();
+                }
+
+            }
+        });
     }
 
     // save userdata to backendless server
@@ -119,7 +153,7 @@ public class SessionManager {
                 userData.setHeartRateData(heartRateData);
 
                 if (logout) {
-                    logoutUser();
+                    logoutUser(showProgressBar);
                 } else if (showProgressBar) {
                     progress.dismiss();
                     Toast.makeText(context, "Success!", Toast.LENGTH_LONG).show();
@@ -169,12 +203,13 @@ public class SessionManager {
         userData.setGender(sharedValues.getString("gender"));
         userData.setStepGoal(sharedValues.getInt("stepGoal"));
         userData.setActivityLevel(sharedValues.getInt("physicalActivityLevel"));
+        userData.setRestingHeartRate(sharedValues.getInt("restingHeartRate"));
+        userData.setHeartRateMax(sharedValues.getInt("heartRateMax"));
 
         //PedometerData
         pedometerData.setSessionDay(sharedValues.getString("sessionDay"));
         pedometerData.setDailyStepCount(sharedValues.getInt("stepsOverDay"));
         pedometerData.setWeeklyStepCount(sharedValues.getInt("stepsOverWeek"));
-
 
         //HeartRateData
         heartRateData.setAverageHeartRate(sharedValues.getInt("averageHeartRate"));
@@ -197,21 +232,34 @@ public class SessionManager {
     }
 
     //Check if loginToken is still valid
-    public void isLoginValid() {
+    private void isLoginValid() {
         Backendless.UserService.isValidLogin(new AsyncCallback<Boolean>() {
             @Override
             public void handleResponse(Boolean response) {
 
                 if (!response) {
-                    logoutUser();
-                    System.out.println("[ASYNC] Is login valid? - " + response);
+                    Log.e(TAG, "Is login valid? - " + response);
+                    String currentUserId = Backendless.UserService.loggedInUser();
+                    Backendless.UserService.findById(currentUserId, new AsyncCallback<BackendlessUser>() {
+                        @Override
+                        public void handleResponse(BackendlessUser currentUser) {
+                            logoutUser(false);
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault backendlessFault) {
+                            progress.dismiss();
+                            logoutUser(false);
+                            Log.e(TAG, "Error login validation:" + backendlessFault);
+                        }
+                    });
                 }
-                System.out.println("[ASYNC] Is login valid? - " + response);
+                Log.e(TAG, "Is login valid? - " + response);
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
-                logoutUser();
+                logoutUser(false);
                 System.err.println("Error - " + fault);
             }
 
@@ -231,7 +279,6 @@ public class SessionManager {
             @Override
             public void handleResponse(BackendlessUser backendlessUser) {
                 Backendless.UserService.setCurrentUser(backendlessUser);
-
                 getUserFromServer(intent);
             }
 
@@ -246,22 +293,20 @@ public class SessionManager {
     }
 
     //Load currentUser
-    public void getUserFromServer(final Intent intent) {
-
+    private void getUserFromServer(final Intent intent) {
         String currentUserId = Backendless.UserService.loggedInUser();
         Backendless.UserService.findById(currentUserId, new AsyncCallback<BackendlessUser>() {
             @Override
             public void handleResponse(BackendlessUser currentUser) {
-                System.out.println("First Step!");
-                System.out.println("User: " + currentUser);
+                Log.e(TAG, "Loaded User: " + currentUser);
                 getUserDataFromServer(intent);
             }
 
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
                 progress.dismiss();
-                logoutUser();
-                System.err.println("Error - " + backendlessFault);
+                logoutUser(false);
+                Log.e(TAG, "Could not load user: " + backendlessFault);
             }
         });
     }
@@ -279,26 +324,25 @@ public class SessionManager {
                     userData = new UserData(data.getData().get(0));
                     getUserPedometerDataFromServer(intent);
                     userData.setEmail(sharedValues.getString("email"));
-                    System.out.println("Second Step! Got UserData");
+                    Log.e(TAG, "Loaded UserData: " + userData.getObjectId());
                 } else {
-                    System.out.println("Second Step! No UserData");
+                    Log.e(TAG, "Could not load UserData (Does not exist on server)");
                     userData = new UserData();
                     userData.setEmail(sharedValues.getString("email"));
                     getUserPedometerDataFromServer(intent);
-                    progress.dismiss();
                 }
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
                 progress.dismiss();
-                System.err.println("Error - " + fault);
+                Log.e(TAG, "Error loading UserData: " + fault);
                 if (Objects.equals(fault.getCode(), "1009")) {
                     userData = new UserData();
                     userData.setEmail(sharedValues.getString("email"));
                     createTables();
                 }
-    }
+            }
         });
     }
 
@@ -317,9 +361,9 @@ public class SessionManager {
                 if (!(pedometerDataBackendlessCollection.getTotalObjects() == 0)) {
                     userData.setPedometerData(pedometerDataBackendlessCollection.getData().get(0));
                     getUserHeartRateDataFromServer(intent);
-                    System.out.println("Third Step!");
+                    Log.e(TAG, "Loaded PedometerData: " + userData.getPedometerData().getObjectId());
                 } else {
-                    System.out.println("Third Step!");
+                    Log.e(TAG, "Could not load PedometerData (Does not exist on server)");
                     PedometerData pedometerData = new PedometerData();
                     pedometerData.setSessionDay(sharedValues.getString("sessionDay"));
                     userData.setPedometerData(pedometerData);
@@ -329,7 +373,12 @@ public class SessionManager {
 
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
-                System.err.println("Error - " + backendlessFault);
+                Log.e(TAG, "Error loading PedometerData: " + backendlessFault);
+                if (Objects.equals(backendlessFault.getCode(), "1009")) {
+                    userData = new UserData();
+                    userData.setEmail(sharedValues.getString("email"));
+                    createTables();
+                }
             }
         });
     }
@@ -349,10 +398,10 @@ public class SessionManager {
             public void handleResponse(BackendlessCollection<HeartRateData> heartRateDataBackendlessCollection) {
                 if (!(heartRateDataBackendlessCollection.getTotalObjects() == 0)) {
                     userData.setHeartRateData(heartRateDataBackendlessCollection.getData().get(0));
-                    System.out.println("Finished Step!");
+                    Log.e(TAG, "Loaded HeartRateData: " + userData.getHeartRateData().getObjectId());
                     mapDataToSharedValue(intent);
                 } else {
-                    System.out.println("Finished Step!");
+                    Log.e(TAG, "Could not load HeartRateData (Does not exist on server)");
                     HeartRateData heartRateData = new HeartRateData();
                     heartRateData.setSessionDay(sharedValues.getString("sessionDay"));
                     userData.setHeartRateData(heartRateData);
@@ -362,7 +411,12 @@ public class SessionManager {
 
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
-                System.err.println("Error - " + backendlessFault);
+                Log.e(TAG, "Error loading HeartRateData: " + backendlessFault);
+                if (Objects.equals(backendlessFault.getCode(), "1009")) {
+                    userData = new UserData();
+                    userData.setEmail(sharedValues.getString("email"));
+                    createTables();
+                }
             }
         });
     }
@@ -379,16 +433,19 @@ public class SessionManager {
         sharedValues.saveInt("stepGoal", userData.getStepGoal());
         sharedValues.saveInt("physicalActivityLevel", userData.getActivityLevel());
         sharedValues.saveInt("weight", userData.getWeight());
+        sharedValues.saveInt("restingHeartRate", userData.getRestingHeartRate());
+        sharedValues.saveInt("heartRateMax", userData.getHeartRateMax());
 
         //PedometerData
         sharedValues.saveInt("stepsOverDay", pedometerData.getDailyStepCount());
         sharedValues.saveInt("stepsOverWeek", pedometerData.getWeeklyStepCount());
 
-        System.out.println(userData.getObjectId());
-        System.out.println(userData.getPedometerData().getObjectId());
-        System.out.println(userData.getHeartRateData().getObjectId());
+        Log.e(TAG, "Data mapped to sharedValues");
         progress.dismiss();
-        context.startActivity(intent);
+
+        if (intent != null) {
+            context.startActivity(intent);
+        }
     }
 
     //FOR FIRST TIME TESTING

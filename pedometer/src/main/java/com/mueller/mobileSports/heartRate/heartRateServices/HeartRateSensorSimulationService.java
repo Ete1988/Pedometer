@@ -23,7 +23,12 @@ import java.io.InputStreamReader;
 
 public class HeartRateSensorSimulationService extends Service {
 
-    public final static String HRM_SIMULATION_MESSAGE = "com.mueller.mobileSPorts.pedometer.heartRate.hR_Monitor.HeartRateSimulationService.STEP_VALUE";
+    public final static String ACTION_HRM_SIMULATION_STEPDETECTED = "com.mueller.mobileSPorts.HeartRateSimulation.STEP_VALUE";
+    public final static String ACTION_HRM_SIMULATION_CONNECTED =
+            "com.mueller.mobileSPorts.HeartRateSimulation.CONNECTED";
+    public final static String ACTION_HRM_SIMULATION_DISCONNECTED =
+            "com.mueller.mobileSPorts.HeartRateSimulation.DISCONNECTED";
+
     private final static String TAG = HeartRateSensorSimulationService.class.getSimpleName();
     private final static int SIZE_OF_SIMULATION_DATA = 541;
     private final static int TIME_DELAY = 3000;
@@ -45,12 +50,25 @@ public class HeartRateSensorSimulationService extends Service {
                 heartRateMonitorUtility.calculateAverageHeartRate(arrayAverageHeartRate);
                 averageHeartRateCalculationCounter = 0;
             }
+
             heartRateMonitorUtility.storeMinAndMaxHeartRate(arraySimulationData[updateCounter]);
-            sharedValues.saveInt("currentHeartRate", arraySimulationData[updateCounter++]);
-            sendMessage();
+            sharedValues.saveInt("currentHeartRate", arraySimulationData[updateCounter]);
+            broadcastUpdate(ACTION_HRM_SIMULATION_STEPDETECTED, arraySimulationData[updateCounter++]);
             mHandler.postDelayed(this, TIME_DELAY);
         }
     };
+
+    private void broadcastUpdate(final String action) {
+        final Intent intent = new Intent(action);
+        sendBroadcast(intent);
+    }
+
+    private void broadcastUpdate(final String action,
+                                 int heartRate) {
+        final Intent intent = new Intent(action);
+        intent.putExtra(ACTION_HRM_SIMULATION_STEPDETECTED, String.valueOf(heartRate));
+        sendBroadcast(intent);
+    }
 
     @Override
     public void onCreate() {
@@ -70,23 +88,17 @@ public class HeartRateSensorSimulationService extends Service {
         int i = 0;
         AssetManager assetManager = getAssets();
 
-            InputStream csvStream = assetManager.open("simulationData.csv");
-            InputStreamReader csvStreamReader = new InputStreamReader(csvStream);
-            CSVReader csvReader = new CSVReader(csvStreamReader, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, 1);
-            String[] line;
-            csvReader.readNext();
-            while ((line = csvReader.readNext()) != null) {
-                arraySimulationData[i] = Integer.parseInt(line[1]);
-                i++;
-            }
+        InputStream csvStream = assetManager.open("simulationData.csv");
+        InputStreamReader csvStreamReader = new InputStreamReader(csvStream);
+        CSVReader csvReader = new CSVReader(csvStreamReader, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, 1);
+        String[] line;
+        csvReader.readNext();
+        while ((line = csvReader.readNext()) != null) {
+            arraySimulationData[i] = Integer.parseInt(line[1]);
+            i++;
+        }
     }
 
-    private void sendMessage() {
-        Intent intent = new Intent();
-        intent.setAction(HRM_SIMULATION_MESSAGE);
-        intent.putExtra("DATA_PASSED", "");
-        sendBroadcast(intent);
-    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -98,6 +110,7 @@ public class HeartRateSensorSimulationService extends Service {
             arraySimulationData = new int[SIZE_OF_SIMULATION_DATA];
             tryToReadSimulationData();
         }
+
         if (arrayAverageHeartRate == null) {
             arrayAverageHeartRate = new int[3];
         }
@@ -107,6 +120,7 @@ public class HeartRateSensorSimulationService extends Service {
         if (mHandler == null) {
             mHandler = new Handler();
         }
+        broadcastUpdate(ACTION_HRM_SIMULATION_CONNECTED);
         mHandler.postDelayed(mHeartRateSimulation, 0);
         Log.e(TAG, "HeartRateSensorSimulation started.");
         return true;
@@ -114,6 +128,7 @@ public class HeartRateSensorSimulationService extends Service {
 
     @Override
     public boolean onUnbind(Intent intent) {
+        broadcastUpdate(ACTION_HRM_SIMULATION_DISCONNECTED);
         return super.onUnbind(intent);
     }
 

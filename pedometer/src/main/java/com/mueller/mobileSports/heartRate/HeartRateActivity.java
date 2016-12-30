@@ -44,7 +44,6 @@ public class HeartRateActivity extends AppCompatActivity {
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     public static final String EXTRAS_BIND_SERVICE = "BIND_SERVICE";
     private final static String TAG = HeartRateActivity.class.getSimpleName();
-    MyReceiver myReceiver;
     private String mDeviceAddress;
     private boolean bindSensorService = false;
     private boolean bindSimulationHeartRate;
@@ -63,11 +62,18 @@ public class HeartRateActivity extends AppCompatActivity {
                 updateConnectionState(R.string.disconnected);
             } else if (HeartRateSensorService.ACTION_DATA_AVAILABLE.equals(action)) {
                 displayData(intent.getStringExtra(HeartRateSensorService.EXTRA_DATA));
-            } else if (HeartRateSensorSimulationService.HRM_SIMULATION_MESSAGE.equals(action)) {
-                displayData(intent.getStringExtra(HeartRateSensorSimulationService.HRM_SIMULATION_MESSAGE));
+            } else if (HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_STEPDETECTED.equals(action)) {
+                displayData(intent.getStringExtra(HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_STEPDETECTED));
+            } else if (HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_CONNECTED.equals(action)) {
+                mConnected = true;
+                updateConnectionState(R.string.connected);
+            } else if (HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_DISCONNECTED.equals(action)) {
+                mConnected = false;
+                updateConnectionState(R.string.disconnected);
             }
         }
     };
+
     private ImageView iv_start, iv_restart;
     private TextView mTextTime, mHeartRate, mAverageHeartRate, mMaxHearRate, mMinHeartRate, mConnectionState;
     private int time_seconds, time_minutes, time_milliseconds;
@@ -80,28 +86,21 @@ public class HeartRateActivity extends AppCompatActivity {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
 
-            heartRateSensorService = ((HeartRateSensorService.LocalBinder) service).getService();
-            if (!heartRateSensorService.initialize()) {
-                Log.e(TAG, "Unable to initialize HeartRateSensorService");
-                finish();
-            }
-            heartRateSensorService.connect(mDeviceAddress);
-           /* if(bindSimulationHeartRate){
+            if (bindSimulationHeartRate) {
                 heartRateSensorSimulationService = ((HeartRateSensorSimulationService.LocalBinder) service).getService();
                 if (!heartRateSensorSimulationService.initialize()) {
                     Log.e(TAG, "Unable to initialize HeartRateSimulationService");
                     finish();
                 }
             } else {
-                System.out.println("Here !!!!!!!!!!!!!!!!!!!!!!!!Fuuuunot");
                 System.out.println(2);
                 heartRateSensorService = ((HeartRateSensorService.LocalBinder) service).getService();
-                if(!heartRateSensorService.initialize()) {
+                if (!heartRateSensorService.initialize()) {
                     Log.e(TAG, "Unable to initialize HeartRateSensorService");
                     finish();
                 }
                 heartRateSensorService.connect(mDeviceAddress);
-            }*/
+            }
         }
 
         @Override
@@ -114,11 +113,12 @@ public class HeartRateActivity extends AppCompatActivity {
 
     private static IntentFilter updateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(HeartRateSensorSimulationService.HRM_SIMULATION_MESSAGE);
+        intentFilter.addAction(HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_STEPDETECTED);
+        intentFilter.addAction(HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_CONNECTED);
+        intentFilter.addAction(HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_DISCONNECTED);
         intentFilter.addAction(HeartRateSensorService.ACTION_GATT_CONNECTED);
         intentFilter.addAction(HeartRateSensorService.ACTION_GATT_DISCONNECTED);
         intentFilter.addAction(HeartRateSensorService.ACTION_GATT_SERVICES_DISCOVERED);
-        intentFilter.addAction(HeartRateSensorService.ACTION_DATA_AVAILABLE);
         return intentFilter;
     }
 
@@ -174,7 +174,6 @@ public class HeartRateActivity extends AppCompatActivity {
     }
 
     private void init() {
-        myReceiver = new MyReceiver();
         sharedValues = SharedValues.getInstance(this);
         mConnectionState = (TextView) findViewById(R.id.txtConnectionStatus);
         sessionManager = new SessionManager(this);
@@ -272,8 +271,6 @@ public class HeartRateActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        tryToUnregisterReceiver(myReceiver);
-        tryToUnregisterReceiver(mGattUpdateReceiver);
         if (!(heartRateSensorService == null) || !(heartRateSensorSimulationService == null)) {
             unbindService(mServiceConnection);
         }
@@ -283,7 +280,6 @@ public class HeartRateActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        tryToUnregisterReceiver(myReceiver);
         tryToUnregisterReceiver(mGattUpdateReceiver);
         paused = System.currentTimeMillis();
     }
@@ -291,7 +287,7 @@ public class HeartRateActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(myReceiver, updateIntentFilter());
+        sessionManager.checkUserState();
         registerReceiver(mGattUpdateReceiver, updateIntentFilter());
         final Intent receiveIntent = getIntent();
         mDeviceAddress = receiveIntent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
@@ -300,7 +296,6 @@ public class HeartRateActivity extends AppCompatActivity {
             startRealHRM();
         }
 
-        sessionManager.isLoginValid();
         start_time += System.currentTimeMillis() - paused;
     }
 
@@ -330,20 +325,8 @@ public class HeartRateActivity extends AppCompatActivity {
         try {
             unregisterReceiver(myReceiver);
         } catch (IllegalArgumentException e) {
-            // System.err.println(e);
+            e.printStackTrace();
         }
     }
-
-    private class MyReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context arg0, Intent arg1) {
-            mMaxHearRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("maxHeartRate")));
-            mMinHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("minHeartRate")));
-            mHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("currentHeartRate")));
-            mAverageHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("averageHeartRate")));
-
-        }
-    }
-
 }
 
