@@ -64,9 +64,9 @@ public class SharedValues {
      */
     public String getString(String key) {
         if (sharedPreferences != null) {
-            return sharedPreferences.getString(key, "");
+            return sharedPreferences.getString(key, " ");
         }
-        return "";
+        return " ";
     }
 
     /**
@@ -83,19 +83,15 @@ public class SharedValues {
 
     }
 
-    public void saveBool(String key, boolean bool) {
-        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
-        prefsEditor.putBoolean(key, bool);
-        prefsEditor.apply();
-    }
-
-    public boolean getBool(String key) {
-        return sharedPreferences != null && sharedPreferences.getBoolean(key, false);
-    }
-
     public void clearData() {
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
         prefsEditor.clear();
+        prefsEditor.apply();
+    }
+
+    public void removeEntry(String key) {
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        prefsEditor.remove(key);
         prefsEditor.apply();
     }
 
@@ -105,7 +101,7 @@ public class SharedValues {
      * @param key string
      * @return true if key exists within the shared value
      */
-    public boolean checkIfContained(String key) {
+    boolean checkIfContained(String key) {
         return sharedPreferences.contains(key);
     }
 

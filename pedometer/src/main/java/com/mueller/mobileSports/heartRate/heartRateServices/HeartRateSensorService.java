@@ -11,11 +11,11 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
 import com.mueller.mobileSports.general.SharedValues;
+import com.mueller.mobileSports.heartRate.HeartRateActivity;
 import com.mueller.mobileSports.heartRate.hR_Utility.HeartRateMonitorUtility;
 
 import java.util.UUID;
@@ -23,10 +23,13 @@ import java.util.UUID;
 
 /**
  * Created by Ete on 28/12/2016.
+ *
+ * ServiceClass to handle communication with a BLE Heart Rate device
+ *
+ *
  */
 
 public class HeartRateSensorService extends Service {
-
 
     public final static String ACTION_GATT_CONNECTED =
             "com.mueller.mobileSports.heartRate.ACTION_HRM_SIMULATION_CONNECTED";
@@ -47,7 +50,7 @@ public class HeartRateSensorService extends Service {
             UUID.fromString(HEART_RATE_MEASUREMENT);
     public static String HEART_RATE_SERVICE = "0000180d-0000-1000-8000-00805f9b34fb";
     public static String CLIENT_CHARACTERISTIC_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";
-    private final IBinder mBinder = new LocalBinder();
+    public Context context;
     private SharedValues sharedValues;
     private int i = 0;
     private int[] averageHeartRate = new int[3];
@@ -115,7 +118,7 @@ public class HeartRateSensorService extends Service {
 
         if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
             int flag = characteristic.getProperties();
-            int format = -1;
+            int format;
             if ((flag & 0x01) != 0) {
                 format = BluetoothGattCharacteristic.FORMAT_UINT16;
                 Log.d(TAG, "Heart rate format UINT16.");
@@ -127,7 +130,7 @@ public class HeartRateSensorService extends Service {
             Log.d(TAG, String.format("Received heart rate: %d", heartRate));
 
             sharedValues.saveInt("currentHeartRate", heartRate);
-            heartRateMonitorUtility.storeMinAndMaxHeartRate(heartRate);
+            heartRateMonitorUtility.doCalculations(heartRate);
 
             if (i == 3) {
                 heartRateMonitorUtility.calculateAverageHeartRate(averageHeartRate);
@@ -154,7 +157,15 @@ public class HeartRateSensorService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        return mBinder;
+        return null;
+    }
+
+    @Override
+    public void onDestroy() {
+        disconnect();
+        close();
+        Log.w(TAG, "HRMSensor destroyed.");
+        super.onDestroy();
     }
 
     @Override
@@ -169,8 +180,7 @@ public class HeartRateSensorService extends Service {
      * @return Return true if the initialization is successful.
      */
     public boolean initialize() {
-        // For API level 18 and above, get a reference to BluetoothAdapter through
-        // BluetoothManager.
+
         if (mBluetoothManager == null) {
             mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
             if (mBluetoothManager == null) {
@@ -267,6 +277,13 @@ public class HeartRateSensorService extends Service {
         mBluetoothGatt = null;
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        initialize();
+        connect(intent.getStringExtra(HeartRateActivity.EXTRAS_DEVICE_ADDRESS));
+        return Service.START_STICKY;
+    }
+
     /**
      * Enables or disables notification on a give characteristic.
      *
@@ -287,12 +304,6 @@ public class HeartRateSensorService extends Service {
                     UUID.fromString(CLIENT_CHARACTERISTIC_CONFIG));
             descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
             mBluetoothGatt.writeDescriptor(descriptor);
-        }
-    }
-
-    public class LocalBinder extends Binder {
-        public HeartRateSensorService getService() {
-            return HeartRateSensorService.this;
         }
     }
 

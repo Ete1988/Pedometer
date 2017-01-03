@@ -63,6 +63,9 @@ public class SessionManager {
             progress.setCancelable(false);
             progress.show(); // disable dismiss by tapping outside of the dialog
             final Intent intent = new Intent(context, PedometerActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             Backendless.UserService.isValidLogin(new AsyncCallback<Boolean>() {
                 @Override
                 public void handleResponse(Boolean response) {
@@ -462,6 +465,5 @@ public class SessionManager {
             }
         });
     }
-
 }
 

@@ -5,12 +5,15 @@ import com.mueller.mobileSports.pedometer.pedometerUtility.PedometerData;
 
 /**
  * Created by Sandra on 24.11.2016.
+ *
+ * Data Class for app with all relevant information
+ *
  */
 
 /**
  *
  */
-public class UserData {
+class UserData {
 
 
     private static PedometerData pedometerData;

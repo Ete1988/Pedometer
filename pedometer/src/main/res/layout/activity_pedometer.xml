@@ -57,27 +57,9 @@
             android:background="@null"
             android:clickable="true"
             android:contentDescription="@string/emptyString"
-            android:onClick="onClickPedometer"
+            android:onClick="onClickPedometerActivity"
             android:scaleType="fitXY"
             android:src="@mipmap/ic_heart"
-            android:visibility="visible" />
-
-        <android.support.v4.widget.Space
-            android:layout_width="40dp"
-            android:layout_height="match_parent" />
-
-        <ImageButton
-            android:id="@+id/PM_ProfileBtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginEnd="20dp"
-            android:background="@null"
-            android:clickable="true"
-            android:contentDescription="@string/emptyString"
-            android:onClick="onClickPedometer"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_profile"
             android:visibility="visible" />
 
 

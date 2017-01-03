@@ -72,6 +72,7 @@
             android:name="com.mueller.mobileSports.heartRate.heartRateServices.HeartRateSensorService"
             android:enabled="true" />
 
+        <activity android:name="com.mueller.mobileSports.heartRate.TrainingSessionActivity"></activity>
     </application>
 
 </manifest>

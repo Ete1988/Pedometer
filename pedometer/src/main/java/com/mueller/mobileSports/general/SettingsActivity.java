@@ -26,7 +26,6 @@ import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private final static String TAG = SettingsActivity.class.getSimpleName();
     private final String[] goalsValuesArray = {"5000", "6000", "7000", "8000", "9000", "10000", "Other? Please set here!"};
     private final String[] activityLevelTextArray = {"0: Avoid walking or exertion, for example, always use elevator, drive " +
             "whenever possible instead of walking",
@@ -85,13 +84,13 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         if (!(sharedValues.getInt("heartRateMax") == 0)) {
-            System.out.println("1SharedValue: " + sharedValues.getInt("heartRateMax"));
             heartRateMax = sharedValues.getInt("heartRateMax");
         } else if (!(sharedValues.getInt("age") == 0)) {
-            System.out.println("2SharedValue: " + sharedValues.getInt("heartRateMax"));
             heartRateMax = (int) (208 - (0.7 * (sharedValues.getInt("age"))));
+        } else {
+            heartRateMax = 0;
+            mHeartRateMax.setError("Please set your age in the profile tab, or set HRmax manually");
         }
-
         mRestingHeartRate.setText(String.format(Locale.getDefault(), "%d", restingHeartRate));
         mHeartRateMax.setText(String.format(Locale.getDefault(), "%d", heartRateMax));
     }
@@ -104,7 +103,7 @@ public class SettingsActivity extends AppCompatActivity {
         } else if (v.getId() == R.id.SE_GoalSelector) {
             setGoalDialog();
         } else if (v.getId() == R.id.SE_HeartRateMaxSelector) {
-            numberPickerDialog(130, 200, mHeartRateMax, "Set Maximum Heart Rate");
+            numberPickerDialog(120, 220, mHeartRateMax, "Set Maximum Heart Rate");
         } else if (v.getId() == R.id.SE_LevelSelector) {
             setActivityLevelDialog();
         } else if (v.getId() == R.id.SE_RestingHeartRateSelector) {
@@ -177,7 +176,6 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-
     private void editGoal() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Please enter daily Goal");
@@ -217,14 +215,14 @@ public class SettingsActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    private void numberPickerDialog(int min, int max, final TextView textView, String title) {
+    private void numberPickerDialog(int min, int max, final TextView textView, final String title) {
         NumberPicker myNumberPicker = new NumberPicker(this);
         myNumberPicker.setMinValue(min);
         myNumberPicker.setMaxValue(max);
         NumberPicker.OnValueChangeListener myValChangeListener = new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                textView.setText("" + newVal);
+                textView.setText(String.format(Locale.getDefault(), "%d", newVal));
                 System.out.println(textView.getText().toString());
             }
         };

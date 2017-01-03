@@ -16,13 +16,14 @@
 
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/my_toolbar"
-        android:layout_marginTop="15dp"
         android:orientation="vertical"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
 
         <android.support.design.widget.TextInputLayout
@@ -69,7 +70,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Gender:"
+                android:text="@string/gender"
                 android:textSize="12sp" />
 
             <android.support.v4.widget.Space
@@ -130,56 +131,22 @@
         </android.support.design.widget.TextInputLayout>
 
 
-        <Button
-            android:id="@+id/PF_saveChangesBtn"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickProfile"
-            android:text="@string/save" />
-
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@color/black_overlay"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:gravity="center">
 
-        <ImageButton
-            android:id="@+id/PF_PedometerBtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="20dp"
-            android:background="@null"
-            android:clickable="true"
-            android:contentDescription="@string/emptyString"
-            android:onClick="onClickProfile"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_steps"
-            android:visibility="visible" />
+        <Button
+            android:id="@+id/PF_saveChangesBtn"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-        <android.support.v4.widget.Space
-            android:layout_width="40dp"
-            android:layout_height="match_parent" />
-
-        <ImageButton
-            android:id="@+id/PF_HeartRateBtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="20dp"
-            android:background="@null"
-            android:clickable="true"
-            android:contentDescription="@string/emptyString"
-            android:onClick="onClickProfile"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_heart"
-            android:visibility="visible" />
-
+            android:onClick="onClickProfileActivity"
+            android:text="@string/save" />
     </LinearLayout>
 </RelativeLayout>
 

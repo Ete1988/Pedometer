@@ -76,13 +76,10 @@ public class TimeManager {
         }
     }
 
-    public String getCurrentDateAsString() {
+    private String getCurrentDateAsString() {
         Date todayDate = new Date();
         SimpleDateFormat currDate = new SimpleDateFormat("EE dd MMM yyyy", Locale.getDefault());
         return currDate.format(todayDate);
     }
 
-    public Date getCurrentDate() {
-        return new Date();
-    }
 }

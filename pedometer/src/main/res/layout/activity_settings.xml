@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -17,24 +17,27 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/my_toolbar"
         android:orientation="vertical"
-        android:paddingEnd="10dp"
-        android:paddingStart="10dp">
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="General"
+            android:text="@string/general"
             android:textSize="24sp"
             android:textStyle="normal|bold|italic" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="25dp"
+            android:gravity="center"
             android:orientation="horizontal"
             android:paddingEnd="15dp"
             android:paddingStart="15dp">
@@ -42,27 +45,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="3"
                 android:fontFamily="sans-serif"
                 android:text="@string/activity_level"
                 android:textSize="18sp"
                 android:textStyle="normal|italic" />
 
-            <android.support.v4.widget.Space
-                android:layout_width="100dp"
-                android:layout_height="match_parent" />
-
             <TextView
                 android:id="@+id/SE_TextActivityLevelView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:fontFamily="serif"
-                android:text="X"
+                android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="normal|italic" />
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2">
 
                 <ImageButton
                     android:id="@+id/SE_LevelSelector"
@@ -89,7 +91,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pedometer"
+            android:text="@string/app_name"
             android:textSize="24sp"
             android:textStyle="normal|bold|italic" />
 
@@ -101,30 +103,29 @@
             android:paddingStart="15dp">
 
             <TextView
-                android:id="@+id/stepGoal"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Step Goal: "
+                android:layout_weight="3"
+                android:text="@string/step_goal"
                 android:textAlignment="textStart"
                 android:textSize="18sp"
                 android:textStyle="normal|italic" />
 
-            <android.support.v4.widget.Space
-                android:layout_width="80dp"
-                android:layout_height="match_parent" />
-
             <TextView
                 android:id="@+id/SE_TextStepGoalView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:fontFamily="serif"
-                android:text="XXXX"
+                android:text="@string/emptyString"
+                android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="normal|italic" />
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
 
                 <ImageButton
                     android:id="@+id/SE_GoalSelector"
@@ -151,7 +152,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="HeartRate"
+            android:text="@string/heart_rate"
             android:textSize="24sp"
             android:textStyle="normal|bold|italic" />
 
@@ -159,109 +160,44 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingEnd="15dp"
-            android:paddingStart="15dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Resting Heart Rate:"
-                    android:textSize="18sp"
-
-                    android:textStyle="normal|italic" />
-
-                <android.support.v4.widget.Space
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Maximum Heart Rate:"
-                    android:textSize="18sp"
-                    android:textStyle="normal|italic" />
-
-            </LinearLayout>
-
-            <android.support.v4.widget.Space
-                android:layout_width="20dp"
-                android:layout_height="match_parent" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/SE_TextRestingHeartRateView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/standardValue"
-                    android:textSize="18sp" />
-
-                <android.support.v4.widget.Space
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp" />
-
-                <TextView
-                    android:id="@+id/SE_TextHeartRateMaxView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/standardValue"
-                    android:textSize="18sp" />
-
-
-            </LinearLayout>
-
-            <android.support.v4.widget.Space
-                android:layout_width="5dp"
-                android:layout_height="match_parent" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
-
-                <android.support.v4.widget.Space
-                    android:layout_width="match_parent"
-                    android:layout_height="4dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/bpm"
-                    android:textSize="12sp" />
-
-                <android.support.v4.widget.Space
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/bpm"
-                    android:textSize="12sp" />
-
-
-            </LinearLayout>
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
+                android:layout_height="25dp"
+                android:orientation="horizontal"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="end">
+                    android:layout_weight="3"
+                    android:text="@string/resting_heart_rate"
+                    android:textSize="18sp"
+                    android:textStyle="normal|italic" />
+
+
+
+                <TextView
+                    android:id="@+id/SE_TextRestingHeartRateView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@string/emptyString"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@string/bpm"
+                    android:textSize="12sp" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
                     <ImageButton
                         android:id="@+id/SE_RestingHeartRateSelector"
@@ -273,17 +209,44 @@
                         android:onClick="onClickSettingsActivity"
                         android:scaleType="fitXY"
                         android:src="@mipmap/ic_edit" />
+                </RelativeLayout>
+            </LinearLayout>
 
-                </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:orientation="horizontal"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp">
 
-                <android.support.v4.widget.Space
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="end">
+                    android:layout_weight="2"
+                    android:text="@string/maximum_heart_rate"
+                    android:textSize="18sp"
+                    android:textStyle="normal|italic" />
+
+
+                <TextView
+                    android:id="@+id/SE_TextHeartRateMaxView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@string/emptyString"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@string/bpm"
+                    android:textSize="12sp" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
                     <ImageButton
                         android:id="@+id/SE_HeartRateMaxSelector"
@@ -295,24 +258,21 @@
                         android:onClick="onClickSettingsActivity"
                         android:scaleType="fitXY"
                         android:src="@mipmap/ic_edit" />
-
-                </LinearLayout>
-
-
+                </RelativeLayout>
             </LinearLayout>
 
 
         </LinearLayout>
-
-        <Button
-            android:id="@+id/SE_SaveChangesBtn"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClickSettingsActivity"
-            android:text="@string/save" />
-
     </LinearLayout>
 
+    <Button
+        android:id="@+id/SE_SaveChangesBtn"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:onClick="onClickSettingsActivity"
+        android:text="@string/save" />
 
-</LinearLayout>
+
+</RelativeLayout>

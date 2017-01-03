@@ -1,23 +1,19 @@
 package com.mueller.mobileSports.heartRate;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mueller.mobileSports.general.BluetoothScanActivity;
 import com.mueller.mobileSports.general.SettingsActivity;
@@ -30,7 +26,6 @@ import com.mueller.mobileSports.user.ProfileActivity;
 import com.mueller.mobileSports.user.SessionManager;
 
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * Created by Ete
@@ -42,83 +37,48 @@ public class HeartRateActivity extends AppCompatActivity {
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
-    public static final String EXTRAS_BIND_SERVICE = "BIND_SERVICE";
+    public static final String EXTRAS_START_SERVICE = "BIND_SERVICE";
+    public static final String EXTRAS_START_SIMULATION_SERVICE = "BIND_SIMULATION_SERVICE";
     private final static String TAG = HeartRateActivity.class.getSimpleName();
     private String mDeviceAddress;
-    private boolean bindSensorService = false;
-    private boolean bindSimulationHeartRate;
-    private Runnable mTimerRunnable;
-    private boolean mConnected;
-    private long paused;
+    private String mDeviceName;
+
+    private boolean startSimulationSensorService = false;
+    private boolean startRealSensorService = false;
     private SharedValues sharedValues;
+    private TextView mHeartRate, mAverageHeartRate, mMaxHearRate, mMinHeartRate, mConnectionState, mConnectedDeviceName;
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (HeartRateSensorService.ACTION_GATT_CONNECTED.equals(action)) {
-                mConnected = true;
                 updateConnectionState(R.string.connected);
             } else if (HeartRateSensorService.ACTION_GATT_DISCONNECTED.equals(action)) {
-                mConnected = false;
+                mConnectedDeviceName.setText(R.string.emptyString);
                 updateConnectionState(R.string.disconnected);
             } else if (HeartRateSensorService.ACTION_DATA_AVAILABLE.equals(action)) {
                 displayData(intent.getStringExtra(HeartRateSensorService.EXTRA_DATA));
-            } else if (HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_STEPDETECTED.equals(action)) {
-                displayData(intent.getStringExtra(HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_STEPDETECTED));
+            } else if (HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_STEP_DETECTED.equals(action)) {
+                displayData(intent.getStringExtra(HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_STEP_DETECTED));
             } else if (HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_CONNECTED.equals(action)) {
-                mConnected = true;
                 updateConnectionState(R.string.connected);
             } else if (HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_DISCONNECTED.equals(action)) {
-                mConnected = false;
                 updateConnectionState(R.string.disconnected);
             }
         }
     };
-
-    private ImageView iv_start, iv_restart;
-    private TextView mTextTime, mHeartRate, mAverageHeartRate, mMaxHearRate, mMinHeartRate, mConnectionState;
-    private int time_seconds, time_minutes, time_milliseconds;
-    private long start_time, timeInMilliseconds, time_update, time_swapBuff;
-    private Handler mHandler;
     private HeartRateSensorService heartRateSensorService;
-    private HeartRateSensorSimulationService heartRateSensorSimulationService;
-    private final ServiceConnection mServiceConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder service) {
-
-            if (bindSimulationHeartRate) {
-                heartRateSensorSimulationService = ((HeartRateSensorSimulationService.LocalBinder) service).getService();
-                if (!heartRateSensorSimulationService.initialize()) {
-                    Log.e(TAG, "Unable to initialize HeartRateSimulationService");
-                    finish();
-                }
-            } else {
-                System.out.println(2);
-                heartRateSensorService = ((HeartRateSensorService.LocalBinder) service).getService();
-                if (!heartRateSensorService.initialize()) {
-                    Log.e(TAG, "Unable to initialize HeartRateSensorService");
-                    finish();
-                }
-                heartRateSensorService.connect(mDeviceAddress);
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            heartRateSensorSimulationService = null;
-            heartRateSensorService = null;
-        }
-    };
     private SessionManager sessionManager;
+    private HeartRateSensorSimulationService heartRateSensorSimulationService;
 
     private static IntentFilter updateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_STEPDETECTED);
+        intentFilter.addAction(HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_STEP_DETECTED);
         intentFilter.addAction(HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_CONNECTED);
         intentFilter.addAction(HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_DISCONNECTED);
         intentFilter.addAction(HeartRateSensorService.ACTION_GATT_CONNECTED);
         intentFilter.addAction(HeartRateSensorService.ACTION_GATT_DISCONNECTED);
         intentFilter.addAction(HeartRateSensorService.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(HeartRateSensorService.ACTION_DATA_AVAILABLE);
         return intentFilter;
     }
 
@@ -127,161 +87,12 @@ public class HeartRateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_heart_rate);
         init();
-        iv_start.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                startHRM();
-                bindSimulationHeartRate = true;
-                /*
-                if (btnState == 1) {
-                    iv_start.setImageResource(R.mipmap.ic_stop);
-                    start_time = System.currentTimeMillis();
-                    mHandler.postDelayed(mTimerRunnable, 10L);
-                    btnState = 0;
-                } else {
-                    iv_start.setImageResource(R.mipmap.ic_start);
-                    time_swapBuff += timeInMilliseconds;
-                    mHandler.removeCallbacks(mTimerRunnable);
-                    btnState = 1;
-                }
-                */
-            }
-        });
-
-        iv_restart.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(HeartRateActivity.this, BluetoothScanActivity.class);
-                startActivity(i);
-                bindSimulationHeartRate = false;
-                // startHRM();
-                /*
-                start_time = 0L;
-                timeInMilliseconds = 0L;
-                time_swapBuff = 0L;
-                btnState = 1;
-                time_seconds = 0;
-                time_milliseconds = 0;
-                time_minutes = 0;
-                mHandler.removeCallbacks(mTimerRunnable);
-                mTextTime.setText(String.format(Locale.getDefault(), "%02d:%02d:%02d", 0, 0, 0));
-            */
-
-            }
-        });
-    }
-
-    private void init() {
-        sharedValues = SharedValues.getInstance(this);
-        mConnectionState = (TextView) findViewById(R.id.txtConnectionStatus);
-        sessionManager = new SessionManager(this);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-        mTextTime = (TextView) findViewById(R.id.timeTextView);
-        mHeartRate = (TextView) findViewById(R.id.txtHeartRateView);
-        mAverageHeartRate = (TextView) findViewById(R.id.txtAvrHRView);
-        mMaxHearRate = (TextView) findViewById(R.id.txtMaxHRView);
-        mMinHeartRate = (TextView) findViewById(R.id.txtMinHRView);
-        iv_start = (ImageView) findViewById(R.id.iv_start_stop);
-        iv_restart = (ImageView) findViewById(R.id.iv_reset);
-        mHandler = new Handler();
-
-        mTimerRunnable = new Runnable() {
-
-            @Override
-            public void run() {
-
-                timeInMilliseconds = System.currentTimeMillis() - start_time;
-                time_update = time_swapBuff + timeInMilliseconds;
-                time_seconds = (int) (time_update / 1000);
-                time_minutes = time_seconds / 60;
-                time_milliseconds = (int) (time_update % 1000);
-                mTextTime.setText(String.format(Locale.getDefault(), "%02d:%02d:%02d", time_minutes, time_seconds % 60, time_milliseconds % 100));
-                mHandler.postDelayed(this, 30);
-            }
-        };
-    }
-
-    private void updateConnectionState(final int resourceId) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mConnectionState.setText(resourceId);
-            }
-        });
-    }
-
-    private void displayData(String data) {
-        if (data != null) {
-            mHeartRate.setText(data);
-            mMaxHearRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("maxHeartRate")));
-            mMinHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("minHeartRate")));
-            mHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("currentHeartRate")));
-            mAverageHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("averageHeartRate")));
-        }
-    }
-
-    private void startHRM() {
-
-        Intent intent = new Intent(HeartRateActivity.this, HeartRateSensorSimulationService.class);
-        bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
-    }
-
-    private void startRealHRM() {
-        Intent intent = new Intent(HeartRateActivity.this, HeartRateSensorService.class);
-        bindSimulationHeartRate = false;
-        bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
-
-    }
-
-    public void calculateTRIMP() {
-        double duration = time_minutes;
-        double x, y, b;
-        double trimp;
-
-        x = ((sharedValues.getInt("averageHeartRate") - sharedValues.getInt("minHeartRate") /
-                (sharedValues.getInt("maxHeartRate") - sharedValues.getInt("minHeartRate"))));
-
-        if (Objects.equals(sharedValues.getString("gender"), "Female")) {
-            b = 1.67;
-        } else {
-            b = 1.92;
-        }
-
-        y = Math.exp(b * x);
-
-        trimp = duration * x * y;
-    }
-
-    public void onClickHeartRateMeter(View v) {
-        if (v == null) {
-            throw new NullPointerException(
-                    "You are referring null object. "
-                            + "Please check weather you had called super class method mappingWidgets() or not");
-        } else if (v.getId() == R.id.HRM_ProfileBtn) {
-            Intent i = new Intent(this, ProfileActivity.class);
-            startActivity(i);
-        } else if (v.getId() == R.id.HRM_PedometerBtn) {
-            Intent i = new Intent(this, PedometerActivity.class);
-            startActivity(i);
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (!(heartRateSensorService == null) || !(heartRateSensorSimulationService == null)) {
-            unbindService(mServiceConnection);
-        }
-        super.onDestroy();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         tryToUnregisterReceiver(mGattUpdateReceiver);
-        paused = System.currentTimeMillis();
     }
 
     @Override
@@ -290,13 +101,14 @@ public class HeartRateActivity extends AppCompatActivity {
         sessionManager.checkUserState();
         registerReceiver(mGattUpdateReceiver, updateIntentFilter());
         final Intent receiveIntent = getIntent();
-        mDeviceAddress = receiveIntent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
-        bindSensorService = receiveIntent.getBooleanExtra(EXTRAS_BIND_SERVICE, false);
-        if (bindSensorService) {
-            startRealHRM();
+        if (!isMyServiceRunning(HeartRateSensorService.class) && !isMyServiceRunning(HeartRateSensorSimulationService.class)) {
+            mDeviceAddress = receiveIntent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
+            mDeviceName = receiveIntent.getStringExtra(EXTRAS_DEVICE_NAME);
+            sharedValues.saveString("deviceName", mDeviceName);
+            startRealSensorService = receiveIntent.getBooleanExtra(EXTRAS_START_SERVICE, false);
+            startSimulationSensorService = receiveIntent.getBooleanExtra(EXTRAS_START_SIMULATION_SERVICE, false);
+            startHRMService();
         }
-
-        start_time += System.currentTimeMillis() - paused;
     }
 
     @Override
@@ -317,8 +129,94 @@ public class HeartRateActivity extends AppCompatActivity {
             case R.id.menu_logout:
                 sessionManager.uploadUserData(this, true, true);
                 break;
+            case R.id.menu_profile:
+                Intent i2 = new Intent(this, ProfileActivity.class);
+                startActivity(i2);
+                break;
         }
         return true;
+    }
+
+    private void init() {
+        sharedValues = SharedValues.getInstance(this);
+
+        sessionManager = new SessionManager(this);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        mHeartRate = (TextView) findViewById(R.id.HR_heartRateView);
+        mAverageHeartRate = (TextView) findViewById(R.id.HR_averageHeartRateView);
+        mMaxHearRate = (TextView) findViewById(R.id.HR_maxHeartRateView);
+        mMinHeartRate = (TextView) findViewById(R.id.HR_minHeartRateView);
+        mConnectionState = (TextView) findViewById(R.id.HR_connectionStateView);
+        mConnectedDeviceName = (TextView) findViewById(R.id.HR_connectedDeviceName);
+    }
+
+    private void startHRMService() {
+
+        if (startRealSensorService) {
+            Intent intent = new Intent(HeartRateActivity.this, HeartRateSensorService.class);
+            intent.putExtra(EXTRAS_DEVICE_NAME, mDeviceName);
+            intent.putExtra(EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
+            startService(intent);
+        }
+        if (startSimulationSensorService) {
+            Intent intent = new Intent(HeartRateActivity.this, HeartRateSensorSimulationService.class);
+            startService(intent);
+        }
+
+    }
+
+    private void updateConnectionState(final int resourceId) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mConnectionState.setText(resourceId);
+            }
+        });
+    }
+
+    private void displayData(String data) {
+        if (data != null) {
+            mHeartRate.setText(data);
+            mMaxHearRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("maxHeartRate")));
+            mMinHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("minHeartRate")));
+            mHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("currentHeartRate")));
+            mAverageHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("averageHeartRate")));
+            mConnectedDeviceName.setText(sharedValues.getString("deviceName"));
+
+        }
+    }
+
+    public void onClickHeartRateActivity(View v) {
+        Intent i;
+        if (v == null) {
+            throw new NullPointerException(
+                    "You are referring null object. "
+                            + "Please check weather you had called super class method mappingWidgets() or not");
+        } else if (v.getId() == R.id.HR_searchDeviceBtn) {
+            i = new Intent(this, BluetoothScanActivity.class);
+            startActivity(i);
+        } else if (v.getId() == R.id.HR_startSessionBtn) {
+            if (checkIfSessionCanBeStarted()) {
+                i = new Intent(this, TrainingSessionActivity.class);
+                startActivity(i);
+            } else {
+                Toast.makeText(this, "No HeartRateSensor Connected!", Toast.LENGTH_LONG).show();
+            }
+        } else if (v.getId() == R.id.HRM_PedometerBtn) {
+            i = new Intent(this, PedometerActivity.class);
+            startActivity(i);
+        } else if (v.getId() == R.id.HR_disconnectDeviceBtn) {
+            if (isMyServiceRunning(HeartRateSensorService.class)) {
+                stopService(new Intent(this, HeartRateSensorService.class));
+                sharedValues.removeEntry("deviceName");
+            } else if (isMyServiceRunning(HeartRateSensorSimulationService.class)) {
+                stopService(new Intent(this, HeartRateSensorSimulationService.class));
+                sharedValues.removeEntry("deviceName");
+            } else {
+                Toast.makeText(this, "No HeartRateSensor Connected!", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void tryToUnregisterReceiver(BroadcastReceiver myReceiver) {
@@ -327,6 +225,49 @@ public class HeartRateActivity extends AppCompatActivity {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Small check if training session can be started
+     *
+     * @return true iff all necessary data is available
+     */
+    private boolean checkIfSessionCanBeStarted() {
+
+        if (sharedValues.getInt("age") == 0) {
+            if (sharedValues.getInt("heartRateMax") == 0) {
+                Toast.makeText(this, "Please set either your age(Profile) or HRmax(Settings)!", Toast.LENGTH_LONG).show();
+                return false;
+            }
+
+        } else if (sharedValues.getInt("heartRateMax") == 0) {
+            int heartRateMax;
+            heartRateMax = (int) (208 - (0.7 * (sharedValues.getInt("age"))));
+            sharedValues.saveInt("heartRateMax", heartRateMax);
+        }
+
+        if (sharedValues.getInt("weight") == 0) {
+            Toast.makeText(this, "Please set your weight(Profile)!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (sharedValues.getInt("height") == 0) {
+            Toast.makeText(this, "Please set your height(Profile)!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return isMyServiceRunning(HeartRateSensorService.class) || isMyServiceRunning(HeartRateSensorSimulationService.class);
+
     }
 }
 

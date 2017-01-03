@@ -8,6 +8,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -17,16 +18,35 @@ import com.mueller.mobileSports.general.SharedValues;
 public class PedometerService extends Service implements SensorEventListener {
 
     public final static String STEP_MESSAGE = "com.mueller.mobileSPorts.pedometer.pedometerUtility.PedometerService.STEP_VALUE";
+    public final static String CADENCE_MESSAGE = "com.mueller.mobileSPorts.pedometer.pedometerUtility.PedometerService.CADENCE_VALUE";
+
     private final static String TAG = PedometerService.class.getSimpleName();
     private final IBinder mBinder = new LocalBinder();
     private SensorManager sensorManager;
-    private int mStepsDay, mStepsWeek;
+    private int mStepsDay, mStepsWeek, timeCount, mSecondaryStepCount;
     private SharedValues sharedValues;
     private Sensor mSensor;
+    private Handler mHandler;
+    private Runnable mTimer = new Runnable() {
+        @Override
+        public void run() {
+            timeCount++;
+
+            if (timeCount == 5) {
+                sharedValues.saveInt("cadence", mSecondaryStepCount);
+                mSecondaryStepCount = 0;
+                timeCount = 0;
+                broadcastUpdate(CADENCE_MESSAGE);
+            }
+            mHandler.postDelayed(this, 1000);
+        }
+
+    };
 
     @Override
     public void onCreate() {
         sharedValues = SharedValues.getInstance(this);
+        mHandler = new Handler();
         mStepsDay = sharedValues.getInt("stepsOverDay");
         mStepsWeek = sharedValues.getInt("stepsOverWeek");
     }
@@ -45,15 +65,21 @@ public class PedometerService extends Service implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         sharedValues.saveInt("stepsOverWeek", mStepsWeek++);
         sharedValues.saveInt("stepsOverDay", mStepsDay++);
-        sendMessage();
-        Log.e(TAG, "Sensor Listener Change.");
+        mSecondaryStepCount++;
+        broadcastUpdate(STEP_MESSAGE);
+
     }
 
-    private void sendMessage() {
-        Intent intent = new Intent();
-        intent.setAction(STEP_MESSAGE);
-        intent.putExtra("DATA_PASSED", "");
+    private void broadcastUpdate(final String action) {
+        final Intent intent = new Intent(action);
         sendBroadcast(intent);
+    }
+
+    @Override
+    public void onDestroy() {
+        mHandler.removeCallbacks(mTimer);
+        Log.w(TAG, "Pedo destroyed.");
+        super.onDestroy();
     }
 
     public boolean initialize() {
@@ -73,7 +99,8 @@ public class PedometerService extends Service implements SensorEventListener {
             }
         }
 
-        sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        mHandler.postDelayed(mTimer, 1000);
+        sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_FASTEST);
         Log.e(TAG, "Sensor Listener Started.");
         return true;
     }
@@ -84,19 +111,8 @@ public class PedometerService extends Service implements SensorEventListener {
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);          // get an instance of the SensorManager class, lets us access sensors.
-        Sensor mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);    // get StepCounter sensor from the list of sensors.
-
-        if (mSensor == null)
-            stopSelf();
-        else
-            sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        initialize();
         return START_STICKY;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     public class LocalBinder extends Binder {
@@ -104,4 +120,5 @@ public class PedometerService extends Service implements SensorEventListener {
             return PedometerService.this;
         }
     }
+
 }

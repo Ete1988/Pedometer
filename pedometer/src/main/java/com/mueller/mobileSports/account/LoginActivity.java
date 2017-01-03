@@ -3,8 +3,8 @@ package com.mueller.mobileSports.account;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -27,18 +27,13 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
         setTitle("Login");
         sessionManager = new SessionManager(this);
         sessionManager.isUserLoggedIn();
-        Button mLoginButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailText = (EditText) findViewById(R.id.input_email);
         mPasswordText = (EditText) findViewById(R.id.password);
-        mLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                login();
-            }
-        });
     }
 
     public void onBackPressed() {
@@ -46,10 +41,12 @@ public class LoginActivity extends AppCompatActivity {
         this.finish();
     }
 
-    public void onClickLogin(View v) {
+    public void onClick(View v) {
         if (v.getId() == R.id.register_button) {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
+        } else if (v.getId() == R.id.email_sign_in_button) {
+            login();
         }
 
     }
@@ -62,13 +59,16 @@ public class LoginActivity extends AppCompatActivity {
         // Check if username, password is filled
         if (email.trim().length() > 0 && password.trim().length() > 0) {
             //Backendless Login and let user stay logged in.
-            Intent intent = new Intent(getApplicationContext(), PedometerActivity.class);
+            Intent intent = new Intent(this, PedometerActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             sessionManager.userLogin(email, password, intent);
         } else {
             // user didn't enter username or password
             Toast.makeText(getBaseContext(), "Please enter username and password", Toast.LENGTH_LONG).show();
         }
-
     }
+
 
 }

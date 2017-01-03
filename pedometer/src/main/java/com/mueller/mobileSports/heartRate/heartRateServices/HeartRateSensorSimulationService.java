@@ -3,7 +3,6 @@ package com.mueller.mobileSports.heartRate.heartRateServices;
 import android.app.Service;
 import android.content.Intent;
 import android.content.res.AssetManager;
-import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -19,11 +18,14 @@ import java.io.InputStreamReader;
 
 /**
  * Created by Ete on 15/12/2016.
+ *
+ * Class to simulate an connected BLE HeartRate device
+ *
  */
 
 public class HeartRateSensorSimulationService extends Service {
 
-    public final static String ACTION_HRM_SIMULATION_STEPDETECTED = "com.mueller.mobileSPorts.HeartRateSimulation.STEP_VALUE";
+    public final static String ACTION_HRM_SIMULATION_STEP_DETECTED = "com.mueller.mobileSPorts.HeartRateSimulation.STEP_VALUE";
     public final static String ACTION_HRM_SIMULATION_CONNECTED =
             "com.mueller.mobileSPorts.HeartRateSimulation.CONNECTED";
     public final static String ACTION_HRM_SIMULATION_DISCONNECTED =
@@ -32,7 +34,6 @@ public class HeartRateSensorSimulationService extends Service {
     private final static String TAG = HeartRateSensorSimulationService.class.getSimpleName();
     private final static int SIZE_OF_SIMULATION_DATA = 541;
     private final static int TIME_DELAY = 3000;
-    private final IBinder mBinder = new LocalBinder();
     private int[] arraySimulationData, arrayAverageHeartRate;
     private int updateCounter, averageHeartRateCalculationCounter;
     private Handler mHandler;
@@ -41,6 +42,7 @@ public class HeartRateSensorSimulationService extends Service {
     private Runnable mHeartRateSimulation = new Runnable() {
         @Override
         public void run() {
+            broadcastUpdate(ACTION_HRM_SIMULATION_CONNECTED);
             if (updateCounter == arraySimulationData.length) {
                 updateCounter = 0;
             }
@@ -51,9 +53,9 @@ public class HeartRateSensorSimulationService extends Service {
                 averageHeartRateCalculationCounter = 0;
             }
 
-            heartRateMonitorUtility.storeMinAndMaxHeartRate(arraySimulationData[updateCounter]);
+            heartRateMonitorUtility.doCalculations(arraySimulationData[updateCounter]);
             sharedValues.saveInt("currentHeartRate", arraySimulationData[updateCounter]);
-            broadcastUpdate(ACTION_HRM_SIMULATION_STEPDETECTED, arraySimulationData[updateCounter++]);
+            broadcastUpdate(ACTION_HRM_SIMULATION_STEP_DETECTED, arraySimulationData[updateCounter++]);
             mHandler.postDelayed(this, TIME_DELAY);
         }
     };
@@ -66,7 +68,7 @@ public class HeartRateSensorSimulationService extends Service {
     private void broadcastUpdate(final String action,
                                  int heartRate) {
         final Intent intent = new Intent(action);
-        intent.putExtra(ACTION_HRM_SIMULATION_STEPDETECTED, String.valueOf(heartRate));
+        intent.putExtra(ACTION_HRM_SIMULATION_STEP_DETECTED, String.valueOf(heartRate));
         sendBroadcast(intent);
     }
 
@@ -79,7 +81,6 @@ public class HeartRateSensorSimulationService extends Service {
         try {
             readSimulationFile();
         } catch (IOException e) {
-            //TODO make error handling
             e.printStackTrace();
         }
     }
@@ -99,10 +100,17 @@ public class HeartRateSensorSimulationService extends Service {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        broadcastUpdate(ACTION_HRM_SIMULATION_DISCONNECTED);
+        mHandler.removeCallbacks(mHeartRateSimulation);
+        Log.e(TAG, "HeartRateSensorSimulation destroyed.");
+        super.onDestroy();
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
-        return mBinder;
+        return null;
     }
 
     public boolean initialize() {
@@ -127,15 +135,15 @@ public class HeartRateSensorSimulationService extends Service {
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        initialize();
+        return Service.START_STICKY;
+    }
+
+    @Override
     public boolean onUnbind(Intent intent) {
         broadcastUpdate(ACTION_HRM_SIMULATION_DISCONNECTED);
         return super.onUnbind(intent);
-    }
-
-    public class LocalBinder extends Binder {
-        public HeartRateSensorSimulationService getService() {
-            return HeartRateSensorSimulationService.this;
-        }
     }
 
 }

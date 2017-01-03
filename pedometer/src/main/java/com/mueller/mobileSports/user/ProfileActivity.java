@@ -8,19 +8,14 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-import com.mueller.mobileSports.general.SettingsActivity;
 import com.mueller.mobileSports.general.SharedValues;
-import com.mueller.mobileSports.heartRate.HeartRateActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
-import com.mueller.mobileSports.pedometer.PedometerActivity;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -64,6 +59,12 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        sessionManager.checkUserState();
+        super.onResume();
+    }
+
     private void init() {
 
         sessionManager = new SessionManager(this);
@@ -77,7 +78,7 @@ public class ProfileActivity extends AppCompatActivity {
         mInputData[3] = (EditText) findViewById(R.id.input_height);
         mInputData[4] = (EditText) findViewById(R.id.input_email);
         spinner = (Spinner) findViewById(R.id.spinner_gender);
-        loadUserData();
+        mapUserDataToView();
         if (Objects.equals(sharedValues.getString("gender"), "Female")) {
             spinner.setSelection(1);
         } else if (Objects.equals(sharedValues.getString("gender"), "Male")) {
@@ -87,13 +88,19 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void loadUserData() {
+    private void mapUserDataToView() {
 
         mInputData[0].setText(sharedValues.getString("username"));
-        mInputData[1].setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("age")));
-        mInputData[2].setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("weight")));
-        mInputData[3].setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("height")));
         mInputData[4].setText(sharedValues.getString("email"));
+
+        if (!(sharedValues.getInt("age") == 0))
+            mInputData[1].setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("age")));
+        if (!(sharedValues.getInt("weight") == 0))
+            mInputData[2].setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("weight")));
+        if (!(sharedValues.getInt("height") == 0))
+            mInputData[3].setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("height")));
+
+
     }
 
     private void updateData() {
@@ -124,61 +131,41 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    //TODO implement validation
+    /**
+     * Validated UserInput
+     *
+     * @return true iff all data is valid
+     */
     private boolean validateInput() {
-        boolean valid = true;
-/*
+        if (mInputData[0].length() == 0) {
+            mInputData[0].setText(" ");
+        }
         if (mInputData[1].length() == 0 || mInputData[1].toString().equals("0")) {
             Toast.makeText(this, "Please set your age!", Toast.LENGTH_LONG).show();
-            valid = false;
-        } else if (spinner.getSelectedItemPosition() == 0) {
-            Toast.makeText(this, "Please set your gender!", Toast.LENGTH_LONG).show();
-            valid = false;
+            return false;
         }
-*/
-        return valid;
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
+        if (mInputData[2].length() == 0 || mInputData[2].toString().equals("0")) {
+            mInputData[2].setText("");
+            Toast.makeText(this, "Please set your weight!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (mInputData[3].length() == 0 || mInputData[3].toString().equals("0")) {
+            mInputData[3].setText("");
+            Toast.makeText(this, "Please set your height!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        //Only one button for now.
-        switch (item.getItemId()) {
-            case R.id.menu_settings:
-                Intent i = new Intent(this, SettingsActivity.class);
-                startActivity(i);
-                break;
-            case R.id.menu_logout:
-                sessionManager.uploadUserData(this, true, true);
-                break;
-        }
-        return true;
-    }
-
-    @Override
-    protected void onResume() {
-        sessionManager.checkUserState();
-        super.onResume();
-    }
-
-    public void onClickProfile(View v) {
+    public void onClickProfileActivity(View v) {
         if (v == null)
             throw new NullPointerException(
                     "You are referring null object. "
                             + "Please check weather you had called super class method mappingWidgets() or not");
-        if (v.getId() == R.id.PF_PedometerBtn) {
-            Intent i = new Intent(this, PedometerActivity.class);
-            startActivity(i);
-        } else if (v.getId() == R.id.PF_HeartRateBtn) {
-            Intent i = new Intent(this, HeartRateActivity.class);
-            startActivity(i);
-        } else if (v.getId() == R.id.PF_saveChangesBtn) {
+        if (v.getId() == R.id.PF_saveChangesBtn) {
             updateData();
         }
     }
