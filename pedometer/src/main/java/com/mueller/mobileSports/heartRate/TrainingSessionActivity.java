@@ -178,7 +178,7 @@ public class TrainingSessionActivity extends AppCompatActivity {
             mMinHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("minHeartRate")));
             mHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("currentHeartRate")));
             mAverageHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("averageHeartRate")));
-            mEnergyExpenditure.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("energyExpenditure")));
+            mEnergyExpenditure.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("energyExpenditureHR")));
             mPercentageOfHrMax.setText(String.format(Locale.getDefault(), "%02d", sharedValues.getInt("percentOfHRmax")));
         }
     }
@@ -195,7 +195,7 @@ public class TrainingSessionActivity extends AppCompatActivity {
         sharedValues.saveInt("averageHeartRate", 0);
         sharedValues.saveInt("maxHeartRate", 0);
         sharedValues.saveInt("minHeartRate", 0);
-        sharedValues.saveInt("energyExpenditure", 0);
+        sharedValues.saveInt("energyExpenditureHR", 0);
         sharedValues.saveInt("percentOfHRmax", 0);
         mTrimpScore.setText(R.string.emptyString);
         mAverageHeartRate.setText(R.string.emptyString);

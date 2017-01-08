@@ -66,9 +66,7 @@ public class HeartRateActivity extends AppCompatActivity {
             }
         }
     };
-    private HeartRateSensorService heartRateSensorService;
     private SessionManager sessionManager;
-    private HeartRateSensorSimulationService heartRateSensorSimulationService;
 
     private static IntentFilter updateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
@@ -189,11 +187,7 @@ public class HeartRateActivity extends AppCompatActivity {
 
     public void onClickHeartRateActivity(View v) {
         Intent i;
-        if (v == null) {
-            throw new NullPointerException(
-                    "You are referring null object. "
-                            + "Please check weather you had called super class method mappingWidgets() or not");
-        } else if (v.getId() == R.id.HR_searchDeviceBtn) {
+        if (v.getId() == R.id.HR_searchDeviceBtn) {
             i = new Intent(this, BluetoothScanActivity.class);
             startActivity(i);
         } else if (v.getId() == R.id.HR_startSessionBtn) {
@@ -201,7 +195,7 @@ public class HeartRateActivity extends AppCompatActivity {
                 i = new Intent(this, TrainingSessionActivity.class);
                 startActivity(i);
             } else {
-                Toast.makeText(this, "No HeartRateSensor Connected!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "No Heart Rate Sensor connected!", Toast.LENGTH_LONG).show();
             }
         } else if (v.getId() == R.id.HRM_PedometerBtn) {
             i = new Intent(this, PedometerActivity.class);
@@ -214,7 +208,7 @@ public class HeartRateActivity extends AppCompatActivity {
                 stopService(new Intent(this, HeartRateSensorSimulationService.class));
                 sharedValues.removeEntry("deviceName");
             } else {
-                Toast.makeText(this, "No HeartRateSensor Connected!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "No Heart Rate Sensor connected!", Toast.LENGTH_LONG).show();
             }
         }
     }

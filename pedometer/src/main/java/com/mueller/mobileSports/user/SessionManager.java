@@ -63,20 +63,15 @@ public class SessionManager {
             progress.setCancelable(false);
             progress.show(); // disable dismiss by tapping outside of the dialog
             final Intent intent = new Intent(context, PedometerActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             Backendless.UserService.isValidLogin(new AsyncCallback<Boolean>() {
                 @Override
                 public void handleResponse(Boolean response) {
 
                     if (!response) {
                         logoutUser(true);
-                        System.out.println("[ASYNC] Is login valid? - " + response);
                     } else {
                         getUserDataFromServer(intent);
                     }
-                    System.out.println("[ASYNC] Is login valid? - " + response);
                 }
 
                 @Override
@@ -154,18 +149,12 @@ public class SessionManager {
                 PedometerData pedometerData = updatedData.getPedometerData();
                 userData.setPedometerData(pedometerData);
                 userData.setHeartRateData(heartRateData);
-
                 if (logout) {
                     logoutUser(showProgressBar);
                 } else if (showProgressBar) {
                     progress.dismiss();
                     Toast.makeText(context, "Success!", Toast.LENGTH_LONG).show();
                 }
-
-                System.out.println(userData.getObjectId());
-                System.out.println(userData.getPedometerData().getObjectId());
-                System.out.println(userData.getHeartRateData().getObjectId());
-                System.out.println(userData.getHeartRateData().getObjectId());
             }
 
             @Override
@@ -332,7 +321,9 @@ public class SessionManager {
                     Log.e(TAG, "Could not load UserData (Does not exist on server)");
                     userData = new UserData();
                     userData.setEmail(sharedValues.getString("email"));
-                    getUserPedometerDataFromServer(intent);
+                    Intent i = new Intent(context, ProfileActivity.class);
+                    i.putExtra("goToPedometer", true);
+                    getUserPedometerDataFromServer(i);
                 }
             }
 

@@ -3,14 +3,11 @@ package com.mueller.mobileSports.pedometer;
 
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -33,6 +30,8 @@ import com.mueller.mobileSports.pedometer.pedometerService.PedometerService;
 import com.mueller.mobileSports.user.ProfileActivity;
 import com.mueller.mobileSports.user.SessionManager;
 
+import java.util.Locale;
+
 /**
  * Created by Ete
  * <p>
@@ -44,7 +43,7 @@ public class PedometerActivity extends AppCompatActivity {
     boolean doubleBackToExitPressedOnce = false;
     private SessionManager sessionManager;
     private CircularProgressBar cBar;
-    private TextView date;
+    private TextView mDate, mCadence, mSpeed, mDistance;
     private SharedValues sharedValues;
     private final BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
@@ -52,33 +51,19 @@ public class PedometerActivity extends AppCompatActivity {
             if (PedometerService.STEP_MESSAGE.equals(action)) {
                 cBar.setProgress(sharedValues.getInt("stepsOverDay"));
                 cBar.setTitle(Integer.toString(sharedValues.getInt("stepsOverDay")));
-            } else if (PedometerService.CADENCE_MESSAGE.equals(action)) {
-                calculateAndSetCadence();
+            } else if (PedometerService.VALUES_CHANGED.equals(action)) {
+                //TODO format all
+                mCadence.setText(String.format(Locale.getDefault(), "%03f", intent.getDoubleExtra("cadenceValue", 0.0)));
+                mDistance.setText(String.format(Locale.getDefault(), "%03f", intent.getDoubleExtra("distanceValue", 0.0)));
+                mSpeed.setText(String.format(Locale.getDefault(), "%03f", intent.getDoubleExtra("speedValue", 0.0)));
             }
-        }
-    };
-    private PedometerService pedometerService;
-    private final ServiceConnection mServiceConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder service) {
-            pedometerService = ((PedometerService.LocalBinder) service).getService();
-            if (!pedometerService.initialize()) {
-                Log.e(TAG, "Unable to initialize StepCounter");
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            pedometerService.stopSelf();
-            pedometerService = null;
         }
     };
 
     private static IntentFilter updateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(PedometerService.STEP_MESSAGE);
-        intentFilter.addAction(PedometerService.CADENCE_MESSAGE);
+        intentFilter.addAction(PedometerService.VALUES_CHANGED);
         return intentFilter;
     }
 
@@ -116,14 +101,14 @@ public class PedometerActivity extends AppCompatActivity {
             moveTaskToBack(true);
         }
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Press Back again to minimize the App", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Press Back again to leave", Toast.LENGTH_SHORT).show();
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 doubleBackToExitPressedOnce = false;
             }
-        }, 2000);
+        }, 5000);
     }
 
     @Override
@@ -158,14 +143,18 @@ public class PedometerActivity extends AppCompatActivity {
         TimeManager timeManager = new TimeManager(this);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        date = (TextView) findViewById(R.id.date);
+        mDate = (TextView) findViewById(R.id.PF_DateView);
+        mCadence = (TextView) findViewById(R.id.PF_CadenceView);
+        mSpeed = (TextView) findViewById(R.id.PF_SpeedView);
+        mDistance = (TextView) findViewById(R.id.PF_DistanceView);
         cBar = (CircularProgressBar) findViewById(R.id.circularprogressbar3);
-        cBar.setSubTitle("Steps");
+        cBar.setSubTitle("");
+        cBar.setBackgroundColor(5);
         timeManager.checkTime();
     }
 
     private void mapDataToView() {
-        date.setText(sharedValues.getString("sessionDay"));
+        mDate.setText(sharedValues.getString("sessionDay"));
         cBar.setTitle(Integer.toString(sharedValues.getInt("stepsOverDay")));
         cBar.setProgress(sharedValues.getInt("stepsOverDay"));
         cBar.setMax(sharedValues.getInt("stepGoal"));
@@ -198,12 +187,6 @@ public class PedometerActivity extends AppCompatActivity {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-    }
-
-    private void calculateAndSetCadence() {
-        int cadence = sharedValues.getInt("cadence");
-        cadence = cadence * 12;
-        System.out.println("Cadence: " + cadence);
     }
 
     @Override

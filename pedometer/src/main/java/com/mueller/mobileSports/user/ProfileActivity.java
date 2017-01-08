@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
+import com.mueller.mobileSports.pedometer.PedometerActivity;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -29,7 +30,8 @@ import java.util.Objects;
 public class ProfileActivity extends AppCompatActivity {
 
     private static final int GET_FROM_GALLERY = 3;
-    private EditText[] mInputData;
+    boolean goToPedometer;
+    private EditText mInputUserName, mInputAge, mInputWeight, mInputHeight, mInputEmail;
     private SharedValues sharedValues;
     private SessionManager sessionManager;
     private String gender;
@@ -61,22 +63,37 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        Intent intent = getIntent();
+        goToPedometer = intent.getBooleanExtra("goToPedometer", false);
+        if (goToPedometer) {
+            Toast.makeText(this, "Please set up your profile!", Toast.LENGTH_SHORT).show();
+        }
         sessionManager.checkUserState();
         super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (goToPedometer) {
+            if (validateInput()) {
+                startActivity(new Intent(this, PedometerActivity.class));
+            }
+        }
+        super.onBackPressed();
     }
 
     private void init() {
 
         sessionManager = new SessionManager(this);
         sharedValues = SharedValues.getInstance(this);
-        mInputData = new EditText[5];
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        mInputData[0] = (EditText) findViewById(R.id.input_name);
-        mInputData[1] = (EditText) findViewById(R.id.input_age);
-        mInputData[2] = (EditText) findViewById(R.id.input_weight);
-        mInputData[3] = (EditText) findViewById(R.id.input_height);
-        mInputData[4] = (EditText) findViewById(R.id.input_email);
+        mInputUserName = (EditText) findViewById(R.id.input_name);
+        mInputAge = (EditText) findViewById(R.id.input_age);
+        mInputWeight = (EditText) findViewById(R.id.input_weight);
+        mInputHeight = (EditText) findViewById(R.id.input_height);
+        mInputEmail = (EditText) findViewById(R.id.input_email);
         spinner = (Spinner) findViewById(R.id.spinner_gender);
         mapUserDataToView();
         if (Objects.equals(sharedValues.getString("gender"), "Female")) {
@@ -90,27 +107,29 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void mapUserDataToView() {
 
-        mInputData[0].setText(sharedValues.getString("username"));
-        mInputData[4].setText(sharedValues.getString("email"));
+        mInputUserName.setText(sharedValues.getString("username"));
+        mInputEmail.setText(sharedValues.getString("email"));
 
         if (!(sharedValues.getInt("age") == 0))
-            mInputData[1].setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("age")));
+            mInputAge.setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("age")));
         if (!(sharedValues.getInt("weight") == 0))
-            mInputData[2].setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("weight")));
+            mInputWeight.setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("weight")));
         if (!(sharedValues.getInt("height") == 0))
-            mInputData[3].setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("height")));
+            mInputHeight.setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("height")));
 
 
     }
 
-    private void updateData() {
+    private void updateData(boolean showProgressBar) {
         if (validateInput()) {
             sharedValues.saveString("gender", gender);
-            sharedValues.saveString("username", mInputData[0].getText().toString());
-            sharedValues.saveInt("age", Integer.parseInt(mInputData[1].getText().toString()));
-            sharedValues.saveInt("weight", Integer.parseInt(mInputData[2].getText().toString()));
-            sharedValues.saveInt("height", Integer.parseInt(mInputData[3].getText().toString()));
-            sessionManager.uploadUserData(this, true, false);
+            sharedValues.saveString("username", mInputUserName.getText().toString());
+            sharedValues.saveInt("age", Integer.parseInt(mInputAge.getText().toString()));
+            sharedValues.saveInt("weight", Integer.parseInt(mInputWeight.getText().toString()));
+            sharedValues.saveInt("height", Integer.parseInt(mInputHeight.getText().toString()));
+
+            sessionManager.uploadUserData(this, showProgressBar, false);
+
         }
     }
 
@@ -132,28 +151,38 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     /**
-     * Validated UserInput
+     * Validate UserInput
      *
      * @return true iff all data is valid
      */
     private boolean validateInput() {
-        if (mInputData[0].length() == 0) {
-            mInputData[0].setText(" ");
+        if (mInputUserName.length() == 0) {
+            mInputUserName.setText(" ");
         }
-        if (mInputData[1].length() == 0 || mInputData[1].toString().equals("0")) {
+
+        if (mInputAge.length() == 0) {
             Toast.makeText(this, "Please set your age!", Toast.LENGTH_LONG).show();
             return false;
-        }
-
-        if (mInputData[2].length() == 0 || mInputData[2].toString().equals("0")) {
-            mInputData[2].setText("");
-            Toast.makeText(this, "Please set your weight!", Toast.LENGTH_LONG).show();
+        } else if (Integer.parseInt(mInputAge.getText().toString()) < 10 || Integer.parseInt(mInputAge.getText().toString()) > 100) {
+            Toast.makeText(this, "Please set valid age. From 10yrs - 100yrs.", Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if (mInputData[3].length() == 0 || mInputData[3].toString().equals("0")) {
-            mInputData[3].setText("");
+        if (mInputWeight.length() == 0) {
+            mInputWeight.setText("");
+            Toast.makeText(this, "Please set your weight!", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (Integer.parseInt(mInputWeight.getText().toString()) < 20 || Integer.parseInt(mInputWeight.getText().toString()) > 250) {
+            Toast.makeText(this, "Please set valid weight. From 20kg - 250kg.", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (mInputHeight.length() == 0) {
+            mInputHeight.setText("");
             Toast.makeText(this, "Please set your height!", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (Integer.parseInt(mInputHeight.getText().toString()) < 100 || Integer.parseInt(mInputHeight.getText().toString()) > 250) {
+            Toast.makeText(this, "Please set valid height. From 100cm - 250cm.", Toast.LENGTH_LONG).show();
             return false;
         }
 
@@ -161,12 +190,15 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void onClickProfileActivity(View v) {
-        if (v == null)
-            throw new NullPointerException(
-                    "You are referring null object. "
-                            + "Please check weather you had called super class method mappingWidgets() or not");
         if (v.getId() == R.id.PF_saveChangesBtn) {
-            updateData();
+            if (goToPedometer) {
+                if (validateInput()) {
+                    updateData(false);
+                    startActivity(new Intent(this, PedometerActivity.class));
+                }
+            } else {
+                updateData(true);
+            }
         }
     }
 }

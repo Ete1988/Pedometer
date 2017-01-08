@@ -70,7 +70,7 @@ public class HeartRateMonitorUtility {
         double part1 = -36.3781 + (0.271 * age) + (0.394 * weight) + (0.404 * vo2) + (0.634 * (double) heartRate);
         double part2 = -36.3781 + (0.274 * age) + (0.103 * weight) + (0.380 * vo2) + (0.450 * (double) heartRate);
         double ee = -59.3954 + (gen * part1) + ((1 - gen) * part2);
-        sharedValues.saveInt("energyExpenditure", (int) Math.round(ee));
+        sharedValues.saveInt("energyExpenditureHR", (int) Math.round(ee));
     }
 
     public int calculateTRIMP(int minutes) {
@@ -116,8 +116,5 @@ public class HeartRateMonitorUtility {
         if (heartRate < sharedValues.getInt("minHeartRate") || sharedValues.getInt("minHeartRate") == 0) {
             sharedValues.saveInt("minHeartRate", heartRate);
         }
-
     }
-
-
 }

@@ -4,6 +4,10 @@
     <string name="app_name">Pedometer</string>
     <string name="emptyString" />
 
+    <!-- Strings related to pdeometer -->
+    <string name="pedoTitle">STEPS</string>
+
+
     <!-- Strings related to settings layout -->
     <string name="activity_level">Activity level:</string>
     <string name="set_activity_level">set activity level</string>
@@ -23,10 +27,10 @@
     <!-- Strings related to profile layout -->
     <string name="hint_name">Name</string>
     <string name="hint_height">Height in cm</string>
-    <string name="hint_age">Age in years</string>
+    <string name="hint_age">Age</string>
     <string name="save">Save changes</string>
     <string name="hint_weight">Weight in Kg</string>
-    <string name="email">EMail</string>
+    <string name="email">E-Mail</string>
     <string name="gender">Gender:</string>
     <string-array name="gender_selector">
         <item>Male</item>
@@ -45,7 +49,7 @@
     <string name="connected">Connected</string>
     <string name="disconnected">Disconnected</string>
     <string name="bluetooth_status">Bluetooth Status:</string>
-    <string name="search_bluetooth_device">Search Device</string>
+    <string name="search_bluetooth_device">Connect Device</string>
 
     <!-- Strings related to login layout -->
     <string name="action_sign_in">Sign in</string>

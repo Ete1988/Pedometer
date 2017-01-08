@@ -7,7 +7,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -18,12 +17,12 @@ import com.mueller.mobileSports.general.SharedValues;
 public class PedometerService extends Service implements SensorEventListener {
 
     public final static String STEP_MESSAGE = "com.mueller.mobileSPorts.pedometer.pedometerUtility.PedometerService.STEP_VALUE";
-    public final static String CADENCE_MESSAGE = "com.mueller.mobileSPorts.pedometer.pedometerUtility.PedometerService.CADENCE_VALUE";
+    public final static String VALUES_CHANGED = "com.mueller.mobileSPorts.pedometer.pedometerUtility.PedometerService.CADENCE_VALUE";
 
     private final static String TAG = PedometerService.class.getSimpleName();
-    private final IBinder mBinder = new LocalBinder();
     private SensorManager sensorManager;
-    private int mStepsDay, mStepsWeek, timeCount, mSecondaryStepCount;
+    private int mStepsDay, mStepsWeek, timeCount, mCadenceStepCount;
+
     private SharedValues sharedValues;
     private Sensor mSensor;
     private Handler mHandler;
@@ -33,10 +32,18 @@ public class PedometerService extends Service implements SensorEventListener {
             timeCount++;
 
             if (timeCount == 5) {
-                sharedValues.saveInt("cadence", mSecondaryStepCount);
-                mSecondaryStepCount = 0;
+                double cadence = calculateCadence(mCadenceStepCount, 5);
+                calculateEnergyExpenditure(cadence);
+                double stride = calculateStrideLength();
+                double distance = calculateDistance(stride, mStepsDay);
+                double speed = calculateSpeed(stride, cadence);
+                Intent i = new Intent(VALUES_CHANGED);
+                i.putExtra("cadenceValue", cadence);
+                i.putExtra("speedValue", speed);
+                i.putExtra("distanceValue", distance);
+                sendBroadcast(i);
+                mCadenceStepCount = 0;
                 timeCount = 0;
-                broadcastUpdate(CADENCE_MESSAGE);
             }
             mHandler.postDelayed(this, 1000);
         }
@@ -53,7 +60,7 @@ public class PedometerService extends Service implements SensorEventListener {
 
     @Override
     public IBinder onBind(Intent intent) {
-        return mBinder;
+        return null;
     }
 
     @Override
@@ -65,7 +72,8 @@ public class PedometerService extends Service implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         sharedValues.saveInt("stepsOverWeek", mStepsWeek++);
         sharedValues.saveInt("stepsOverDay", mStepsDay++);
-        mSecondaryStepCount++;
+        mCadenceStepCount++;
+
         broadcastUpdate(STEP_MESSAGE);
 
     }
@@ -78,7 +86,7 @@ public class PedometerService extends Service implements SensorEventListener {
     @Override
     public void onDestroy() {
         mHandler.removeCallbacks(mTimer);
-        Log.w(TAG, "Pedo destroyed.");
+        Log.w(TAG, "Pedometer destroyed.");
         super.onDestroy();
     }
 
@@ -92,7 +100,7 @@ public class PedometerService extends Service implements SensorEventListener {
             }
         }
         if (mSensor == null) {
-            mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+            mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
             if (mSensor == null) {
                 Log.e(TAG, "Unable to initialize Sensor.");
                 return false;
@@ -115,10 +123,74 @@ public class PedometerService extends Service implements SensorEventListener {
         return START_STICKY;
     }
 
-    public class LocalBinder extends Binder {
-        public PedometerService getService() {
-            return PedometerService.this;
-        }
+    private double calculateCadence(double stepCount, int timeWindow) {
+        return stepCount / (double) timeWindow;
     }
 
+    private double calculateStrideLength() {
+        double strideLength;
+        double age = sharedValues.getInt("age");
+        double height = sharedValues.getInt("height");
+        double weight = sharedValues.getInt("weight");
+        if (sharedValues.getString("gender").equals("Male")) {
+            strideLength = (-0.002 * age) + (0.760 * (height / 100.0)) - (0.001 * weight) + 0.327;
+        } else {
+            strideLength = (-0.001 * age) + (1.058 * height) - (0.002 * weight) - 0.129;
+        }
+
+        return strideLength;
+    }
+
+    private double calculateSpeed(double strideLength, double cadence) {
+        return strideLength * cadence * 3.6; //  km/h
+    }
+
+    private double calculateDistance(double strideLength, int steps) {
+        return ((((double) steps / 2) * strideLength) / 1000); //km
+    }
+
+    //TODO
+    private void calculateEnergyExpenditure(double cadence) {
+        double energyExpenditure;
+        double energyBodyLifting;
+        double energyToLive;
+        double horizontalAccelEnergy;
+        double totalEnergy;
+        double bmr;
+        double energyWalking;
+        double gravity = 9.81;
+        double weight = sharedValues.getInt("weight");
+
+
+        //Energy for lifting body in J
+        if (cadence <= 3.0) {
+            energyBodyLifting = weight * gravity * 0.03 * cadence;
+        } else {
+            energyBodyLifting = weight * gravity * 0.07 * cadence;
+        }
+
+        //EnergyWalking in J
+        energyWalking = 1.64 * weight;
+
+        //BMR in kcal/day
+        if (sharedValues.getString("gender").equals("Male")) {
+            bmr = 24.0 * weight;
+        } else {
+            bmr = 24.0 * weight * 0.9;
+        }
+
+        //Living Energy in J/s
+        energyToLive = bmr * 4.184;             // kJ/day
+        energyToLive = energyToLive * 1000;     // J/day
+        energyToLive = energyToLive / 24.0;     // J/hr
+        energyToLive = energyToLive / 60;        // J/min
+        energyToLive = energyToLive / 60;        // J/s
+
+        //Total Energy
+        totalEnergy = energyWalking - energyToLive;
+
+        //Horizontal Acceleration Energy
+        horizontalAccelEnergy = totalEnergy - energyBodyLifting;
+
+    }
 }

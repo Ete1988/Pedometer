@@ -89,7 +89,6 @@ public class SettingsActivity extends AppCompatActivity {
             heartRateMax = (int) (208 - (0.7 * (sharedValues.getInt("age"))));
         } else {
             heartRateMax = 0;
-            mHeartRateMax.setError("Please set your age in the profile tab, or set HRmax manually");
         }
         mRestingHeartRate.setText(String.format(Locale.getDefault(), "%d", restingHeartRate));
         mHeartRateMax.setText(String.format(Locale.getDefault(), "%d", heartRateMax));

@@ -112,7 +112,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void startSimulationService(){
+    private void startSimulationService() {
         final Intent intent = new Intent(this, HeartRateActivity.class);
         intent.putExtra(HeartRateActivity.EXTRAS_START_SIMULATION_SERVICE, true);
         intent.putExtra(HeartRateActivity.EXTRAS_DEVICE_NAME, "HeartRateSimulator");
@@ -136,7 +136,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
             bleCompatible = false;
-        }else {
+        } else {
             bleCompatible = true;
         }
     }
@@ -145,16 +145,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         checkCompatibility();
-        // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
-        // fire an intent to display a dialog asking the user to grant permission to enable it.
-        if(!(mBluetoothAdapter == null)){
-        if (!mBluetoothAdapter.isEnabled()) {
-            if (!mBluetoothAdapter.isEnabled()) {
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            }
-        }
-    }
+
         // Initializes list view adapter.
         mLeDeviceListAdapter = new LeDeviceListAdapter();
         setListAdapter(mLeDeviceListAdapter);
@@ -209,28 +200,39 @@ public class BluetoothScanActivity extends AppCompatActivity {
         getListView().setAdapter(listAdapter);
     }
 
-    public void onClickBlueToothScanActivity(View v){
+    public void onClickBlueToothScanActivity(View v) {
 
-        if (v == null) {
-            throw new NullPointerException(
-                    "You are referring null object. "
-                            + "Please check weather you had called super class method mappingWidgets() or not");
-        } else if (v.getId() == R.id.BTS_StartScanBtn) {
-            if(bleCompatible){
-                if(!mScanning){
-                    scanLeDevice(true);
-                    Button btn = (Button) findViewById(R.id.BTS_StartScanBtn);
-                    btn.setText(R.string.stop_device_scan);
-                }else {
-                    scanLeDevice(false);
-                    Button btn = (Button) findViewById(R.id.BTS_StartScanBtn);
-                    btn.setText(R.string.start_device_scan);
+        if (v.getId() == R.id.BTS_StartScanBtn) {
+            if (bleCompatible) {
+
+                // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
+                // fire an intent to display a dialog asking the user to grant permission to enable it.
+                if (!(mBluetoothAdapter == null)) {
+                    if (!mBluetoothAdapter.isEnabled()) {
+                        if (!mBluetoothAdapter.isEnabled()) {
+                            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+                        }
+                    }
                 }
 
+                if (mBluetoothAdapter.isEnabled()) {
+                    if (!mScanning) {
+                        scanLeDevice(true);
+                        Button btn = (Button) findViewById(R.id.BTS_StartScanBtn);
+                        btn.setText(R.string.stop_device_scan);
+                    } else {
+
+
+                        scanLeDevice(false);
+                        Button btn = (Button) findViewById(R.id.BTS_StartScanBtn);
+                        btn.setText(R.string.start_device_scan);
+                    }
+                }
             } else {
                 Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
             }
-        }else if( v.getId() == R.id.BTS_UseSimulatorBtn){
+        } else if (v.getId() == R.id.BTS_UseSimulatorBtn) {
             startSimulationService();
         }
 

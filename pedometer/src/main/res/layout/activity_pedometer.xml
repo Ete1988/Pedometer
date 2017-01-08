@@ -18,7 +18,7 @@
 
 
     <TextView
-        android:id="@+id/date"
+        android:id="@+id/PF_DateView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -30,21 +30,128 @@
         android:textStyle="normal|bold|italic"
         android:typeface="sans" />
 
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/PF_DateView"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="@string/pedoTitle"
+            android:textSize="24sp"
+            android:textStyle="normal|bold|italic" />
+    </LinearLayout>
+
     <com.lylc.widget.circularprogressbar.CircularProgressBar
         android:id="@+id/circularprogressbar3"
         style="@style/Widget.ProgressBar.CircularProgressBar"
         android:layout_width="150dip"
         android:layout_height="150dip"
-        android:layout_below="@+id/date"
+        android:layout_below="@+id/linearLayout"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp"
         circular:cpb_subtitle="subtitle"
         circular:cpb_title="Title" />
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/PM_bottomBar"
+        android:layout_below="@id/circularprogressbar3"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Cadence:"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/PF_CadenceView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Steps/s" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Speed:"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/PF_SpeedView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="km/h" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Distance:"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/PF_DistanceView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="km" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/PM_bottomBar"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:background="@color/black_overlay"
         android:gravity="center"
         android:orientation="horizontal">
