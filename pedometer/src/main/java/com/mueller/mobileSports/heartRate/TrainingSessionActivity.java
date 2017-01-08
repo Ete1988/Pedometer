@@ -132,11 +132,7 @@ public class TrainingSessionActivity extends AppCompatActivity {
 
     public void onClickTrainingSessionActivity(View v) {
         Button myButton;
-        if (v == null) {
-            throw new NullPointerException(
-                    "You are referring null object. "
-                            + "Please check weather you had called super class method mappingWidgets() or not");
-        } else if (v.getId() == R.id.TS_StartSessionBtn) {
+         if (v.getId() == R.id.TS_StartSessionBtn) {
             resetAllValuesOnTimerStart();
             registerReceiver(mUpdateReceiver, updateIntentFilter());
             start_time = SystemClock.uptimeMillis();

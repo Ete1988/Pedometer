@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.mueller.mobileSports.general.SettingsActivity;
 import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
@@ -30,7 +31,7 @@ import java.util.Objects;
 public class ProfileActivity extends AppCompatActivity {
 
     private static final int GET_FROM_GALLERY = 3;
-    boolean goToPedometer;
+    boolean firstTime;
     private EditText mInputUserName, mInputAge, mInputWeight, mInputHeight, mInputEmail;
     private SharedValues sharedValues;
     private SessionManager sessionManager;
@@ -64,8 +65,8 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         Intent intent = getIntent();
-        goToPedometer = intent.getBooleanExtra("goToPedometer", false);
-        if (goToPedometer) {
+        firstTime = intent.getBooleanExtra("firstTime", false);
+        if (firstTime) {
             Toast.makeText(this, "Please set up your profile!", Toast.LENGTH_SHORT).show();
         }
         sessionManager.checkUserState();
@@ -75,12 +76,14 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if (goToPedometer) {
+        if (firstTime) {
             if (validateInput()) {
                 startActivity(new Intent(this, PedometerActivity.class));
             }
+        } else {
+            super.onBackPressed();
         }
-        super.onBackPressed();
+
     }
 
     private void init() {
@@ -107,7 +110,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void mapUserDataToView() {
 
-        mInputUserName.setText(sharedValues.getString("username"));
+        if(Objects.equals(sharedValues.getString("username"), " ")){
+            mInputUserName.setText(sharedValues.getString("username2"));
+            }else {
+            mInputUserName.setText(sharedValues.getString("username"));
+        }
+
+
         mInputEmail.setText(sharedValues.getString("email"));
 
         if (!(sharedValues.getInt("age") == 0))
@@ -133,7 +142,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    //TODO remove, not used!?--> Sandra  Why??
+    //TODO remove?
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -191,7 +200,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void onClickProfileActivity(View v) {
         if (v.getId() == R.id.PF_saveChangesBtn) {
-            if (goToPedometer) {
+            if (firstTime) {
                 if (validateInput()) {
                     updateData(false);
                     startActivity(new Intent(this, PedometerActivity.class));

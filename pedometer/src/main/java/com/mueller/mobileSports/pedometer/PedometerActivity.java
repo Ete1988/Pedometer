@@ -53,9 +53,9 @@ public class PedometerActivity extends AppCompatActivity {
                 cBar.setTitle(Integer.toString(sharedValues.getInt("stepsOverDay")));
             } else if (PedometerService.VALUES_CHANGED.equals(action)) {
                 //TODO format all
-                mCadence.setText(String.format(Locale.getDefault(), "%03f", intent.getDoubleExtra("cadenceValue", 0.0)));
-                mDistance.setText(String.format(Locale.getDefault(), "%03f", intent.getDoubleExtra("distanceValue", 0.0)));
-                mSpeed.setText(String.format(Locale.getDefault(), "%03f", intent.getDoubleExtra("speedValue", 0.0)));
+                mCadence.setText(String.format(Locale.getDefault(), "%.2f", intent.getDoubleExtra("cadenceValue", 0.0)));
+                mDistance.setText(String.format(Locale.getDefault(), "%.2f", intent.getDoubleExtra("distanceValue", 0.0)));
+                mSpeed.setText(String.format(Locale.getDefault(), "%.2f", intent.getDoubleExtra("speedValue", 0.0)));
             }
         }
     };
@@ -137,6 +137,7 @@ public class PedometerActivity extends AppCompatActivity {
         return true;
     }
 
+
     private void init() {
         sessionManager = new SessionManager(this);
         sharedValues = SharedValues.getInstance(this);
@@ -161,11 +162,7 @@ public class PedometerActivity extends AppCompatActivity {
     }
 
     public void onClickPedometerActivity(View v) {
-        if (v == null) {
-            throw new NullPointerException(
-                    "You are referring null object. "
-                            + "Please check weather you had called super class method mappingWidgets() or not");
-        } else if (v.getId() == R.id.PM_HeartRateBtn) {
+        if (v.getId() == R.id.PM_HeartRateBtn) {
             Intent i = new Intent(this, HeartRateActivity.class);
             startActivity(i);
         }

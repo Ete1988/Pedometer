@@ -15,6 +15,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 
 import butterknife.Bind;
@@ -33,10 +34,13 @@ public class RegisterActivity extends AppCompatActivity {
     EditText _passwordText;
     @Bind(R.id.confirmpassword)
     EditText _confirmPasswordText;
+    @Bind(R.id.input_name) EditText name;
     @Bind(R.id.createAccount_button)
     Button _signupButton;
     @Bind(R.id.link_login)
     TextView _loginLink;
+    SharedValues sharedValues;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         setTitle("Register Account");
         ButterKnife.bind(this);
+        sharedValues = SharedValues.getInstance(this);
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     String email = _emailText.getText().toString();
                     String password = _passwordText.getText().toString();
+                    sharedValues.saveString("username2",name.getText().toString());
 
 
                     BackendlessUser user = new BackendlessUser();

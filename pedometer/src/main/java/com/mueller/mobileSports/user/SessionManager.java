@@ -110,7 +110,7 @@ public class SessionManager {
                 if (progressBarActive) {
                     progress.dismiss();
                 }
-                sharedValues.clearData();
+
                 Log.e(TAG, "UserLogout successful");
                 Intent i = new Intent(context, LoginActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -211,6 +211,11 @@ public class SessionManager {
 
         userData.setHeartRateData(heartRateData);
         userData.setPedometerData(pedometerData);
+
+
+        System.out.println(userData.getObjectId());
+        System.out.println(userData.getHeartRateData().getObjectId());
+        System.out.println(userData.getPedometerData().getObjectId());
 
     }
 
@@ -322,7 +327,7 @@ public class SessionManager {
                     userData = new UserData();
                     userData.setEmail(sharedValues.getString("email"));
                     Intent i = new Intent(context, ProfileActivity.class);
-                    i.putExtra("goToPedometer", true);
+                    i.putExtra("firstTime", true);
                     getUserPedometerDataFromServer(i);
                 }
             }

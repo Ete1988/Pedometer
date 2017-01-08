@@ -2,6 +2,7 @@ package com.mueller.mobileSports.general;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.mueller.mobileSports.pedometer.MainActivity.R;
+import com.mueller.mobileSports.pedometer.PedometerActivity;
 import com.mueller.mobileSports.user.SessionManager;
 
 import java.util.Locale;
@@ -75,7 +77,13 @@ public class SettingsActivity extends AppCompatActivity {
         physicalActivityLevel = sharedValues.getInt("physicalActivityLevel");
         mActivityLevelText.setText(String.format(Locale.getDefault(), "%d", physicalActivityLevel));
         stepGoal = sharedValues.getInt("stepGoal");
-        mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", stepGoal));
+        if(stepGoal == 0){
+            stepGoal = 5000;
+            mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", stepGoal));
+            sharedValues.saveInt("stepGoal", stepGoal);
+        } else {
+            mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", stepGoal));
+        }
 
         if (!(sharedValues.getInt("restingHeartRate") == 0)) {
             restingHeartRate = sharedValues.getInt("restingHeartRate");
@@ -95,11 +103,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void onClickSettingsActivity(View v) {
-        if (v == null) {
-            throw new NullPointerException(
-                    "You are referring null object. "
-                            + "Please check weather you had called super class method mappingWidgets() or not");
-        } else if (v.getId() == R.id.SE_GoalSelector) {
+        if (v.getId() == R.id.SE_GoalSelector) {
             setGoalDialog();
         } else if (v.getId() == R.id.SE_HeartRateMaxSelector) {
             numberPickerDialog(120, 220, mHeartRateMax, "Set Maximum Heart Rate");

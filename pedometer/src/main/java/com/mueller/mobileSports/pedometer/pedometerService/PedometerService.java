@@ -9,6 +9,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.mueller.mobileSports.general.SharedValues;
@@ -35,12 +36,15 @@ public class PedometerService extends Service implements SensorEventListener {
                 double cadence = calculateCadence(mCadenceStepCount, 5);
                 calculateEnergyExpenditure(cadence);
                 double stride = calculateStrideLength();
-                double distance = calculateDistance(stride, mStepsDay);
+                     double distance = calculateDistance(stride, mStepsDay);
                 double speed = calculateSpeed(stride, cadence);
                 Intent i = new Intent(VALUES_CHANGED);
                 i.putExtra("cadenceValue", cadence);
                 i.putExtra("speedValue", speed);
                 i.putExtra("distanceValue", distance);
+                System.out.println("cadence: " + cadence);
+                System.out.println("speed: " + speed);
+                System.out.println("distance: " + distance);
                 sendBroadcast(i);
                 mCadenceStepCount = 0;
                 timeCount = 0;
@@ -135,7 +139,7 @@ public class PedometerService extends Service implements SensorEventListener {
         if (sharedValues.getString("gender").equals("Male")) {
             strideLength = (-0.002 * age) + (0.760 * (height / 100.0)) - (0.001 * weight) + 0.327;
         } else {
-            strideLength = (-0.001 * age) + (1.058 * height) - (0.002 * weight) - 0.129;
+            strideLength = (-0.001 * age) + (1.058 * height / 100.0) - (0.002 * weight) - 0.129;
         }
 
         return strideLength;

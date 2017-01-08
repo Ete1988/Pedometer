@@ -27,6 +27,17 @@
 
         <!-- Login progress -->
 
+    <TextView
+            android:id="@+id/welcome"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Welcome!"
+            android:fontFamily="cursive"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,6 +47,7 @@
                 android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="25dp"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
@@ -48,6 +60,7 @@
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="25dp"
                 android:hint="@string/password"
                 android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
@@ -58,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="50dp"
             android:onClick="onClick"
             android:text="@string/action_sign_in"
             android:textStyle="bold" />
@@ -68,8 +81,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onClick"
-            android:paddingLeft="80dp"
-            android:paddingTop="20dp"
+            android:gravity="center"
+            android:layout_marginTop="25dp"
             android:text="@string/action_register"
             android:textStyle="bold" />
 
