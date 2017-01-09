@@ -4,4 +4,6 @@
     <color name="black_overlay">#66000000</color>
     <color name="splashBackground">#ffffff</color>
     <color name="mySpinnerColor">#e28a53</color>
+    <color name="myTitleColor">#79ece0</color>
+
 </resources>

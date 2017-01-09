@@ -45,10 +45,10 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        setContentView(R.layout.activity_register);
-        setTitle("Register Account");
+        setTitle("Create Step Up account");
         ButterKnife.bind(this);
         sharedValues = SharedValues.getInstance(this);
 

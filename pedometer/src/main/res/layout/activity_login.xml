@@ -29,12 +29,13 @@
 
     <TextView
             android:id="@+id/welcome"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Welcome!"
             android:fontFamily="cursive"
-            android:textSize="40sp"
+        android:gravity="center"
+        android:text="Welcome to Step Up!"
+        android:textColor="@color/myTitleColor"
+        android:textSize="35sp"
             android:textStyle="bold" />
 
 
@@ -47,9 +48,9 @@
                 android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="25dp"
                 android:hint="@string/email"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:textSize="20dp" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -60,9 +61,9 @@
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="25dp"
                 android:hint="@string/password"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:textSize="20dp" />
         </android.support.design.widget.TextInputLayout>
 
         <Button
@@ -80,9 +81,9 @@
             android:id="@+id/register_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onClick"
-            android:gravity="center"
             android:layout_marginTop="25dp"
+            android:gravity="center"
+            android:onClick="onClick"
             android:text="@string/action_register"
             android:textStyle="bold" />
 

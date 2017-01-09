@@ -144,6 +144,7 @@ public class PedometerActivity extends AppCompatActivity {
         TimeManager timeManager = new TimeManager(this);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        setTitle("Step Up");
         mDate = (TextView) findViewById(R.id.PF_DateView);
         mCadence = (TextView) findViewById(R.id.PF_CadenceView);
         mSpeed = (TextView) findViewById(R.id.PF_SpeedView);

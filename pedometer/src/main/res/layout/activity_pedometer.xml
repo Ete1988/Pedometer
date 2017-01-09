@@ -16,28 +16,17 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-
-    <TextView
-        android:id="@+id/PF_DateView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/my_toolbar"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/emptyString"
-        android:textSize="18sp"
-        android:textStyle="normal|bold|italic"
-        android:typeface="sans" />
-
-
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/PF_DateView"
+        android:layout_below="@+id/PF_LayoutDateView"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical">
+
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -46,7 +35,13 @@
             android:text="@string/pedoTitle"
             android:textSize="24sp"
             android:textStyle="normal|bold|italic" />
+
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
     </LinearLayout>
+
 
     <com.lylc.widget.circularprogressbar.CircularProgressBar
         android:id="@+id/circularprogressbar3"
@@ -55,24 +50,72 @@
         android:layout_height="150dip"
         android:layout_below="@+id/linearLayout"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="11dp"
         circular:cpb_subtitle="subtitle"
         circular:cpb_title="Title" />
 
 
     <LinearLayout
+        android:id="@+id/PM_bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black_overlay"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/PM_HeartRateBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="20dp"
+            android:background="@null"
+            android:clickable="true"
+            android:contentDescription="@string/emptyString"
+            android:onClick="onClickPedometerActivity"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_heart"
+            android:visibility="visible" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/PF_LayoutDateView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/my_toolbar"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/PF_DateView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/emptyString"
+            android:textSize="18sp"
+            android:textStyle="normal|bold|italic"
+            android:typeface="sans" />
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/PM_bottomBar"
-        android:layout_below="@id/circularprogressbar3"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/circularprogressbar3"
+        android:orientation="vertical"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:orientation="vertical">
+        android:paddingTop="@dimen/activity_vertical_margin">
+
         <android.support.v4.widget.Space
             android:layout_width="match_parent"
-            android:layout_height="20dp" />
+            android:layout_height="10dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -154,30 +197,32 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    <LinearLayout
-        android:id="@+id/PM_bottomBar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/black_overlay"
-        android:gravity="center"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:paddingTop="10dp"
+                android:text="Energy Expenditure:"
+                android:textSize="18sp" />
 
-        <ImageButton
-            android:id="@+id/PM_HeartRateBtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="20dp"
-            android:background="@null"
-            android:clickable="true"
-            android:contentDescription="@string/emptyString"
-            android:onClick="onClickPedometerActivity"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_heart"
-            android:visibility="visible" />
+            <TextView
+                android:id="@+id/PF_EnergyExpenditure"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Joules/min" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -67,6 +67,7 @@ public class HeartRateMonitorUtility {
         } else {
             gen = 1;
         }
+
         double part1 = -36.3781 + (0.271 * age) + (0.394 * weight) + (0.404 * vo2) + (0.634 * (double) heartRate);
         double part2 = -36.3781 + (0.274 * age) + (0.103 * weight) + (0.380 * vo2) + (0.450 * (double) heartRate);
         double ee = -59.3954 + (gen * part1) + ((1 - gen) * part2);
