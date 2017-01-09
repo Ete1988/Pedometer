@@ -9,7 +9,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.util.Log;
 
 import com.mueller.mobileSports.general.SharedValues;
@@ -36,15 +35,12 @@ public class PedometerService extends Service implements SensorEventListener {
                 double cadence = calculateCadence(mCadenceStepCount, 5);
                 calculateEnergyExpenditure(cadence);
                 double stride = calculateStrideLength();
-                     double distance = calculateDistance(stride, mStepsDay);
+                double distance = calculateDistance(stride, mStepsDay);
                 double speed = calculateSpeed(stride, cadence);
                 Intent i = new Intent(VALUES_CHANGED);
                 i.putExtra("cadenceValue", cadence);
                 i.putExtra("speedValue", speed);
                 i.putExtra("distanceValue", distance);
-                System.out.println("cadence: " + cadence);
-                System.out.println("speed: " + speed);
-                System.out.println("distance: " + distance);
                 sendBroadcast(i);
                 mCadenceStepCount = 0;
                 timeCount = 0;
@@ -153,48 +149,20 @@ public class PedometerService extends Service implements SensorEventListener {
         return ((((double) steps / 2) * strideLength) / 1000); //km
     }
 
-    //TODO
+    //TODO Increment through the day!
     private void calculateEnergyExpenditure(double cadence) {
         double energyExpenditure;
-        double energyBodyLifting;
-        double energyToLive;
-        double horizontalAccelEnergy;
-        double totalEnergy;
-        double bmr;
-        double energyWalking;
         double gravity = 9.81;
         double weight = sharedValues.getInt("weight");
 
 
         //Energy for lifting body in J
         if (cadence <= 3.0) {
-            energyBodyLifting = weight * gravity * 0.03 * cadence;
+            energyExpenditure = weight * gravity * 0.03 * cadence;
         } else {
-            energyBodyLifting = weight * gravity * 0.07 * cadence;
+            energyExpenditure = weight * gravity * 0.07 * cadence;
         }
 
-        //EnergyWalking in J
-        energyWalking = 1.64 * weight;
-
-        //BMR in kcal/day
-        if (sharedValues.getString("gender").equals("Male")) {
-            bmr = 24.0 * weight;
-        } else {
-            bmr = 24.0 * weight * 0.9;
-        }
-
-        //Living Energy in J/s
-        energyToLive = bmr * 4.184;             // kJ/day
-        energyToLive = energyToLive * 1000;     // J/day
-        energyToLive = energyToLive / 24.0;     // J/hr
-        energyToLive = energyToLive / 60;        // J/min
-        energyToLive = energyToLive / 60;        // J/s
-
-        //Total Energy
-        totalEnergy = energyWalking - energyToLive;
-
-        //Horizontal Acceleration Energy
-        horizontalAccelEnergy = totalEnergy - energyBodyLifting;
 
     }
 }

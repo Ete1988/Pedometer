@@ -21,6 +21,10 @@ import com.mueller.mobileSports.pedometer.MainActivity.R;
 
 import java.util.Locale;
 
+/**
+ * Activity mean to display data during a session.
+ * Offers methods to start stop or pause a session.
+ */
 public class TrainingSessionActivity extends AppCompatActivity {
 
     private TextView mTextTime;
@@ -49,7 +53,7 @@ public class TrainingSessionActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (HeartRateSensorService.ACTION_GATT_DISCONNECTED.equals(action)) {
-                //DO SOMETHING
+                //TODO
             } else if (HeartRateSensorService.ACTION_DATA_AVAILABLE.equals(action)) {
                 displayData(intent.getStringExtra(HeartRateSensorService.EXTRA_DATA));
             } else if (HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_STEP_DETECTED.equals(action)) {
@@ -105,6 +109,9 @@ public class TrainingSessionActivity extends AppCompatActivity {
         paused = System.currentTimeMillis();
     }
 
+    /**
+     * Initializes most fields of activity
+     */
     private void init() {
         sharedValues = SharedValues.getInstance(this);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -120,6 +127,9 @@ public class TrainingSessionActivity extends AppCompatActivity {
         mEnergyExpenditure = (TextView) findViewById(R.id.TS_EnergyExpenditureView);
     }
 
+    /**
+     * small calculations for display of session timer.
+     */
     private void timerCalculations() {
         timeInMilliseconds = SystemClock.uptimeMillis() - start_time;
         time_update = time_swapBuff + timeInMilliseconds;
@@ -167,6 +177,11 @@ public class TrainingSessionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method to map data to widgets in view
+     *
+     * @param data
+     */
     private void displayData(String data) {
         if (data != null) {
             mHeartRate.setText(data);
@@ -179,6 +194,9 @@ public class TrainingSessionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Reset all values on start of a new session
+     */
     private void resetAllValuesOnTimerStart() {
 
         start_time = 0L;

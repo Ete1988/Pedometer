@@ -135,6 +135,9 @@ public class HeartRateActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Initializes most fields of activity
+     */
     private void init() {
         sharedValues = SharedValues.getInstance(this);
 
@@ -149,14 +152,19 @@ public class HeartRateActivity extends AppCompatActivity {
         mConnectedDeviceName = (TextView) findViewById(R.id.HR_connectedDeviceName);
     }
 
+    /**
+     * Method to start HRM service
+     */
     private void startHRMService() {
 
+        //True iff real sensor was choosen in BluetoothScanActivity
         if (startRealSensorService) {
             Intent intent = new Intent(HeartRateActivity.this, HeartRateSensorService.class);
             intent.putExtra(EXTRAS_DEVICE_NAME, mDeviceName);
             intent.putExtra(EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
             startService(intent);
         }
+        //True iff simulation service was choosen in BluetoothScanActivity
         if (startSimulationSensorService) {
             Intent intent = new Intent(HeartRateActivity.this, HeartRateSensorSimulationService.class);
             startService(intent);
@@ -164,6 +172,7 @@ public class HeartRateActivity extends AppCompatActivity {
 
     }
 
+    //Thread to update the connection state to the connected service/device
     private void updateConnectionState(final int resourceId) {
         runOnUiThread(new Runnable() {
             @Override
@@ -173,6 +182,11 @@ public class HeartRateActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Method to map data to widgets in view
+     *
+     * @param data
+     */
     private void displayData(String data) {
         if (data != null) {
             mHeartRate.setText(data);
@@ -221,6 +235,12 @@ public class HeartRateActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Quick check if the given Service class is already running
+     *
+     * @param serviceClass to be checked service class
+     * @return true iff given service class is already running
+     */
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -232,7 +252,7 @@ public class HeartRateActivity extends AppCompatActivity {
     }
 
     /**
-     * Small check if training session can be started
+     * Quick check if training session can be started
      *
      * @return true iff all necessary data is available
      */

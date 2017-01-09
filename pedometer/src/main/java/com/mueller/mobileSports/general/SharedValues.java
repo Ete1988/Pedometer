@@ -83,12 +83,19 @@ public class SharedValues {
 
     }
 
+    /**
+     * Clear all data from sharedValues
+     */
     public void clearData() {
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
         prefsEditor.clear();
         prefsEditor.apply();
     }
 
+    /**
+     * Method ti remove a specific entry from the sharedValues
+     * @param key corresponding key for the to be removed value
+     */
     public void removeEntry(String key) {
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
         prefsEditor.remove(key);

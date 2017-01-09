@@ -8,6 +8,8 @@ import java.util.Objects;
 
 /**
  * Created by Ete on 18/12/2016.
+ * Utility class offering different calculations concerning the heart rate monitoring
+ *
  */
 
 public class HeartRateMonitorUtility {
@@ -53,11 +55,11 @@ public class HeartRateMonitorUtility {
                 + (1.463 * pal) + (9.17 * height) - (0.254 * weight) + 34.143;
     }
 
+    //TODO Increment through the day!
     public void calculateEnergyExpenditure(int heartRate) {
 
         double vo2 = calculateVO2Max();
         double age = sharedValues.getInt("age");
-        double height = sharedValues.getInt("height");
         double weight = sharedValues.getInt("weight");
         String gender = sharedValues.getString("gender");
         int gen;
@@ -118,4 +120,5 @@ public class HeartRateMonitorUtility {
             sharedValues.saveInt("minHeartRate", heartRate);
         }
     }
+
 }

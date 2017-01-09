@@ -55,31 +55,6 @@
 
 
     <LinearLayout
-        android:id="@+id/PM_bottomBar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/black_overlay"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/PM_HeartRateBtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="20dp"
-            android:background="@null"
-            android:clickable="true"
-            android:contentDescription="@string/emptyString"
-            android:onClick="onClickPedometerActivity"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_heart"
-            android:visibility="visible" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/PF_LayoutDateView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -115,6 +90,14 @@
         <android.support.v4.widget.Space
             android:layout_width="match_parent"
             android:layout_height="10dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dip"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/mySpinnerColor" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -223,6 +206,38 @@
                 android:text="Joules/min" />
 
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dip"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/mySpinnerColor" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/PM_bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black_overlay"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/PM_HeartRateBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="20dp"
+            android:background="@null"
+            android:clickable="true"
+            android:contentDescription="@string/emptyString"
+            android:onClick="onClickPedometerActivity"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_heart"
+            android:visibility="visible" />
+
 
     </LinearLayout>
 

@@ -151,28 +151,26 @@ public class HeartRateSensorService extends Service {
         sendBroadcast(intent);
     }
 
-    public UUID getUuidFromString(String string) {
-        return UUID.fromString(string);
-    }
-
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
-    @Override
-    public void onDestroy() {
-        disconnect();
-        close();
-        Log.w(TAG, "HRMSensor destroyed.");
-        super.onDestroy();
+    /**
+     * Start Heart Rate monitoring
+     */
+    public void startMonitoring() {
+        BluetoothGattCharacteristic characteristic = mBluetoothGatt.getService(getUuidFromString(HEART_RATE_SERVICE)).getCharacteristic(getUuidFromString(HEART_RATE_MEASUREMENT));
+        setCharacteristicNotification(characteristic, true);
     }
 
     @Override
-    public boolean onUnbind(Intent intent) {
-        close();
-        return super.onUnbind(intent);
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        initialize();
+        connect(intent.getStringExtra(HeartRateActivity.EXTRAS_DEVICE_ADDRESS));
+        return Service.START_STICKY;
     }
+
 
     /**
      * Initializes a reference to the local Bluetooth adapter.
@@ -205,9 +203,28 @@ public class HeartRateSensorService extends Service {
         return true;
     }
 
-    public void startMonitoring() {
-        BluetoothGattCharacteristic characteristic = mBluetoothGatt.getService(getUuidFromString(HEART_RATE_SERVICE)).getCharacteristic(getUuidFromString(HEART_RATE_MEASUREMENT));
-        setCharacteristicNotification(characteristic, true);
+    /**
+     * Enables or disables notification on a given characteristic.
+     *
+     * @param characteristic Characteristic to act on.
+     * @param enabled        If true, enable notification.  False otherwise.
+     *
+     */
+    public void setCharacteristicNotification(BluetoothGattCharacteristic characteristic,
+                                              boolean enabled) {
+        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.w(TAG, "BluetoothAdapter not initialized");
+            return;
+        }
+        mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
+
+        // This is specific to Heart Rate Measurement.
+        if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
+            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
+                    UUID.fromString(CLIENT_CHARACTERISTIC_CONFIG));
+            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            mBluetoothGatt.writeDescriptor(descriptor);
+        }
     }
 
     /**
@@ -220,7 +237,6 @@ public class HeartRateSensorService extends Service {
      * callback.
      */
     public boolean connect(final String address) {
-        System.out.println("Here " + address);
         if (mBluetoothAdapter == null || address == null) {
             Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.");
             return false;
@@ -242,6 +258,7 @@ public class HeartRateSensorService extends Service {
             Log.w(TAG, "Device not found.  Unable to connect.");
             return false;
         }
+
         // We want to directly connect to the device, so we are setting the autoConnect
         // parameter to false.
         mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
@@ -278,33 +295,15 @@ public class HeartRateSensorService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        initialize();
-        connect(intent.getStringExtra(HeartRateActivity.EXTRAS_DEVICE_ADDRESS));
-        return Service.START_STICKY;
+    public void onDestroy() {
+        disconnect();
+        close();
+        Log.w(TAG, "HRMSensor destroyed.");
+        super.onDestroy();
     }
 
-    /**
-     * Enables or disables notification on a give characteristic.
-     *
-     * @param characteristic Characteristic to act on.
-     * @param enabled        If true, enable notification.  False otherwise.
-     */
-    public void setCharacteristicNotification(BluetoothGattCharacteristic characteristic,
-                                              boolean enabled) {
-        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "BluetoothAdapter not initialized");
-            return;
-        }
-        mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
-
-        // This is specific to Heart Rate Measurement.
-        if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
-            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
-                    UUID.fromString(CLIENT_CHARACTERISTIC_CONFIG));
-            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-            mBluetoothGatt.writeDescriptor(descriptor);
-        }
+    public UUID getUuidFromString(String string) {
+        return UUID.fromString(string);
     }
 
 }

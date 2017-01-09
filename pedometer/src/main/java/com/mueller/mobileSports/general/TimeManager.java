@@ -34,11 +34,6 @@ public class TimeManager {
         }
     }
 
-    /**
-     * Method to check if a new day started.
-     *
-     * @throws ParseException
-     */
     private void checkIfNewDay() throws ParseException {
         SimpleDateFormat currDate = new SimpleDateFormat("EE dd MMM yyyy", Locale.getDefault());
 
@@ -56,9 +51,6 @@ public class TimeManager {
         }
     }
 
-    /**
-     * Method to check if a new week started;
-     */
     private void checkIfNewWeek() {
 
         Calendar c = Calendar.getInstance();

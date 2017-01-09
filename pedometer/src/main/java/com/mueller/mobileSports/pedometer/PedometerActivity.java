@@ -60,6 +60,7 @@ public class PedometerActivity extends AppCompatActivity {
         }
     };
 
+
     private static IntentFilter updateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(PedometerService.STEP_MESSAGE);
@@ -137,7 +138,9 @@ public class PedometerActivity extends AppCompatActivity {
         return true;
     }
 
-
+    /**
+     * Initializes most fields of activity
+     */
     private void init() {
         sessionManager = new SessionManager(this);
         sharedValues = SharedValues.getInstance(this);
@@ -155,6 +158,9 @@ public class PedometerActivity extends AppCompatActivity {
         timeManager.checkTime();
     }
 
+    /**
+     * Maps userdata to widgets in view
+     */
     private void mapDataToView() {
         mDate.setText(sharedValues.getString("sessionDay"));
         cBar.setTitle(Integer.toString(sharedValues.getInt("stepsOverDay")));
@@ -169,6 +175,12 @@ public class PedometerActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Quick check if the given Service class is already running
+     *
+     * @param serviceClass to be checked service class
+     * @return true iff given service class is already running
+     */
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {

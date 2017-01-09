@@ -6,6 +6,8 @@ import java.util.Locale;
 
 /**
  * Created by Ete on 22/12/2016.
+ * Data object for HeartRateData
+ *
  */
 
 public class HeartRateData {

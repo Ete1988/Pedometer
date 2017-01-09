@@ -2,7 +2,6 @@ package com.mueller.mobileSports.general;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +14,6 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.mueller.mobileSports.pedometer.MainActivity.R;
-import com.mueller.mobileSports.pedometer.PedometerActivity;
 import com.mueller.mobileSports.user.SessionManager;
 
 import java.util.Locale;
@@ -64,6 +62,9 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initializes most fields of activity
+     */
     private void init() {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -116,6 +117,9 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method to set the activity level
+     */
     public void setActivityLevelDialog() {
         AlertDialog.Builder activityLevelDialog = new AlertDialog.Builder(this);
         activityLevelDialog.setTitle("Select your activity mActivityLevelText");
@@ -131,6 +135,9 @@ public class SettingsActivity extends AppCompatActivity {
         alert.show();
     }
 
+    /**
+     * Method to set the stepGoal
+     */
     public void setGoalDialog() {
         AlertDialog.Builder activityLevelDialog = new AlertDialog.Builder(this);
         activityLevelDialog.setTitle("Set your stepGoal for today");
@@ -146,6 +153,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
+    //Maps the selected item from SetGoalDialog to the widget and sharedValue
     private void mapSelectedItemToGoal(int item) {
         switch (item) {
             case 0:
@@ -179,6 +187,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    //Edit dialog for stepGoal
     private void editGoal() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Please enter daily Goal");
@@ -204,6 +213,9 @@ public class SettingsActivity extends AppCompatActivity {
         alert.show();
     }
 
+    /**
+     * Safe and persist userdata on server
+     */
     public void updateData() {
         sharedValues.saveInt("stepGoal", stepGoal);
         sharedValues.saveInt("physicalActivityLevel", physicalActivityLevel);
@@ -218,6 +230,14 @@ public class SettingsActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    /**
+     * Method to generate numberPicker dialog
+     *
+     * @param min min number to pick
+     * @param max max number to pick
+     * @param textView textview to display picked number
+     * @param title title of to be created numberpicker
+     */
     private void numberPickerDialog(int min, int max, final TextView textView, final String title) {
         NumberPicker myNumberPicker = new NumberPicker(this);
         myNumberPicker.setMinValue(min);
@@ -226,7 +246,6 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 textView.setText(String.format(Locale.getDefault(), "%d", newVal));
-                System.out.println(textView.getText().toString());
             }
         };
 

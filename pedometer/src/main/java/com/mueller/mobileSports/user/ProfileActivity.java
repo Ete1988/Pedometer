@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.mueller.mobileSports.general.SettingsActivity;
 import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
@@ -86,6 +85,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Initializes most fields of activity
+     */
     private void init() {
 
         sessionManager = new SessionManager(this);
@@ -108,6 +110,9 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Maps userdata to widgets in view
+     */
     private void mapUserDataToView() {
 
         if(Objects.equals(sharedValues.getString("username"), " ")){
@@ -129,6 +134,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Safe and persist userdata on server
+     *
+     * @param showProgressBar set true iff progressbar shall be visible.
+     *                        makes user interaction with the app impossible during updateprocess.
+     */
     private void updateData(boolean showProgressBar) {
         if (validateInput()) {
             sharedValues.saveString("gender", gender);
@@ -200,6 +211,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void onClickProfileActivity(View v) {
         if (v.getId() == R.id.PF_saveChangesBtn) {
+            //firstTime is true iff the user just created the account and has to set up his profile
             if (firstTime) {
                 if (validateInput()) {
                     updateData(false);

@@ -77,40 +77,10 @@ public class HeartRateSensorSimulationService extends Service {
         sharedValues = SharedValues.getInstance(this);
     }
 
-    private void tryToReadSimulationData() {
-        try {
-            readSimulationFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void readSimulationFile() throws IOException {
-        int i = 0;
-        AssetManager assetManager = getAssets();
-
-        InputStream csvStream = assetManager.open("simulationData.csv");
-        InputStreamReader csvStreamReader = new InputStreamReader(csvStream);
-        CSVReader csvReader = new CSVReader(csvStreamReader, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, 1);
-        String[] line;
-        csvReader.readNext();
-        while ((line = csvReader.readNext()) != null) {
-            arraySimulationData[i] = Integer.parseInt(line[1]);
-            i++;
-        }
-    }
-
     @Override
-    public void onDestroy() {
-        broadcastUpdate(ACTION_HRM_SIMULATION_DISCONNECTED);
-        mHandler.removeCallbacks(mHeartRateSimulation);
-        Log.e(TAG, "HeartRateSensorSimulation destroyed.");
-        super.onDestroy();
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        initialize();
+        return Service.START_STICKY;
     }
 
     public boolean initialize() {
@@ -135,15 +105,48 @@ public class HeartRateSensorSimulationService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        initialize();
-        return Service.START_STICKY;
+    public void onDestroy() {
+        broadcastUpdate(ACTION_HRM_SIMULATION_DISCONNECTED);
+        mHandler.removeCallbacks(mHeartRateSimulation);
+        Log.e(TAG, "HeartRateSensorSimulation destroyed.");
+        super.onDestroy();
     }
 
     @Override
-    public boolean onUnbind(Intent intent) {
-        broadcastUpdate(ACTION_HRM_SIMULATION_DISCONNECTED);
-        return super.onUnbind(intent);
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    /**
+     * Try to read the simulation data.
+     * Implemented for better readability of code.
+     */
+    private void tryToReadSimulationData() {
+        try {
+            readSimulationFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Reads the simulationdata.csv
+     *
+     * @throws IOException iff simulationData.csv is not available
+     */
+    private void readSimulationFile() throws IOException {
+        int i = 0;
+        AssetManager assetManager = getAssets();
+
+        InputStream csvStream = assetManager.open("simulationData.csv");
+        InputStreamReader csvStreamReader = new InputStreamReader(csvStream);
+        CSVReader csvReader = new CSVReader(csvStreamReader, CSVParser.DEFAULT_SEPARATOR, CSVParser.DEFAULT_QUOTE_CHARACTER, 1);
+        String[] line;
+        csvReader.readNext();
+        while ((line = csvReader.readNext()) != null) {
+            arraySimulationData[i] = Integer.parseInt(line[1]);
+            i++;
+        }
     }
 
 }

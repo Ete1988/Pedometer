@@ -163,7 +163,7 @@ public class SessionManager {
                 if (showProgressBar) {
                     progress.dismiss();
                 }
-                System.out.println(backendlessFault.toString());
+                System.err.println(backendlessFault.toString());
             }
         });
     }
@@ -211,12 +211,6 @@ public class SessionManager {
 
         userData.setHeartRateData(heartRateData);
         userData.setPedometerData(pedometerData);
-
-
-        System.out.println(userData.getObjectId());
-        System.out.println(userData.getHeartRateData().getObjectId());
-        System.out.println(userData.getPedometerData().getObjectId());
-
     }
 
     // return to login activity
@@ -452,7 +446,7 @@ public class SessionManager {
         Backendless.Persistence.of(UserData.class).save(userData, new AsyncCallback<UserData>() {
             @Override
             public void handleResponse(UserData updatedData) {
-                System.out.println("Tables Created");
+                Log.e(TAG, "Tables Created");
             }
 
             @Override

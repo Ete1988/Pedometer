@@ -12,7 +12,6 @@ import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
 import com.mueller.mobileSports.user.SessionManager;
 
-
 /**
  * Created by Sandra on 8/10/2016.
  * A login screen that offers login via email/password.
@@ -69,6 +68,5 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getBaseContext(), "Please enter username and password", Toast.LENGTH_LONG).show();
         }
     }
-
 
 }
