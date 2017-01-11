@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.pedometer.pedometerService;
+package com.mueller.mobileSports.pedometer;
 
 
 import android.app.Service;
@@ -150,7 +150,7 @@ public class PedometerService extends Service implements SensorEventListener {
     }
 
     //TODO Increment through the day!
-    private void calculateEnergyExpenditure(double cadence) {
+    private double calculateEnergyExpenditure(double cadence) {
         double energyExpenditure;
         double gravity = 9.81;
         double weight = sharedValues.getInt("weight");
@@ -163,6 +163,6 @@ public class PedometerService extends Service implements SensorEventListener {
             energyExpenditure = weight * gravity * 0.07 * cadence;
         }
 
-
+        return energyExpenditure;
     }
 }

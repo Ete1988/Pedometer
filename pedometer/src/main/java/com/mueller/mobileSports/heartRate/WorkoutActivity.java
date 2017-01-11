@@ -14,9 +14,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.mueller.mobileSports.general.SharedValues;
-import com.mueller.mobileSports.heartRate.hR_Utility.HeartRateMonitorUtility;
-import com.mueller.mobileSports.heartRate.heartRateServices.HeartRateSensorService;
-import com.mueller.mobileSports.heartRate.heartRateServices.HeartRateSensorSimulationService;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 
 import java.util.Locale;
@@ -25,7 +22,7 @@ import java.util.Locale;
  * Activity mean to display data during a session.
  * Offers methods to start stop or pause a session.
  */
-public class TrainingSessionActivity extends AppCompatActivity {
+public class WorkoutActivity extends AppCompatActivity {
 
     private TextView mTextTime;
     private int time_seconds, time_minutes, time_milliseconds;
@@ -77,7 +74,7 @@ public class TrainingSessionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_training_session);
+        setContentView(R.layout.activity_workout);
         init();
         if (timerRunning) {
             registerReceiver(mUpdateReceiver, updateIntentFilter());

@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.heartRate.heartRateServices;
+package com.mueller.mobileSports.heartRate;
 
 import android.app.Service;
 import android.content.Intent;
@@ -8,7 +8,6 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.mueller.mobileSports.general.SharedValues;
-import com.mueller.mobileSports.heartRate.hR_Utility.HeartRateMonitorUtility;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
 

@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.heartRate.hR_Utility;
+package com.mueller.mobileSports.heartRate;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,9 +27,6 @@ public class HeartRateData {
         return objectId;
     }
 
-    private void setObjectId(String objectId) {
-        this.objectId = objectId;
-    }
 
     public String getSessionDay() {
         return sessionDay;

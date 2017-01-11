@@ -1,7 +1,7 @@
 package com.mueller.mobileSports.user;
 
-import com.mueller.mobileSports.heartRate.hR_Utility.HeartRateData;
-import com.mueller.mobileSports.pedometer.pedometerUtility.PedometerData;
+import com.mueller.mobileSports.heartRate.HeartRateData;
+import com.mueller.mobileSports.pedometer.PedometerData;
 
 /**
  * Created by Sandra on 24.11.2016.
@@ -31,23 +31,6 @@ class UserData {
         pedometerData = new PedometerData();
         heartRateData = new HeartRateData();
         this.gender = "Male";
-    }
-
-
-    UserData(UserData data) {
-        username = data.getUsername();
-        email = data.getEmail();
-        age = data.getAge();
-        gender = data.getGender();
-        weight = data.getWeight();
-        height = data.getHeight();
-        restingHeartRate = data.getRestingHeartRate();
-        heartRateMax = data.getHeartRateMax();
-        activityLevel = data.getActivityLevel();
-        stepGoal = data.getStepGoal();
-        heartRateData = data.getHeartRateData();
-        pedometerData = data.getPedometerData();
-        objectId = data.getObjectId();
     }
 
     PedometerData getPedometerData() {

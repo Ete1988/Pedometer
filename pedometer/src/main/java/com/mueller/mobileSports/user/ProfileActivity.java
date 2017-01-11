@@ -1,11 +1,8 @@
 package com.mueller.mobileSports.user;
 
-import android.app.Activity;
+
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -18,7 +15,6 @@ import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
 
-import java.io.IOException;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -29,7 +25,6 @@ import java.util.Objects;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private static final int GET_FROM_GALLERY = 3;
     boolean firstTime;
     private EditText mInputUserName, mInputAge, mInputWeight, mInputHeight, mInputEmail;
     private SharedValues sharedValues;
@@ -150,23 +145,6 @@ public class ProfileActivity extends AppCompatActivity {
 
             sessionManager.uploadUserData(this, showProgressBar, false);
 
-        }
-    }
-
-    //TODO remove?
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        //Detects request codes
-        if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
-            Uri selectedImage = data.getData();
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 

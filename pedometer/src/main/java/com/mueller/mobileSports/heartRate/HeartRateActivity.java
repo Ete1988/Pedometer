@@ -18,8 +18,6 @@ import android.widget.Toast;
 import com.mueller.mobileSports.general.BluetoothScanActivity;
 import com.mueller.mobileSports.general.SettingsActivity;
 import com.mueller.mobileSports.general.SharedValues;
-import com.mueller.mobileSports.heartRate.heartRateServices.HeartRateSensorService;
-import com.mueller.mobileSports.heartRate.heartRateServices.HeartRateSensorSimulationService;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
 import com.mueller.mobileSports.user.ProfileActivity;
@@ -206,7 +204,7 @@ public class HeartRateActivity extends AppCompatActivity {
             startActivity(i);
         } else if (v.getId() == R.id.HR_startSessionBtn) {
             if (checkIfSessionCanBeStarted()) {
-                i = new Intent(this, TrainingSessionActivity.class);
+                i = new Intent(this, WorkoutActivity.class);
                 startActivity(i);
             } else {
                 Toast.makeText(this, "No Heart Rate Sensor connected!", Toast.LENGTH_LONG).show();

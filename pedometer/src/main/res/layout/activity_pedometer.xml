@@ -108,7 +108,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:text="Cadence:"
+                android:text="@string/cadence"
                 android:textSize="18sp" />
 
             <TextView
@@ -121,7 +121,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Steps/s" />
+                android:text="@string/steps_s" />
 
         </LinearLayout>
 
@@ -135,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:paddingTop="10dp"
-                android:text="Speed:"
+                android:text="@string/speed"
                 android:textSize="18sp" />
 
             <TextView
@@ -148,7 +148,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="km/h" />
+                android:text="@string/km_h" />
 
         </LinearLayout>
 
@@ -163,7 +163,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:paddingTop="10dp"
-                android:text="Distance:"
+                android:text="@string/distance"
                 android:textSize="18sp" />
 
             <TextView
@@ -176,7 +176,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="km" />
+                android:text="@string/km" />
 
         </LinearLayout>
 
@@ -190,7 +190,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:paddingTop="10dp"
-                android:text="Energy Expenditure:"
+                android:text="@string/energy_expenditure"
                 android:textSize="18sp" />
 
             <TextView
@@ -203,7 +203,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Joules/min" />
+                android:text="@string/joules_min" />
 
         </LinearLayout>
 

@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.pedometer.pedometerUtility;
+package com.mueller.mobileSports.pedometer;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,6 +15,10 @@ public class PedometerData {
     private int dailyStepCount;
     private int weeklyStepCount;
     private int monthlyStepCount;
+    private int distance;
+    private int energyExpenditureSteps;
+
+
 
     private String sessionDay;
 

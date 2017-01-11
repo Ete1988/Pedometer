@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.heartRate.hR_Utility;
+package com.mueller.mobileSports.heartRate;
 
 import android.content.Context;
 

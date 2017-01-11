@@ -16,9 +16,9 @@ import com.backendless.persistence.local.UserTokenStorageFactory;
 import com.mueller.mobileSports.account.LoginActivity;
 import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.general.TimeManager;
-import com.mueller.mobileSports.heartRate.hR_Utility.HeartRateData;
+import com.mueller.mobileSports.heartRate.HeartRateData;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
-import com.mueller.mobileSports.pedometer.pedometerUtility.PedometerData;
+import com.mueller.mobileSports.pedometer.PedometerData;
 
 import java.util.Objects;
 
@@ -312,7 +312,7 @@ public class SessionManager {
             @Override
             public void handleResponse(BackendlessCollection<UserData> data) {
                 if (!(data.getTotalObjects() == 0)) {
-                    userData = new UserData(data.getData().get(0));
+                    userData = data.getData().get(0);
                     getUserPedometerDataFromServer(intent);
                     userData.setEmail(sharedValues.getString("email"));
                     Log.e(TAG, "Loaded UserData: " + userData.getObjectId());

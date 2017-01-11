@@ -23,10 +23,9 @@ import com.mueller.mobileSports.general.SettingsActivity;
 import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.general.TimeManager;
 import com.mueller.mobileSports.heartRate.HeartRateActivity;
-import com.mueller.mobileSports.heartRate.heartRateServices.HeartRateSensorService;
-import com.mueller.mobileSports.heartRate.heartRateServices.HeartRateSensorSimulationService;
+import com.mueller.mobileSports.heartRate.HeartRateSensorService;
+import com.mueller.mobileSports.heartRate.HeartRateSensorSimulationService;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
-import com.mueller.mobileSports.pedometer.pedometerService.PedometerService;
 import com.mueller.mobileSports.user.ProfileActivity;
 import com.mueller.mobileSports.user.SessionManager;
 

@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.heartRate.heartRateServices;
+package com.mueller.mobileSports.heartRate;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -15,8 +15,6 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.mueller.mobileSports.general.SharedValues;
-import com.mueller.mobileSports.heartRate.HeartRateActivity;
-import com.mueller.mobileSports.heartRate.hR_Utility.HeartRateMonitorUtility;
 
 import java.util.UUID;
 
@@ -25,7 +23,7 @@ import java.util.UUID;
  * Created by Ete on 28/12/2016.
  *
  * ServiceClass to handle communication with a BLE Heart Rate device
- *
+ * Based on Android API Example for BLE;
  *
  */
 

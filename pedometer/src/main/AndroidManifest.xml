@@ -60,19 +60,19 @@
         <activity android:name="com.mueller.mobileSports.general.BluetoothScanActivity" />
 
         <service
-            android:name="com.mueller.mobileSports.pedometer.pedometerService.PedometerService"
+            android:name="com.mueller.mobileSports.pedometer.PedometerService"
             android:enabled="true">
 
             <!-- exported determines whether or not the service can be executed by other applications. -->
         </service>
         <service
-            android:name="com.mueller.mobileSports.heartRate.heartRateServices.HeartRateSensorSimulationService"
+            android:name="com.mueller.mobileSports.heartRate.HeartRateSensorSimulationService"
             android:enabled="true" />
         <service
-            android:name="com.mueller.mobileSports.heartRate.heartRateServices.HeartRateSensorService"
+            android:name="com.mueller.mobileSports.heartRate.HeartRateSensorService"
             android:enabled="true" />
 
-        <activity android:name="com.mueller.mobileSports.heartRate.TrainingSessionActivity"></activity>
+        <activity android:name="com.mueller.mobileSports.heartRate.WorkoutActivity"></activity>
     </application>
 
 </manifest>
