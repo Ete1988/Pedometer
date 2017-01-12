@@ -21,7 +21,8 @@ import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
 import com.mueller.mobileSports.user.ProfileActivity;
-import com.mueller.mobileSports.user.SessionManager;
+import com.mueller.mobileSports.user.UserData;
+import com.mueller.mobileSports.user.UserSessionManager;
 
 import java.util.Locale;
 
@@ -64,7 +65,7 @@ public class HeartRateActivity extends AppCompatActivity {
             }
         }
     };
-    private SessionManager sessionManager;
+    private UserSessionManager userSessionManager;
 
     private static IntentFilter updateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
@@ -94,7 +95,7 @@ public class HeartRateActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        sessionManager.checkUserState();
+        userSessionManager.checkUserState();
         registerReceiver(mGattUpdateReceiver, updateIntentFilter());
         final Intent receiveIntent = getIntent();
         if (!isMyServiceRunning(HeartRateSensorService.class) && !isMyServiceRunning(HeartRateSensorSimulationService.class)) {
@@ -123,7 +124,7 @@ public class HeartRateActivity extends AppCompatActivity {
                 startActivity(i);
                 break;
             case R.id.menu_logout:
-                sessionManager.uploadUserData(this, true, true);
+                userSessionManager.uploadUserData(this, true, true);
                 break;
             case R.id.menu_profile:
                 Intent i2 = new Intent(this, ProfileActivity.class);
@@ -139,7 +140,7 @@ public class HeartRateActivity extends AppCompatActivity {
     private void init() {
         sharedValues = SharedValues.getInstance(this);
 
-        sessionManager = new SessionManager(this);
+        userSessionManager = new UserSessionManager(this);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         mHeartRate = (TextView) findViewById(R.id.HR_heartRateView);
@@ -255,25 +256,26 @@ public class HeartRateActivity extends AppCompatActivity {
      * @return true iff all necessary data is available
      */
     private boolean checkIfSessionCanBeStarted() {
-
-        if (sharedValues.getInt("age") == 0) {
-            if (sharedValues.getInt("heartRateMax") == 0) {
-                Toast.makeText(this, "Please set either your age(Profile) or HRmax(Settings)!", Toast.LENGTH_LONG).show();
+        UserData userData = UserSessionManager.getUserData();
+        if (userData.getAge() == 0) {
+            if (userData.getHeartRateMax() == 0) {
+                Toast.makeText(this, "Please set either your age(Profile) or HRMax(Settings)!", Toast.LENGTH_LONG).show();
                 return false;
             }
 
-        } else if (sharedValues.getInt("heartRateMax") == 0) {
+        } else if (userData.getHeartRateMax() == 0) {
             int heartRateMax;
             heartRateMax = (int) (208 - (0.7 * (sharedValues.getInt("age"))));
-            sharedValues.saveInt("heartRateMax", heartRateMax);
+            userData.setHeartRateMax(heartRateMax);
+            UserSessionManager.setUserData(userData);
         }
 
-        if (sharedValues.getInt("weight") == 0) {
+        if (userData.getWeight() == 0) {
             Toast.makeText(this, "Please set your weight(Profile)!", Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if (sharedValues.getInt("height") == 0) {
+        if (userData.getHeight() == 0) {
             Toast.makeText(this, "Please set your height(Profile)!", Toast.LENGTH_LONG).show();
             return false;
         }

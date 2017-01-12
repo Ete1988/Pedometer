@@ -42,9 +42,12 @@ public class HeartRateSensorSimulationService extends Service {
         @Override
         public void run() {
             broadcastUpdate(ACTION_HRM_SIMULATION_CONNECTED);
+
+            //Let the simulation run forever
             if (updateCounter == arraySimulationData.length) {
                 updateCounter = 0;
             }
+
             arrayAverageHeartRate[averageHeartRateCalculationCounter++] = arraySimulationData[updateCounter];
 
             if (averageHeartRateCalculationCounter == 3) {
@@ -56,6 +59,7 @@ public class HeartRateSensorSimulationService extends Service {
             sharedValues.saveInt("currentHeartRate", arraySimulationData[updateCounter]);
             broadcastUpdate(ACTION_HRM_SIMULATION_STEP_DETECTED, arraySimulationData[updateCounter++]);
             mHandler.postDelayed(this, TIME_DELAY);
+
         }
     };
 
@@ -82,7 +86,7 @@ public class HeartRateSensorSimulationService extends Service {
         return Service.START_STICKY;
     }
 
-    public boolean initialize() {
+    public void initialize() {
         if (arraySimulationData == null) {
             arraySimulationData = new int[SIZE_OF_SIMULATION_DATA];
             tryToReadSimulationData();
@@ -100,7 +104,6 @@ public class HeartRateSensorSimulationService extends Service {
         broadcastUpdate(ACTION_HRM_SIMULATION_CONNECTED);
         mHandler.postDelayed(mHeartRateSimulation, 0);
         Log.e(TAG, "HeartRateSensorSimulation started.");
-        return true;
     }
 
     @Override

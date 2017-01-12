@@ -14,7 +14,8 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.mueller.mobileSports.pedometer.MainActivity.R;
-import com.mueller.mobileSports.user.SessionManager;
+import com.mueller.mobileSports.user.UserData;
+import com.mueller.mobileSports.user.UserSessionManager;
 
 import java.util.Locale;
 
@@ -42,10 +43,9 @@ public class SettingsActivity extends AppCompatActivity {
             "7: run over 10 miles (16 km) per week or spend over 3 hours per week " +
                     "in comparable physical activity"
     };
-    private int physicalActivityLevel, stepGoal, restingHeartRate, heartRateMax;
+    private int activityLevel, stepGoal, restingHeartRate, heartRateMax;
     private TextView mActivityLevelText, mCurrentStepGoalText, mRestingHeartRate, mHeartRateMax;
-    private SessionManager sessionManager;
-    private SharedValues sharedValues;
+    private UserSessionManager userSessionManager;
     private Button mSaveBtn;
 
     @Override
@@ -66,39 +66,45 @@ public class SettingsActivity extends AppCompatActivity {
      * Initializes most fields of activity
      */
     private void init() {
+        UserData userData = UserSessionManager.getUserData();
+        userSessionManager = new UserSessionManager(this);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         mSaveBtn = (Button) findViewById(R.id.SE_SaveChangesBtn);
-        sharedValues = SharedValues.getInstance(this);
-        sessionManager = new SessionManager(this);
         mActivityLevelText = (TextView) findViewById(R.id.SE_TextActivityLevelView);
         mCurrentStepGoalText = (TextView) findViewById(R.id.SE_TextStepGoalView);
         mRestingHeartRate = (TextView) findViewById(R.id.SE_TextRestingHeartRateView);
         mHeartRateMax = (TextView) findViewById(R.id.SE_TextHeartRateMaxView);
-        physicalActivityLevel = sharedValues.getInt("physicalActivityLevel");
-        mActivityLevelText.setText(String.format(Locale.getDefault(), "%d", physicalActivityLevel));
-        stepGoal = sharedValues.getInt("stepGoal");
+        activityLevel = userData.getActivityLevel();
+        stepGoal = userData.getStepGoal();
+
+        mActivityLevelText.setText(String.format(Locale.getDefault(), "%d", activityLevel));
+
         if(stepGoal == 0){
             stepGoal = 5000;
             mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", stepGoal));
-            sharedValues.saveInt("stepGoal", stepGoal);
+            userData.setStepGoal(stepGoal);
         } else {
             mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", stepGoal));
         }
 
-        if (!(sharedValues.getInt("restingHeartRate") == 0)) {
-            restingHeartRate = sharedValues.getInt("restingHeartRate");
+        if (!(userData.getRestingHeartRate() == 0)) {
+            restingHeartRate = userData.getRestingHeartRate();
         } else {
             restingHeartRate = 60;
         }
 
-        if (!(sharedValues.getInt("heartRateMax") == 0)) {
-            heartRateMax = sharedValues.getInt("heartRateMax");
-        } else if (!(sharedValues.getInt("age") == 0)) {
-            heartRateMax = (int) (208 - (0.7 * (sharedValues.getInt("age"))));
+        //If HRMax is set, get it
+        if (!(userData.getHeartRateMax() == 0)) {
+            heartRateMax = userData.getHeartRateMax();
+            //If HRMax is not set, check if Age is set and calculate HRMax based on it
+        } else if (!(userData.getAge() == 0)) {
+            heartRateMax = (int) (208 - (0.7 * (userData.getAge())));
         } else {
             heartRateMax = 0;
         }
+
+
         mRestingHeartRate.setText(String.format(Locale.getDefault(), "%d", restingHeartRate));
         mHeartRateMax.setText(String.format(Locale.getDefault(), "%d", heartRateMax));
     }
@@ -126,8 +132,8 @@ public class SettingsActivity extends AppCompatActivity {
         activityLevelDialog.setSingleChoiceItems(activityLevelTextArray, -1, new DialogInterface
                 .OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
-                physicalActivityLevel = item;
-                mActivityLevelText.setText(String.format(Locale.getDefault(), "%d", physicalActivityLevel));
+                activityLevel = item;
+                mActivityLevelText.setText(String.format(Locale.getDefault(), "%d", activityLevel));
                 dialog.dismiss();
             }
         });
@@ -206,7 +212,7 @@ public class SettingsActivity extends AppCompatActivity {
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int negativeButton) {
                 //Put actions for CANCEL button here, or leave in blank
-                mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("stepGoal")));
+                mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", stepGoal));
                 dialog.dismiss();
             }
         });
@@ -217,16 +223,19 @@ public class SettingsActivity extends AppCompatActivity {
      * Safe and persist userdata on server
      */
     public void updateData() {
-        sharedValues.saveInt("stepGoal", stepGoal);
-        sharedValues.saveInt("physicalActivityLevel", physicalActivityLevel);
-        sharedValues.saveInt("restingHeartRate", restingHeartRate);
-        sharedValues.saveInt("heartRateMax", heartRateMax);
-        sessionManager.uploadUserData(this, true, false);
+        UserData userData = UserSessionManager.getUserData();
+
+        userData.setStepGoal(stepGoal);
+        userData.setActivityLevel(activityLevel);
+        userData.setHeartRateMax(heartRateMax);
+        userData.setRestingHeartRate(restingHeartRate);
+        UserSessionManager.setUserData(userData);
+        userSessionManager.uploadUserData(this, true, false);
     }
 
     @Override
     protected void onResume() {
-        sessionManager.checkUserState();
+        userSessionManager.checkUserState();
         super.onResume();
     }
 
@@ -258,10 +267,8 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if (textView.getId() == mRestingHeartRate.getId()) {
                     restingHeartRate = Integer.parseInt(mRestingHeartRate.getText().toString());
-                    sharedValues.saveInt("restingHeartRate", restingHeartRate);
                 } else if (textView.getId() == mHeartRateMax.getId()) {
                     heartRateMax = Integer.parseInt(mHeartRateMax.getText().toString());
-                    sharedValues.saveInt("heartRateMax", heartRateMax);
                 }
             }
         });

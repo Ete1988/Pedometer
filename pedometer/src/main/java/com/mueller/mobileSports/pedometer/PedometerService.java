@@ -12,6 +12,12 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.mueller.mobileSports.general.SharedValues;
+import com.mueller.mobileSports.user.UserSessionManager;
+
+import org.jetbrains.annotations.Contract;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 
 public class PedometerService extends Service implements SensorEventListener {
@@ -21,8 +27,11 @@ public class PedometerService extends Service implements SensorEventListener {
 
     private final static String TAG = PedometerService.class.getSimpleName();
     private SensorManager sensorManager;
-    private int mStepsDay, mStepsWeek, timeCount, mCadenceStepCount;
-
+    private int stepsOverDay;
+    private int stepsOverWeek;
+    private int timeCount;
+    private int mCadenceStepCount;
+    private double stride;
     private SharedValues sharedValues;
     private Sensor mSensor;
     private Handler mHandler;
@@ -33,14 +42,26 @@ public class PedometerService extends Service implements SensorEventListener {
 
             if (timeCount == 5) {
                 double cadence = calculateCadence(mCadenceStepCount, 5);
-                calculateEnergyExpenditure(cadence);
-                double stride = calculateStrideLength();
-                double distance = calculateDistance(stride, mStepsDay);
+                double distance = calculateDistance(stride, stepsOverDay);
                 double speed = calculateSpeed(stride, cadence);
+                float energy = calculateEnergyExpenditure(cadence);
+                DecimalFormat df = new DecimalFormat("#.##");
+                df.setRoundingMode(RoundingMode.CEILING);
+
+                cadence = Double.parseDouble(df.format(cadence));
+                distance = Double.parseDouble(df.format(distance));
+                speed = Double.parseDouble(df.format(speed));
+                energy = Float.parseFloat(df.format(energy));
+
                 Intent i = new Intent(VALUES_CHANGED);
                 i.putExtra("cadenceValue", cadence);
                 i.putExtra("speedValue", speed);
                 i.putExtra("distanceValue", distance);
+                i.putExtra("energyExpenditure", energy);
+
+                sharedValues.saveFloat("distance", (float) distance);
+                sharedValues.saveFloat("energyExpenditureSteps", energy);
+
                 sendBroadcast(i);
                 mCadenceStepCount = 0;
                 timeCount = 0;
@@ -54,8 +75,7 @@ public class PedometerService extends Service implements SensorEventListener {
     public void onCreate() {
         sharedValues = SharedValues.getInstance(this);
         mHandler = new Handler();
-        mStepsDay = sharedValues.getInt("stepsOverDay");
-        mStepsWeek = sharedValues.getInt("stepsOverWeek");
+
     }
 
     @Override
@@ -64,23 +84,14 @@ public class PedometerService extends Service implements SensorEventListener {
     }
 
     @Override
-    public boolean onUnbind(Intent intent) {
-        return super.onUnbind(intent);
-    }
-
-    @Override
     public void onSensorChanged(SensorEvent event) {
-        sharedValues.saveInt("stepsOverWeek", mStepsWeek++);
-        sharedValues.saveInt("stepsOverDay", mStepsDay++);
+        sharedValues.saveInt("stepsOverDay", stepsOverDay++);
+        sharedValues.saveInt("stepsOverWeek", stepsOverWeek++);
         mCadenceStepCount++;
-
-        broadcastUpdate(STEP_MESSAGE);
-
-    }
-
-    private void broadcastUpdate(final String action) {
-        final Intent intent = new Intent(action);
+        Intent intent = new Intent(STEP_MESSAGE);
+        intent.putExtra("steps", stepsOverDay);
         sendBroadcast(intent);
+
     }
 
     @Override
@@ -90,27 +101,28 @@ public class PedometerService extends Service implements SensorEventListener {
         super.onDestroy();
     }
 
-    public boolean initialize() {
+    public void initialize() {
 
         if (sensorManager == null) {
             sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
             if (sensorManager == null) {
                 Log.e(TAG, "Unable to initialize SensorManager.");
-                return false;
             }
         }
         if (mSensor == null) {
             mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
             if (mSensor == null) {
                 Log.e(TAG, "Unable to initialize Sensor.");
-                return false;
             }
         }
 
+        stepsOverDay = sharedValues.getInt("stepsOverDay");
+        stepsOverWeek = sharedValues.getInt("stepsOverWeek");
+
         mHandler.postDelayed(mTimer, 1000);
+        stride = calculateStrideLength();
         sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_FASTEST);
         Log.e(TAG, "Sensor Listener Started.");
-        return true;
     }
 
     @Override
@@ -123,16 +135,17 @@ public class PedometerService extends Service implements SensorEventListener {
         return START_STICKY;
     }
 
-    private double calculateCadence(double stepCount, int timeWindow) {
-        return stepCount / (double) timeWindow;
+    @Contract(pure = true)
+    private float calculateCadence(float stepCount, int timeWindow) {
+        return stepCount / (float) timeWindow;
     }
 
     private double calculateStrideLength() {
         double strideLength;
-        double age = sharedValues.getInt("age");
-        double height = sharedValues.getInt("height");
-        double weight = sharedValues.getInt("weight");
-        if (sharedValues.getString("gender").equals("Male")) {
+        double age = UserSessionManager.getUserData().getAge();
+        double height = UserSessionManager.getUserData().getHeight();
+        double weight = UserSessionManager.getUserData().getWeight();
+        if (UserSessionManager.getUserData().getGender().equals("Male")) {
             strideLength = (-0.002 * age) + (0.760 * (height / 100.0)) - (0.001 * weight) + 0.327;
         } else {
             strideLength = (-0.001 * age) + (1.058 * height / 100.0) - (0.002 * weight) - 0.129;
@@ -141,20 +154,20 @@ public class PedometerService extends Service implements SensorEventListener {
         return strideLength;
     }
 
+    @Contract(pure = true)
     private double calculateSpeed(double strideLength, double cadence) {
         return strideLength * cadence * 3.6; //  km/h
     }
 
+    @Contract(pure = true)
     private double calculateDistance(double strideLength, int steps) {
-        return ((((double) steps / 2) * strideLength) / 1000); //km
+        return (((steps / 2) * strideLength) / 1000); //km
     }
 
-    //TODO Increment through the day!
-    private double calculateEnergyExpenditure(double cadence) {
+    private float calculateEnergyExpenditure(double cadence) {
         double energyExpenditure;
         double gravity = 9.81;
-        double weight = sharedValues.getInt("weight");
-
+        double weight = UserSessionManager.getUserData().getWeight();
 
         //Energy for lifting body in J
         if (cadence <= 3.0) {
@@ -163,6 +176,9 @@ public class PedometerService extends Service implements SensorEventListener {
             energyExpenditure = weight * gravity * 0.07 * cadence;
         }
 
-        return energyExpenditure;
+        energyExpenditure = (energyExpenditure / 4.184) / 1000;  // kCal
+        energyExpenditure = (energyExpenditure * stepsOverDay);
+
+        return Math.round(energyExpenditure);
     }
 }

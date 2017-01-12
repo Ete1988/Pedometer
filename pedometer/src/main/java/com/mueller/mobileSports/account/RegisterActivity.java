@@ -15,11 +15,11 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 
 /**
  * Created by Sandra on 8/10/2016.
@@ -39,7 +39,6 @@ public class RegisterActivity extends AppCompatActivity {
     Button _signupButton;
     @Bind(R.id.link_login)
     TextView _loginLink;
-    SharedValues sharedValues;
 
 
     @Override
@@ -50,7 +49,6 @@ public class RegisterActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         setTitle("Create Step Up account");
         ButterKnife.bind(this);
-        sharedValues = SharedValues.getInstance(this);
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,12 +58,11 @@ public class RegisterActivity extends AppCompatActivity {
 
                     String email = _emailText.getText().toString();
                     String password = _passwordText.getText().toString();
-                    sharedValues.saveString("username2",name.getText().toString());
-
 
                     BackendlessUser user = new BackendlessUser();
                     user.setEmail(email);
                     user.setPassword(password);
+                    user.setProperty("name", name.getText().toString());
 
                     final ProgressDialog pd = new ProgressDialog(RegisterActivity.this);
                     pd.setTitle("Creating account...");

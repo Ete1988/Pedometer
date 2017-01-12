@@ -1,9 +1,5 @@
 package com.mueller.mobileSports.heartRate;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 /**
  * Created by Ete on 22/12/2016.
  * Data object for HeartRateData
@@ -15,25 +11,17 @@ public class HeartRateData {
     private int maxHeartRate;
     private int minHeartRate;
     private int averageHeartRate;
-    private String sessionDay;
+    private double sessionDuration;
+    private int trimpScore;
+    private float energyExpenditure;
     private String objectId;
-
-    public HeartRateData() {
-        SimpleDateFormat currDate = new SimpleDateFormat("EE dd MMM yyyy", Locale.getDefault());
-        this.sessionDay = currDate.format(new Date());
-    }
 
     public String getObjectId() {
         return objectId;
     }
 
-
-    public String getSessionDay() {
-        return sessionDay;
-    }
-
-    public void setSessionDay(String sessionDay) {
-        this.sessionDay = sessionDay;
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 
     public int getMaxHeartRate() {
@@ -58,5 +46,42 @@ public class HeartRateData {
 
     public void setAverageHeartRate(int averageHeartRate) {
         this.averageHeartRate = averageHeartRate;
+    }
+
+    public double getSessionDuration() {
+        return sessionDuration;
+    }
+
+    public void setSessionDuration(double sessionDuration) {
+        this.sessionDuration = sessionDuration;
+    }
+
+    public int getTrimpScore() {
+        return trimpScore;
+    }
+
+    public void setTrimpScore(int trimpScore) {
+        this.trimpScore = trimpScore;
+    }
+
+    public float getEnergyExpenditure() {
+        return energyExpenditure;
+    }
+
+    public void setEnergyExpenditure(float energyExpenditure) {
+        this.energyExpenditure = energyExpenditure;
+    }
+
+    @Override
+    public String toString() {
+        return "HeartRateData{" +
+                "maxHeartRate=" + maxHeartRate +
+                ", minHeartRate=" + minHeartRate +
+                ", averageHeartRate=" + averageHeartRate +
+                ", sessionDuration=" + sessionDuration +
+                ", trimpScore=" + trimpScore +
+                ", energyExpenditure=" + energyExpenditure +
+                ", objectId='" + objectId + '\'' +
+                '}';
     }
 }

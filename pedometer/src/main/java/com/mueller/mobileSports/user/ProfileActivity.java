@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
 
@@ -22,14 +21,13 @@ import java.util.Objects;
  * Created by Sandra on 8/10/2016.
  * A profile screen to display and edit user profile data
  */
-
 public class ProfileActivity extends AppCompatActivity {
 
     boolean firstTime;
     private EditText mInputUserName, mInputAge, mInputWeight, mInputHeight, mInputEmail;
-    private SharedValues sharedValues;
-    private SessionManager sessionManager;
-    private String gender;
+    private UserSessionManager userSessionManager;
+    private String gender, username, email;
+    private int age, weight, height;
     private Spinner spinner;
 
     @Override
@@ -63,7 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
         if (firstTime) {
             Toast.makeText(this, "Please set up your profile!", Toast.LENGTH_SHORT).show();
         }
-        sessionManager.checkUserState();
+        userSessionManager.checkUserState();
         super.onResume();
     }
 
@@ -84,9 +82,13 @@ public class ProfileActivity extends AppCompatActivity {
      * Initializes most fields of activity
      */
     private void init() {
-
-        sessionManager = new SessionManager(this);
-        sharedValues = SharedValues.getInstance(this);
+        UserData userData = UserSessionManager.getUserData();
+        age = userData.getAge();
+        height = userData.getHeight();
+        weight = userData.getWeight();
+        username = userData.getUsername();
+        email = userData.getEmail();
+        userSessionManager = new UserSessionManager(this);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         mInputUserName = (EditText) findViewById(R.id.input_name);
@@ -96,9 +98,9 @@ public class ProfileActivity extends AppCompatActivity {
         mInputEmail = (EditText) findViewById(R.id.input_email);
         spinner = (Spinner) findViewById(R.id.spinner_gender);
         mapUserDataToView();
-        if (Objects.equals(sharedValues.getString("gender"), "Female")) {
+        if (Objects.equals(userData.getGender(), "Female")) {
             spinner.setSelection(1);
-        } else if (Objects.equals(sharedValues.getString("gender"), "Male")) {
+        } else if (Objects.equals(userData.getGender(), "Male")) {
             spinner.setSelection(0);
         } else {
             spinner.setSelection(0);
@@ -110,23 +112,20 @@ public class ProfileActivity extends AppCompatActivity {
      */
     private void mapUserDataToView() {
 
-        if(Objects.equals(sharedValues.getString("username"), " ")){
-            mInputUserName.setText(sharedValues.getString("username2"));
+        if (Objects.equals(username, "")) {
+            mInputUserName.setText("");
             }else {
-            mInputUserName.setText(sharedValues.getString("username"));
+            mInputUserName.setText(username);
         }
 
+        mInputEmail.setText(email);
 
-        mInputEmail.setText(sharedValues.getString("email"));
-
-        if (!(sharedValues.getInt("age") == 0))
-            mInputAge.setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("age")));
-        if (!(sharedValues.getInt("weight") == 0))
-            mInputWeight.setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("weight")));
-        if (!(sharedValues.getInt("height") == 0))
-            mInputHeight.setText(String.format(Locale.getDefault(), "%d", sharedValues.getInt("height")));
-
-
+        if (!(age == 0))
+            mInputAge.setText(String.format(Locale.getDefault(), "%d", age));
+        if (!(weight == 0))
+            mInputWeight.setText(String.format(Locale.getDefault(), "%d", weight));
+        if (!(height == 0))
+            mInputHeight.setText(String.format(Locale.getDefault(), "%d", height));
     }
 
     /**
@@ -137,14 +136,16 @@ public class ProfileActivity extends AppCompatActivity {
      */
     private void updateData(boolean showProgressBar) {
         if (validateInput()) {
-            sharedValues.saveString("gender", gender);
-            sharedValues.saveString("username", mInputUserName.getText().toString());
-            sharedValues.saveInt("age", Integer.parseInt(mInputAge.getText().toString()));
-            sharedValues.saveInt("weight", Integer.parseInt(mInputWeight.getText().toString()));
-            sharedValues.saveInt("height", Integer.parseInt(mInputHeight.getText().toString()));
+            UserData userData = UserSessionManager.getUserData();
 
-            sessionManager.uploadUserData(this, showProgressBar, false);
+            userData.setAge(Integer.parseInt(mInputAge.getText().toString()));
+            userData.setGender(gender);
+            userData.setUsername(mInputUserName.getText().toString());
+            userData.setHeight(Integer.parseInt(mInputHeight.getText().toString()));
+            userData.setWeight(Integer.parseInt(mInputWeight.getText().toString()));
 
+            UserSessionManager.setUserData(userData);
+            userSessionManager.uploadUserData(this, showProgressBar, false);
         }
     }
 

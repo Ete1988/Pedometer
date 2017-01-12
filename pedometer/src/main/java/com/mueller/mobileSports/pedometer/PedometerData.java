@@ -1,9 +1,5 @@
 package com.mueller.mobileSports.pedometer;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 /**
  * Created by Ete on 22/12/2016.
  * Data object for PedometerData
@@ -15,19 +11,9 @@ public class PedometerData {
     private int dailyStepCount;
     private int weeklyStepCount;
     private int monthlyStepCount;
-    private int distance;
-    private int energyExpenditureSteps;
-
-
-
-    private String sessionDay;
-
+    private double distance;
+    private float energyExpenditureSteps;
     private String objectId;
-
-    public PedometerData() {
-        SimpleDateFormat currDate = new SimpleDateFormat("EE dd MMM yyyy", Locale.getDefault());
-        this.sessionDay = currDate.format(new Date());
-    }
 
     public String getObjectId() {
         return objectId;
@@ -35,14 +21,6 @@ public class PedometerData {
 
     private void setObjectId(String objectId) {
         this.objectId = objectId;
-    }
-
-    public String getSessionDay() {
-        return sessionDay;
-    }
-
-    public void setSessionDay(String sessionDay) {
-        this.sessionDay = sessionDay;
     }
 
     public int getDailyStepCount() {
@@ -67,5 +45,33 @@ public class PedometerData {
 
     public void setMonthlyStepCount(int monthlyStepCount) {
         this.monthlyStepCount = monthlyStepCount;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public float getEnergyExpenditureSteps() {
+        return energyExpenditureSteps;
+    }
+
+    public void setEnergyExpenditureSteps(float energyExpenditureSteps) {
+        this.energyExpenditureSteps = energyExpenditureSteps;
+    }
+
+    @Override
+    public String toString() {
+        return "PedometerData{" +
+                "dailyStepCount=" + dailyStepCount +
+                ", weeklyStepCount=" + weeklyStepCount +
+                ", monthlyStepCount=" + monthlyStepCount +
+                ", distance=" + distance +
+                ", energyExpenditureSteps=" + energyExpenditureSteps +
+                ", objectId='" + objectId + '\'' +
+                '}';
     }
 }

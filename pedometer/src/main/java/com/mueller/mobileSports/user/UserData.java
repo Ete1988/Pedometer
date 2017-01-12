@@ -1,7 +1,6 @@
 package com.mueller.mobileSports.user;
 
-import com.mueller.mobileSports.heartRate.HeartRateData;
-import com.mueller.mobileSports.pedometer.PedometerData;
+import java.util.ArrayList;
 
 /**
  * Created by Sandra on 24.11.2016.
@@ -9,12 +8,9 @@ import com.mueller.mobileSports.pedometer.PedometerData;
  *
  */
 
-class UserData {
+public class UserData {
 
-
-    private static PedometerData pedometerData;
-    private static HeartRateData heartRateData;
-
+    private ArrayList<DailyData> dailyData;
     private String username;
     private String email;
     private String gender;
@@ -27,51 +23,34 @@ class UserData {
     private int restingHeartRate;
     private String objectId;
 
+
     UserData() {
-        pedometerData = new PedometerData();
-        heartRateData = new HeartRateData();
+        dailyData = new ArrayList<>();
         this.gender = "Male";
     }
 
-    PedometerData getPedometerData() {
-        if (pedometerData == null) {
-            pedometerData = new PedometerData();
-            return pedometerData;
-        } else {
-            return pedometerData;
-        }
 
+    ArrayList<DailyData> getDailyData() {
+        return dailyData;
     }
 
-    void setPedometerData(PedometerData pedometerData) {
-        UserData.pedometerData = pedometerData;
+    void setDailyData(ArrayList<DailyData> dailyData) {
+        this.dailyData = dailyData;
     }
 
-    HeartRateData getHeartRateData() {
-        if (heartRateData == null) {
-            heartRateData = new HeartRateData();
-            return heartRateData;
-        }
-        return heartRateData;
-    }
-
-    void setHeartRateData(HeartRateData heartRateData) {
-        UserData.heartRateData = heartRateData;
-    }
-
-    int getRestingHeartRate() {
+    public int getRestingHeartRate() {
         return restingHeartRate;
     }
 
-    void setRestingHeartRate(int restingHeartRate) {
+    public void setRestingHeartRate(int restingHeartRate) {
         this.restingHeartRate = restingHeartRate;
     }
 
-    int getHeartRateMax() {
+    public int getHeartRateMax() {
         return heartRateMax;
     }
 
-    void setHeartRateMax(int heartRateMax) {
+    public void setHeartRateMax(int heartRateMax) {
         this.heartRateMax = heartRateMax;
     }
 
@@ -107,7 +86,7 @@ class UserData {
         this.height = height;
     }
 
-    int getAge() {
+    public int getAge() {
         return age;
     }
 
@@ -115,7 +94,7 @@ class UserData {
         this.age = age;
     }
 
-    String getGender() {
+    public String getGender() {
         return gender;
     }
 
@@ -123,7 +102,7 @@ class UserData {
         this.gender = gender;
     }
 
-    int getWeight() {
+    public int getWeight() {
         return weight;
     }
 
@@ -131,35 +110,37 @@ class UserData {
         this.weight = weight;
     }
 
-    int getStepGoal() {
+    public int getStepGoal() {
         return stepGoal;
     }
 
-    void setStepGoal(int stepGoal) {
+    public void setStepGoal(int stepGoal) {
         this.stepGoal = stepGoal;
     }
 
-    int getActivityLevel() {
+    public int getActivityLevel() {
         return activityLevel;
     }
 
-    void setActivityLevel(int activityLevel) {
+    public void setActivityLevel(int activityLevel) {
         this.activityLevel = activityLevel;
     }
 
-    public void deleteAll() {
-        setAge(0);
-        setHeight(0);
-        setUsername("");
-        setWeight(0);
-        setGender("");
-        setEmail("");
-        setObjectId(null);
-        setActivityLevel(0);
-        setHeartRateMax(0);
-        setRestingHeartRate(0);
-        setHeartRateData(null);
-        setPedometerData(null);
+    @Override
+    public String toString() {
+        return "UserData{" +
+                "dailyData=" + dailyData +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", gender='" + gender + '\'' +
+                ", height=" + height +
+                ", age=" + age +
+                ", weight=" + weight +
+                ", stepGoal=" + stepGoal +
+                ", activityLevel=" + activityLevel +
+                ", heartRateMax=" + heartRateMax +
+                ", restingHeartRate=" + restingHeartRate +
+                ", objectId='" + objectId + '\'' +
+                '}';
     }
-
 }

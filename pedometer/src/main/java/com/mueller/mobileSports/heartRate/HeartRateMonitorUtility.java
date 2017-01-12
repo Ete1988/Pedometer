@@ -3,7 +3,10 @@ package com.mueller.mobileSports.heartRate;
 import android.content.Context;
 
 import com.mueller.mobileSports.general.SharedValues;
+import com.mueller.mobileSports.user.UserSessionManager;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Objects;
 
 /**
@@ -12,22 +15,22 @@ import java.util.Objects;
  *
  */
 
-public class HeartRateMonitorUtility {
+class HeartRateMonitorUtility {
 
     private SharedValues sharedValues;
 
-    public HeartRateMonitorUtility(Context context) {
+    HeartRateMonitorUtility(Context context) {
         this.sharedValues = SharedValues.getInstance(context);
     }
 
-    public void doCalculations(int heartRate) {
+    void doCalculations(int heartRate) {
         calculateMaxHeartRate(heartRate);
         calculateMinHeartRate(heartRate);
         calculatePercentOfHrMax(heartRate);
         calculateEnergyExpenditure(heartRate);
     }
 
-    public void calculateAverageHeartRate(int[] averageHeartRateArray) {
+    void calculateAverageHeartRate(int[] averageHeartRateArray) {
         int sum = 0;
         for (int i : averageHeartRateArray) {
             sum += i;
@@ -37,12 +40,14 @@ public class HeartRateMonitorUtility {
     }
 
     private double calculateVO2Max() {
-        double age = sharedValues.getInt("age");
-        double pal = sharedValues.getInt("physicalActivityLevel");
-        double height = sharedValues.getInt("height");
-        double weight = sharedValues.getInt("weight");
+
+        double age = UserSessionManager.getUserData().getAge();
+        double height = UserSessionManager.getUserData().getHeight();
+        double weight = UserSessionManager.getUserData().getWeight();
+        double pal = UserSessionManager.getUserData().getActivityLevel();
+        String gender = UserSessionManager.getUserData().getGender();
+
         height = height / 100; // Height in meter
-        String gender = sharedValues.getString("gender");
         int gen;
 
         if (gender.equals("Female")) {
@@ -55,13 +60,11 @@ public class HeartRateMonitorUtility {
                 + (1.463 * pal) + (9.17 * height) - (0.254 * weight) + 34.143;
     }
 
-    //TODO Increment through the day!
-    public void calculateEnergyExpenditure(int heartRate) {
-
+    private void calculateEnergyExpenditure(int heartRate) {
         double vo2 = calculateVO2Max();
-        double age = sharedValues.getInt("age");
-        double weight = sharedValues.getInt("weight");
-        String gender = sharedValues.getString("gender");
+        double age = UserSessionManager.getUserData().getAge();
+        double weight = UserSessionManager.getUserData().getWeight();
+        String gender = UserSessionManager.getUserData().getGender();
         int gen;
 
         if (gender.equals("Female")) {
@@ -69,14 +72,22 @@ public class HeartRateMonitorUtility {
         } else {
             gen = 1;
         }
-
         double part1 = -36.3781 + (0.271 * age) + (0.394 * weight) + (0.404 * vo2) + (0.634 * (double) heartRate);
         double part2 = -36.3781 + (0.274 * age) + (0.103 * weight) + (0.380 * vo2) + (0.450 * (double) heartRate);
         double ee = -59.3954 + (gen * part1) + ((1 - gen) * part2);
+
         sharedValues.saveInt("energyExpenditureHR", (int) Math.round(ee));
     }
 
-    public int calculateTRIMP(int minutes) {
+    float calculateTotalEnergyExpenditureDuringSession(float minutes) {
+        float tEe = (sharedValues.getInt("energyExpenditureHR") * minutes);
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+        tEe = Float.parseFloat(df.format(tEe));
+        return tEe;
+    }
+
+    int calculateTRIMP(int minutes) {
         double x;
         double x1 = sharedValues.getInt("averageHeartRate") - sharedValues.getInt("minHeartRate");
         double x2 = sharedValues.getInt("maxHeartRate") - sharedValues.getInt("minHeartRate");
@@ -87,8 +98,7 @@ public class HeartRateMonitorUtility {
         }
 
         double b;
-
-        if (Objects.equals(sharedValues.getString("gender"), "Female")) {
+        if (Objects.equals(UserSessionManager.getUserData().getGender(), "Female")) {
             b = 1.67;
         } else {
             b = 1.92;
@@ -97,15 +107,15 @@ public class HeartRateMonitorUtility {
         double z;
         z = b * x;
         double y = Math.pow(Math.E, z);
-        double trimpD = (double) minutes * x * y;
-        sharedValues.saveInt("trimp", (int) Math.round(trimpD));
-        return (int) Math.round(trimpD);
+        double trimp = (double) minutes * x * y;
+        sharedValues.saveInt("trimp", (int) Math.round(trimp));
+        return (int) Math.round(trimp);
     }
 
     private void calculatePercentOfHrMax(int heartRate) {
 
-        int hRmax = sharedValues.getInt("heartRateMax");
-        sharedValues.saveInt("percentOfHRmax", ((heartRate * 100) / hRmax));
+        int heartRateMax = sharedValues.getInt("heartRateMax");
+        sharedValues.saveInt("percentOfHRMax", ((heartRate * 100) / heartRateMax));
 
     }
 

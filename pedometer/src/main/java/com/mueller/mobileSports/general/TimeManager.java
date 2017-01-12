@@ -11,7 +11,8 @@ import java.util.Locale;
 /**
  * Created by Ete on 17/12/2016.
  * <p>
- * Class meant to check whether a new day or week started to adjust date, and other data accordingly.
+ * Class meant to check whether a new day or week started to adjust date and other data accordingly.
+ *
  */
 
 public class TimeManager {
@@ -23,7 +24,7 @@ public class TimeManager {
     }
 
     /**
-     * Method to check whether a new week or day has began
+     * Method to check if a new week or day has began
      */
     public void checkTime() {
         try {
@@ -35,8 +36,7 @@ public class TimeManager {
     }
 
     private void checkIfNewDay() throws ParseException {
-        SimpleDateFormat currDate = new SimpleDateFormat("EE dd MMM yyyy", Locale.getDefault());
-
+        SimpleDateFormat currDate = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         if (!(sharedValues.checkIfContained("sessionDay"))) {
             //First time use...
             sharedValues.saveString("sessionDay", getCurrentDateAsString());
@@ -45,7 +45,6 @@ public class TimeManager {
             Date now = currDate.parse(getCurrentDateAsString());
             if (oldDate.before(now)) {
                 //Before today...
-                sharedValues.saveInt("stepsOverDay", 0);
                 sharedValues.saveString("sessionDay", getCurrentDateAsString());
             }
         }
@@ -70,7 +69,7 @@ public class TimeManager {
 
     private String getCurrentDateAsString() {
         Date todayDate = new Date();
-        SimpleDateFormat currDate = new SimpleDateFormat("EE dd MMM yyyy", Locale.getDefault());
+        SimpleDateFormat currDate = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         return currDate.format(todayDate);
     }
 

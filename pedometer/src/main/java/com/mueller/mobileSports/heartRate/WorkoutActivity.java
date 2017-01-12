@@ -58,6 +58,7 @@ public class WorkoutActivity extends AppCompatActivity {
             }
         }
     };
+    private TextView mTotalEnergyExpenditure;
 
     private static IntentFilter updateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
@@ -122,6 +123,7 @@ public class WorkoutActivity extends AppCompatActivity {
         mPercentageOfHrMax = (TextView) findViewById(R.id.TS_PercentageOfHrMaxView);
         mTrimpScore = (TextView) findViewById(R.id.TS_TrimpScoreView);
         mEnergyExpenditure = (TextView) findViewById(R.id.TS_EnergyExpenditureView);
+        mTotalEnergyExpenditure = (TextView) findViewById(R.id.TS_TotalEnergyView);
     }
 
     /**
@@ -139,7 +141,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
     public void onClickTrainingSessionActivity(View v) {
         Button myButton;
-         if (v.getId() == R.id.TS_StartSessionBtn) {
+        if (v.getId() == R.id.TS_StartSessionBtn) {
             resetAllValuesOnTimerStart();
             registerReceiver(mUpdateReceiver, updateIntentFilter());
             start_time = SystemClock.uptimeMillis();
@@ -168,6 +170,14 @@ public class WorkoutActivity extends AppCompatActivity {
             HeartRateMonitorUtility utility = new HeartRateMonitorUtility(this);
             int trimp = utility.calculateTRIMP(time_minutes);
             mTrimpScore.setText(String.format(Locale.getDefault(), "%d", trimp));
+            sharedValues.saveInt("trimpScore", trimp);
+            float sessionDuration = time_minutes + (time_seconds / 100);
+            float totalEnergyExpenditure = utility.calculateTotalEnergyExpenditureDuringSession(sessionDuration);
+            mTotalEnergyExpenditure.setText(String.format(Locale.getDefault(), "%.2f", totalEnergyExpenditure));
+            sharedValues.saveFloat("totalEnergyExpenditureDuringSession", totalEnergyExpenditure);
+
+            sharedValues.saveFloat("sessionDuration", sessionDuration);
+
             tryToUnregisterReceiver(mUpdateReceiver);
             myButton = (Button) findViewById(R.id.TS_StartSessionBtn);
             myButton.setVisibility(View.VISIBLE);
@@ -177,7 +187,7 @@ public class WorkoutActivity extends AppCompatActivity {
     /**
      * Method to map data to widgets in view
      *
-     * @param data
+     * @param data data received through intent;
      */
     private void displayData(String data) {
         if (data != null) {
@@ -187,7 +197,7 @@ public class WorkoutActivity extends AppCompatActivity {
             mHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("currentHeartRate")));
             mAverageHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("averageHeartRate")));
             mEnergyExpenditure.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("energyExpenditureHR")));
-            mPercentageOfHrMax.setText(String.format(Locale.getDefault(), "%02d", sharedValues.getInt("percentOfHRmax")));
+            mPercentageOfHrMax.setText(String.format(Locale.getDefault(), "%02d", sharedValues.getInt("percentOfHRMax")));
         }
     }
 

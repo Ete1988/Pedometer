@@ -74,8 +74,9 @@
     <string name="start_session">Start Session</string>
     <string name="trimp_score">TRIMP Score:</string>
     <string name="energy_expenditure">Energy Expenditure:</string>
-    <string name="joules_min">Joules/min</string>
-
+    <string name="joules_min">J/min</string>
+    <string name="kcal">kCal</string>
+    <string name="energy_burned">Energy burned:</string>
 
     <!-- Bluetooth Search -->
     <string name="ble_not_supported">BLE is not supported</string>

@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
  * Created by Ete on 24/11/2016.
  * <p>
  * Class to managed shared preferences for all activities in the app
+ * After some refactoring nearly not used anymore.
+ *
  */
 
 
@@ -55,6 +57,21 @@ public class SharedValues {
         prefsEditor.putInt(key, value);
         prefsEditor.apply();
     }
+
+    public void saveFloat(String key, float value) {
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        prefsEditor.putFloat(key, value);
+        prefsEditor.apply();
+    }
+
+
+    public float getFloat(String key) {
+        if (sharedPreferences != null) {
+            return sharedPreferences.getFloat(key, 0);
+        }
+        return 0f;
+    }
+
 
     /**
      * Method to get a stored String value from the shared preference specified by a key

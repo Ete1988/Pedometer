@@ -28,4 +28,5 @@ dependencies {
     //compile files('C:/Users/Sandra/Desktop/MobileSports/Pedometer/Libs/opencsv-3.8.jar')
 
 
+    compile 'org.jetbrains:annotations-java5:15.0'
 }

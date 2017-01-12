@@ -21,13 +21,12 @@ import android.widget.Toast;
 import com.lylc.widget.circularprogressbar.CircularProgressBar;
 import com.mueller.mobileSports.general.SettingsActivity;
 import com.mueller.mobileSports.general.SharedValues;
-import com.mueller.mobileSports.general.TimeManager;
 import com.mueller.mobileSports.heartRate.HeartRateActivity;
 import com.mueller.mobileSports.heartRate.HeartRateSensorService;
 import com.mueller.mobileSports.heartRate.HeartRateSensorSimulationService;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.user.ProfileActivity;
-import com.mueller.mobileSports.user.SessionManager;
+import com.mueller.mobileSports.user.UserSessionManager;
 
 import java.util.Locale;
 
@@ -40,25 +39,26 @@ public class PedometerActivity extends AppCompatActivity {
 
     private final static String TAG = PedometerActivity.class.getSimpleName();
     boolean doubleBackToExitPressedOnce = false;
-    private SessionManager sessionManager;
+    private UserSessionManager userSessionManager;
     private CircularProgressBar cBar;
-    private TextView mDate, mCadence, mSpeed, mDistance;
-    private SharedValues sharedValues;
     private final BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (PedometerService.STEP_MESSAGE.equals(action)) {
-                cBar.setProgress(sharedValues.getInt("stepsOverDay"));
-                cBar.setTitle(Integer.toString(sharedValues.getInt("stepsOverDay")));
+                cBar.setProgress(intent.getIntExtra("stepValue", 0));
+                cBar.setTitle(Integer.toString(intent.getIntExtra("steps", 0)));
             } else if (PedometerService.VALUES_CHANGED.equals(action)) {
                 //TODO format all
                 mCadence.setText(String.format(Locale.getDefault(), "%.2f", intent.getDoubleExtra("cadenceValue", 0.0)));
                 mDistance.setText(String.format(Locale.getDefault(), "%.2f", intent.getDoubleExtra("distanceValue", 0.0)));
                 mSpeed.setText(String.format(Locale.getDefault(), "%.2f", intent.getDoubleExtra("speedValue", 0.0)));
+                mEnergyExpenditure.setText(String.format(Locale.getDefault(), "%.2f", intent.getFloatExtra("energyExpenditure", 0.0f)));
+
             }
         }
     };
-
+    private TextView mDate, mCadence, mSpeed, mDistance, mEnergyExpenditure;
+    private SharedValues sharedValues;
 
     private static IntentFilter updateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
@@ -82,7 +82,7 @@ public class PedometerActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        sessionManager.checkUserState();
+        userSessionManager.checkUserState();
         mapDataToView();
         registerReceiver(mUpdateReceiver, updateIntentFilter());
     }
@@ -90,7 +90,7 @@ public class PedometerActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         Log.e(TAG, "Paused");
-        sessionManager.uploadUserData(this, false, false);
+        userSessionManager.uploadUserData(this, false, false);
         tryToUnregisterReceiver(mUpdateReceiver);
         super.onPause();
     }
@@ -127,7 +127,7 @@ public class PedometerActivity extends AppCompatActivity {
                 startActivity(i);
                 break;
             case R.id.menu_logout:
-                sessionManager.uploadUserData(this, true, true);
+                userSessionManager.uploadUserData(this, true, true);
                 break;
             case R.id.menu_profile:
                 Intent i2 = new Intent(this, ProfileActivity.class);
@@ -141,9 +141,8 @@ public class PedometerActivity extends AppCompatActivity {
      * Initializes most fields of activity
      */
     private void init() {
-        sessionManager = new SessionManager(this);
+        userSessionManager = new UserSessionManager(this);
         sharedValues = SharedValues.getInstance(this);
-        TimeManager timeManager = new TimeManager(this);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         setTitle("Step Up");
@@ -151,10 +150,10 @@ public class PedometerActivity extends AppCompatActivity {
         mCadence = (TextView) findViewById(R.id.PF_CadenceView);
         mSpeed = (TextView) findViewById(R.id.PF_SpeedView);
         mDistance = (TextView) findViewById(R.id.PF_DistanceView);
+        mEnergyExpenditure = (TextView) findViewById(R.id.PF_EnergyExpenditure);
         cBar = (CircularProgressBar) findViewById(R.id.circularprogressbar3);
         cBar.setSubTitle("");
         cBar.setBackgroundColor(5);
-        timeManager.checkTime();
     }
 
     /**

@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
-import com.mueller.mobileSports.user.SessionManager;
+import com.mueller.mobileSports.user.UserSessionManager;
 
 /**
  * Created by Sandra on 8/10/2016.
@@ -20,7 +20,7 @@ import com.mueller.mobileSports.user.SessionManager;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText mEmailText, mPasswordText;
-    private SessionManager sessionManager;
+    private UserSessionManager userSessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +29,8 @@ public class LoginActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         setTitle("Login");
-        sessionManager = new SessionManager(this);
-        sessionManager.isUserLoggedIn();
+        userSessionManager = new UserSessionManager(this);
+        userSessionManager.isUserLoggedIn();
         mEmailText = (EditText) findViewById(R.id.input_email);
         mPasswordText = (EditText) findViewById(R.id.password);
     }
@@ -47,7 +47,6 @@ public class LoginActivity extends AppCompatActivity {
         } else if (v.getId() == R.id.email_sign_in_button) {
             login();
         }
-
     }
 
     private void login() {
@@ -62,8 +61,9 @@ public class LoginActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            sessionManager.userLogin(email, password, intent);
+            userSessionManager.userLogin(email, password, intent);
         } else {
+
             // user didn't enter username or password
             Toast.makeText(getBaseContext(), "Please enter username and password", Toast.LENGTH_LONG).show();
         }
