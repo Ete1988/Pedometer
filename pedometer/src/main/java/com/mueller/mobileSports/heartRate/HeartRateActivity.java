@@ -38,7 +38,6 @@ public class HeartRateActivity extends AppCompatActivity {
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     public static final String EXTRAS_START_SERVICE = "BIND_SERVICE";
     public static final String EXTRAS_START_SIMULATION_SERVICE = "BIND_SIMULATION_SERVICE";
-    private final static String TAG = HeartRateActivity.class.getSimpleName();
     private String mDeviceAddress;
     private String mDeviceName;
 
@@ -124,7 +123,7 @@ public class HeartRateActivity extends AppCompatActivity {
                 startActivity(i);
                 break;
             case R.id.menu_logout:
-                userSessionManager.uploadUserData(this, true, true);
+                userSessionManager.uploadUserData(this, true, true, true);
                 break;
             case R.id.menu_profile:
                 Intent i2 = new Intent(this, ProfileActivity.class);
@@ -184,7 +183,7 @@ public class HeartRateActivity extends AppCompatActivity {
     /**
      * Method to map data to widgets in view
      *
-     * @param data
+     * @param data received data
      */
     private void displayData(String data) {
         if (data != null) {
@@ -205,7 +204,7 @@ public class HeartRateActivity extends AppCompatActivity {
             startActivity(i);
         } else if (v.getId() == R.id.HR_startSessionBtn) {
             if (checkIfSessionCanBeStarted()) {
-                i = new Intent(this, WorkoutActivity.class);
+                i = new Intent(this, HRSessionActivity.class);
                 startActivity(i);
             } else {
                 Toast.makeText(this, "No Heart Rate Sensor connected!", Toast.LENGTH_LONG).show();

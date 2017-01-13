@@ -43,7 +43,8 @@
         <activity
             android:name="com.mueller.mobileSports.general.SettingsActivity"
             android:label="Settings"
-            android:noHistory="true" />
+            android:noHistory="true"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.mueller.mobileSports.user.ProfileActivity"
             android:label="Edit Profile"
@@ -51,7 +52,8 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.mueller.mobileSports.account.RegisterActivity"
-            android:label="Register" />
+            android:label="Register"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.mueller.mobileSports.heartRate.HeartRateActivity"
             android:label="Heart-Rate Monitor" />
@@ -70,7 +72,7 @@
             android:name="com.mueller.mobileSports.heartRate.HeartRateSensorService"
             android:enabled="true" />
 
-        <activity android:name="com.mueller.mobileSports.heartRate.WorkoutActivity"></activity>
+        <activity android:name="com.mueller.mobileSports.heartRate.HRSessionActivity"></activity>
     </application>
 
 </manifest>

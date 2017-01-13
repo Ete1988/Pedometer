@@ -127,7 +127,7 @@
                     android:fontFamily="sans-serif"
                     android:text="@string/heart_rate"
                     android:textSize="24sp"
-                    android:textStyle="normal|bold|italic" />
+                    android:textStyle="normal|bold" />
 
                 <TextView
                     android:id="@+id/HR_heartRateView"
@@ -168,7 +168,7 @@
                     android:fontFamily="sans-serif"
                     android:text="@string/average"
                     android:textSize="18sp"
-                    android:textStyle="normal|italic" />
+                    android:textStyle="normal" />
 
                 <TextView
                     android:id="@+id/HR_averageHeartRateView"
@@ -202,7 +202,7 @@
                     android:fontFamily="sans-serif"
                     android:text="@string/minimum"
                     android:textSize="18sp"
-                    android:textStyle="normal|italic" />
+                    android:textStyle="normal" />
 
                 <TextView
                     android:id="@+id/HR_minHeartRateView"
@@ -236,7 +236,7 @@
                     android:fontFamily="sans-serif"
                     android:text="@string/maximum"
                     android:textSize="18sp"
-                    android:textStyle="normal|italic" />
+                    android:textStyle="normal" />
 
                 <TextView
                     android:id="@+id/HR_maxHeartRateView"

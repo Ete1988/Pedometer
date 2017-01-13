@@ -22,7 +22,7 @@ import java.util.Locale;
  * Activity mean to display data during a session.
  * Offers methods to start stop or pause a session.
  */
-public class WorkoutActivity extends AppCompatActivity {
+public class HRSessionActivity extends AppCompatActivity {
 
     private TextView mTextTime;
     private int time_seconds, time_minutes, time_milliseconds;
@@ -192,12 +192,12 @@ public class WorkoutActivity extends AppCompatActivity {
     private void displayData(String data) {
         if (data != null) {
             mHeartRate.setText(data);
-            mMaxHearRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("maxHeartRate")));
-            mMinHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("minHeartRate")));
-            mHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("currentHeartRate")));
-            mAverageHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("averageHeartRate")));
-            mEnergyExpenditure.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("energyExpenditureHR")));
-            mPercentageOfHrMax.setText(String.format(Locale.getDefault(), "%02d", sharedValues.getInt("percentOfHRMax")));
+            mMaxHearRate.setText(String.format(Locale.getDefault(), "%3d", sharedValues.getInt("maxHeartRate")));
+            mMinHeartRate.setText(String.format(Locale.getDefault(), "%3d", sharedValues.getInt("minHeartRate")));
+            mHeartRate.setText(String.format(Locale.getDefault(), "%3d", sharedValues.getInt("currentHeartRate")));
+            mAverageHeartRate.setText(String.format(Locale.getDefault(), "%3d", sharedValues.getInt("averageHeartRate")));
+            mEnergyExpenditure.setText(String.format(Locale.getDefault(), "%3d", sharedValues.getInt("energyExpenditureHR")));
+            mPercentageOfHrMax.setText(String.format(Locale.getDefault(), "%2d", sharedValues.getInt("percentOfHRMax")));
         }
     }
 
@@ -225,7 +225,7 @@ public class WorkoutActivity extends AppCompatActivity {
         mMinHeartRate.setText(R.string.emptyString);
         mHeartRate.setText(R.string.emptyString);
         mEnergyExpenditure.setText(R.string.emptyString);
-
+        mTotalEnergyExpenditure.setText("");
 
     }
 

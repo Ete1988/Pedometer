@@ -12,7 +12,7 @@ public class PedometerData {
     private int weeklyStepCount;
     private int monthlyStepCount;
     private double distance;
-    private float energyExpenditureSteps;
+    private int energyExpenditureSteps;
     private String objectId;
 
     public String getObjectId() {
@@ -55,11 +55,11 @@ public class PedometerData {
         this.distance = distance;
     }
 
-    public float getEnergyExpenditureSteps() {
+    public int getEnergyExpenditureSteps() {
         return energyExpenditureSteps;
     }
 
-    public void setEnergyExpenditureSteps(float energyExpenditureSteps) {
+    public void setEnergyExpenditureSteps(int energyExpenditureSteps) {
         this.energyExpenditureSteps = energyExpenditureSteps;
     }
 

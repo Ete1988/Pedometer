@@ -15,16 +15,17 @@ import com.backendless.persistence.BackendlessDataQuery;
 import com.backendless.persistence.local.UserTokenStorageFactory;
 import com.mueller.mobileSports.account.LoginActivity;
 import com.mueller.mobileSports.general.SharedValues;
-import com.mueller.mobileSports.general.TimeManager;
 import com.mueller.mobileSports.heartRate.HeartRateData;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
 import com.mueller.mobileSports.pedometer.PedometerData;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -45,8 +46,6 @@ public class UserSessionManager {
     public UserSessionManager(Context context) {
         this.context = context;
         sharedValues = SharedValues.getInstance(context);
-        TimeManager timeManager = new TimeManager(context);
-        timeManager.checkTime();
     }
 
     public static UserData getUserData() {
@@ -118,7 +117,6 @@ public class UserSessionManager {
                     progress.dismiss();
                 }
 
-                Log.e(TAG, "UserLogout successful");
                 Intent i = new Intent(context, LoginActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -132,47 +130,52 @@ public class UserSessionManager {
                 if (progressBarActive) {
                     progress.dismiss();
                 }
-
             }
         });
     }
 
     // save userdata to backendless server
-    public void uploadUserData(final Context context, final boolean showProgressBar, final boolean logout) {
-        if (showProgressBar) {
-            progress = new ProgressDialog(context);
-            progress.setTitle("Saving Data");
-            progress.setMessage("Please wait...");
-            progress.setCancelable(false);
-            progress.show(); // disable dismiss by tapping outside of the dialog
+    public void uploadUserData(final Context context, final boolean showProgressBar, final boolean logout, final boolean clearSharedValues) {
+        //If user is logged in
+        if (isUserTokenAvailable()) {
 
+            if (showProgressBar) {
+                progress = new ProgressDialog(context);
+                progress.setTitle("Saving Data");
+                progress.setMessage("Please wait...");
+                progress.setCancelable(false);
+                progress.show(); // disable dismiss by tapping outside of the dialog
+
+            }
+
+            saveDataToObjects();
+
+            Backendless.Persistence.of(UserData.class).save(userData, new AsyncCallback<UserData>() {
+                @Override
+                public void handleResponse(UserData updatedData) {
+                    userData = updatedData;
+                    if (clearSharedValues) {
+                        sharedValues.clearData();
+                    }
+                    if (logout) {
+                        logoutUser(showProgressBar);
+                    } else if (showProgressBar) {
+                        progress.dismiss();
+                        Toast.makeText(context, "Saved!", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void handleFault(BackendlessFault backendlessFault) {
+
+                    if (showProgressBar) {
+                        Toast.makeText(context, "An error occurred, please try again.!", Toast.LENGTH_LONG).show();
+                        progress.dismiss();
+                    }
+                    System.err.println(backendlessFault.toString());
+                }
+            });
         }
-
-        saveDataToObjects();
-
-        Backendless.Persistence.of(UserData.class).save(userData, new AsyncCallback<UserData>() {
-            @Override
-            public void handleResponse(UserData updatedData) {
-                userData = updatedData;
-
-                if (logout) {
-                    logoutUser(showProgressBar);
-                } else if (showProgressBar) {
-                    progress.dismiss();
-                    Toast.makeText(context, "Saved!", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void handleFault(BackendlessFault backendlessFault) {
-
-                if (showProgressBar) {
-                    Toast.makeText(context, "An error occurred, please try again.!", Toast.LENGTH_LONG).show();
-                    progress.dismiss();
-                }
-                System.err.println(backendlessFault.toString());
-            }
-        });
     }
 
     public void userLogin(String email, String password, final Intent intent) {
@@ -208,7 +211,6 @@ public class UserSessionManager {
         Backendless.UserService.findById(currentUserId, new AsyncCallback<BackendlessUser>() {
             @Override
             public void handleResponse(BackendlessUser currentUser) {
-                Log.e(TAG, "Loaded User: " + currentUser);
                 getUserDataFromServer(intent);
 
             }
@@ -362,7 +364,7 @@ public class UserSessionManager {
         Backendless.Persistence.of(UserData.class).save(userData, new AsyncCallback<UserData>() {
             @Override
             public void handleResponse(UserData updatedData) {
-                Log.e(TAG, "Tables Created");
+                Log.i(TAG, "Tables Created");
             }
 
             @Override
@@ -391,7 +393,6 @@ public class UserSessionManager {
             public void handleResponse(Boolean response) {
 
                 if (!response) {
-                    Log.e(TAG, "Is login valid? - " + response);
                     String currentUserId = Backendless.UserService.loggedInUser();
                     Backendless.UserService.findById(currentUserId, new AsyncCallback<BackendlessUser>() {
                         @Override
@@ -407,7 +408,6 @@ public class UserSessionManager {
                         }
                     });
                 }
-                Log.e(TAG, "Is login valid? - " + response);
             }
 
             @Override
@@ -430,29 +430,44 @@ public class UserSessionManager {
 
     private void mapDataToSharedValue(final Intent intent) {
         ArrayList<DailyData> data = userData.getDailyData();
+        boolean newDay;
+        Date now = new Date();
+        SimpleDateFormat currDate = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         DailyData dailyData;
         PedometerData pedometerData;
         HeartRateData heartRateData;
-        if (!(data.size() == 0)) {
 
-            if (data.get(data.size() - 1).getSessionDay().equals(sharedValues.getString("sessionDay"))) {
+        if (!(data.size() == 0)) {
+            //Same date --> data from today
+            if (data.get(data.size() - 1).getSessionDay().equals(currDate.format(now))) {
                 dailyData = data.get(data.size() - 1);
                 pedometerData = dailyData.getPedometerData();
                 heartRateData = dailyData.getHeartRateData();
-
+                newDay = false;
             } else {
+                //New Day
                 pedometerData = new PedometerData();
                 heartRateData = new HeartRateData();
+                sharedValues.saveString("sessionDay", currDate.format(now));
+                newDay = true;
             }
+
             //Userdata
             sharedValues.saveInt("heartRateMax", userData.getHeartRateMax());
             sharedValues.saveInt("stepGoal", userData.getStepGoal());
 
             //PedometerValues
             sharedValues.saveInt("stepsOverDay", pedometerData.getDailyStepCount());
-            sharedValues.saveInt("stepsOverWeek", pedometerData.getWeeklyStepCount());
-            sharedValues.saveFloat("energyExpenditureSteps", pedometerData.getEnergyExpenditureSteps());
+            sharedValues.saveInt("energyExpenditureSteps", pedometerData.getEnergyExpenditureSteps());
             sharedValues.saveFloat("distance", (float) pedometerData.getDistance());
+
+            if (newDay && isNewWeek()) {
+                sharedValues.saveInt("stepsOverWeek", 0);
+            } else if (newDay && !isNewWeek()) {
+                sharedValues.saveInt("stepsOverWeek", data.get(data.size() - 1).getPedometerData().getWeeklyStepCount());
+            } else {
+                sharedValues.saveInt("stepsOverWeek", pedometerData.getWeeklyStepCount());
+            }
 
             //HeartRateValues
             sharedValues.saveInt("averageHeartRate", heartRateData.getAverageHeartRate());
@@ -460,7 +475,7 @@ public class UserSessionManager {
             sharedValues.saveInt("minHeartRate", heartRateData.getMinHeartRate());
 
         }
-        Log.e(TAG, "Data mapped to sharedValues");
+
         progress.dismiss();
 
         if (intent != null) {
@@ -473,9 +488,12 @@ public class UserSessionManager {
         ArrayList<DailyData> data = userData.getDailyData();
         DailyData dailyData;
 
+        //First time
         if (data.size() == 0) {
+
             dailyData = new DailyData();
         } else {
+            //Same Day
             if (data.get(data.size() - 1).getSessionDay().equals(sharedValues.getString("sessionDay"))) {
                 dailyData = data.get(data.size() - 1);
             } else {
@@ -491,7 +509,7 @@ public class UserSessionManager {
         pedometerData.setDailyStepCount(sharedValues.getInt("stepsOverDay"));
         pedometerData.setWeeklyStepCount(sharedValues.getInt("stepsOverWeek"));
         pedometerData.setDistance(sharedValues.getFloat("distance"));
-        pedometerData.setEnergyExpenditureSteps(sharedValues.getFloat("energyExpenditureSteps"));
+        pedometerData.setEnergyExpenditureSteps(sharedValues.getInt("energyExpenditureSteps"));
         pedometerData.setDistance(sharedValues.getFloat("distance"));
 
         //HeartRateData
@@ -512,7 +530,28 @@ public class UserSessionManager {
         Collections.reverse(arrayList);
         return arrayList;
     }
+
+    private boolean isNewWeek() {
+        try {
+            return tryToCheckIfNewWeek();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private boolean tryToCheckIfNewWeek() throws ParseException {
+
+        SimpleDateFormat currDate = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        ArrayList<DailyData> myList = userData.getDailyData();
+        Calendar c = Calendar.getInstance();
+        Calendar checkWeek = Calendar.getInstance();
+        checkWeek.setTime(currDate.parse(myList.get(myList.size() - 1).getSessionDay()));
+        int weekOfYear = checkWeek.get(Calendar.WEEK_OF_YEAR);
+        return (c.get(Calendar.WEEK_OF_YEAR)) > weekOfYear;
+    }
 }
+
 
 
 

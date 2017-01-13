@@ -97,7 +97,9 @@ public class ProfileActivity extends AppCompatActivity {
         mInputHeight = (EditText) findViewById(R.id.input_height);
         mInputEmail = (EditText) findViewById(R.id.input_email);
         spinner = (Spinner) findViewById(R.id.spinner_gender);
+
         mapUserDataToView();
+
         if (Objects.equals(userData.getGender(), "Female")) {
             spinner.setSelection(1);
         } else if (Objects.equals(userData.getGender(), "Male")) {
@@ -145,7 +147,7 @@ public class ProfileActivity extends AppCompatActivity {
             userData.setWeight(Integer.parseInt(mInputWeight.getText().toString()));
 
             UserSessionManager.setUserData(userData);
-            userSessionManager.uploadUserData(this, showProgressBar, false);
+            userSessionManager.uploadUserData(this, showProgressBar, false, false);
         }
     }
 

@@ -118,17 +118,6 @@ public class SharedValues {
         prefsEditor.remove(key);
         prefsEditor.apply();
     }
-
-    /**
-     * Method to check whether a value with a specified key exists in the shared values
-     *
-     * @param key string
-     * @return true if key exists within the shared value
-     */
-    boolean checkIfContained(String key) {
-        return sharedPreferences.contains(key);
-    }
-
 }
 
 

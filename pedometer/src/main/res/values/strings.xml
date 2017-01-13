@@ -96,6 +96,7 @@
     <string name="logout">Logout</string>
     <string name="welcome_to_step_up">Welcome to Step Up!</string>
     <string name="login">Login</string>
+    <string name="cal">Cal</string>
 
 
 </resources>

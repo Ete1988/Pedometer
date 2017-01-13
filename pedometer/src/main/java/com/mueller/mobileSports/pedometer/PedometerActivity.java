@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,7 +36,7 @@ import java.util.Locale;
  */
 public class PedometerActivity extends AppCompatActivity {
 
-    private final static String TAG = PedometerActivity.class.getSimpleName();
+
     boolean doubleBackToExitPressedOnce = false;
     private UserSessionManager userSessionManager;
     private CircularProgressBar cBar;
@@ -54,7 +53,7 @@ public class PedometerActivity extends AppCompatActivity {
                 mCadence.setText(String.format(Locale.getDefault(), "%.2f", intent.getDoubleExtra("cadenceValue", 0.0)));
                 mDistance.setText(String.format(Locale.getDefault(), "%.2f", intent.getDoubleExtra("distanceValue", 0.0)));
                 mSpeed.setText(String.format(Locale.getDefault(), "%.2f", intent.getDoubleExtra("speedValue", 0.0)));
-                mEnergyExpenditure.setText(String.format(Locale.getDefault(), "%.2f", intent.getFloatExtra("energyExpenditure", 0.0f)));
+                mEnergyExpenditure.setText(String.format(Locale.getDefault(), "%d", intent.getIntExtra("energyExpenditureSteps", 0)));
 
             }
         }
@@ -89,10 +88,9 @@ public class PedometerActivity extends AppCompatActivity {
         registerReceiver(mUpdateReceiver, updateIntentFilter());
     }
 
+
     @Override
     protected void onPause() {
-        Log.e(TAG, "Paused");
-        userSessionManager.uploadUserData(this, false, false);
         tryToUnregisterReceiver(mUpdateReceiver);
         super.onPause();
     }
@@ -129,7 +127,7 @@ public class PedometerActivity extends AppCompatActivity {
                 startActivity(i);
                 break;
             case R.id.menu_logout:
-                userSessionManager.uploadUserData(this, true, true);
+                userSessionManager.uploadUserData(this, true, true, true);
                 break;
             case R.id.menu_profile:
                 Intent i2 = new Intent(this, ProfileActivity.class);
@@ -200,6 +198,7 @@ public class PedometerActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        userSessionManager.uploadUserData(this, false, false, true);
         stopService(new Intent(this, PedometerService.class));
         stopService(new Intent(this, HeartRateSensorService.class));
         stopService(new Intent(this, HeartRateSensorSimulationService.class));

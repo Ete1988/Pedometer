@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:text="@string/general"
             android:textSize="24sp"
-            android:textStyle="normal|bold|italic" />
+            android:textStyle="normal|bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,7 +49,7 @@
                 android:fontFamily="sans-serif"
                 android:text="@string/activity_level"
                 android:textSize="18sp"
-                android:textStyle="normal|italic" />
+                android:textStyle="normal" />
 
             <TextView
                 android:id="@+id/SE_TextActivityLevelView"
@@ -59,7 +59,7 @@
                 android:fontFamily="serif"
                 android:textAlignment="center"
                 android:textSize="18sp"
-                android:textStyle="normal|italic" />
+                android:textStyle="normal" />
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textSize="24sp"
-            android:textStyle="normal|bold|italic" />
+            android:textStyle="normal|bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,13 +103,14 @@
             android:paddingStart="15dp">
 
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:text="@string/step_goal"
                 android:textAlignment="textStart"
                 android:textSize="18sp"
-                android:textStyle="normal|italic" />
+                android:textStyle="normal" />
 
             <TextView
                 android:id="@+id/SE_TextStepGoalView"
@@ -120,7 +121,7 @@
                 android:text="@string/emptyString"
                 android:textAlignment="center"
                 android:textSize="18sp"
-                android:textStyle="normal|italic" />
+                android:textStyle="normal" />
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -150,11 +151,12 @@
             android:background="@color/mySpinnerColor" />
 
         <TextView
+            android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/heart_rate"
             android:textSize="24sp"
-            android:textStyle="normal|bold|italic" />
+            android:textStyle="normal|bold" />
 
 
         <LinearLayout
@@ -175,7 +177,7 @@
                     android:layout_weight="3"
                     android:text="@string/resting_heart_rate"
                     android:textSize="18sp"
-                    android:textStyle="normal|italic" />
+                    android:textStyle="normal" />
 
 
 
@@ -226,7 +228,7 @@
                     android:layout_weight="2"
                     android:text="@string/maximum_heart_rate"
                     android:textSize="18sp"
-                    android:textStyle="normal|italic" />
+                    android:textStyle="normal" />
 
 
                 <TextView

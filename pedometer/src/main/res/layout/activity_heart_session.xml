@@ -6,14 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context="com.mueller.mobileSports.heartRate.WorkoutActivity">
+    tools:context="com.mueller.mobileSports.heartRate.HRSessionActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="fill_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/primary"
-        android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -46,7 +45,7 @@
                     android:fontFamily="sans-serif"
                     android:text="@string/heart_rate"
                     android:textSize="24sp"
-                    android:textStyle="normal|bold|italic" />
+                    android:textStyle="normal|bold" />
 
                 <TextView
                     android:id="@+id/TS_HeartRateView"
@@ -87,7 +86,7 @@
                     android:fontFamily="sans-serif"
                     android:text="@string/average"
                     android:textSize="18sp"
-                    android:textStyle="normal|italic" />
+                    android:textStyle="normal" />
 
                 <TextView
                     android:id="@+id/TS_AvrHRView"
@@ -121,7 +120,7 @@
                     android:fontFamily="sans-serif"
                     android:text="@string/minimum"
                     android:textSize="18sp"
-                    android:textStyle="normal|italic" />
+                    android:textStyle="normal" />
 
                 <TextView
                     android:id="@+id/TS_MinHRView"
@@ -155,7 +154,7 @@
                     android:fontFamily="sans-serif"
                     android:text="@string/maximum"
                     android:textSize="18sp"
-                    android:textStyle="normal|italic" />
+                    android:textStyle="normal" />
 
                 <TextView
                     android:id="@+id/TS_MaxHRView"
@@ -194,7 +193,7 @@
                     android:fontFamily="sans-serif"
                     android:text="@string/percentage_of_heart_rate"
                     android:textSize="14sp"
-                    android:textStyle="normal|italic" />
+                    android:textStyle="normal" />
 
                 <TextView
                     android:id="@+id/TS_PercentageOfHrMaxView"
@@ -228,7 +227,7 @@
                     android:fontFamily="sans-serif"
                     android:text="@string/energy_expenditure"
                     android:textSize="16sp"
-                    android:textStyle="normal|italic" />
+                    android:textStyle="normal" />
 
                 <TextView
                     android:id="@+id/TS_EnergyExpenditureView"
@@ -297,8 +296,8 @@
                     android:layout_weight="4"
                     android:fontFamily="sans-serif"
                     android:text="@string/trimp_score"
-                    android:textSize="24sp"
-                    android:textStyle="normal|bold|italic" />
+                    android:textSize="21sp"
+                    android:textStyle="normal|bold" />
 
                 <TextView
                     android:id="@+id/TS_TrimpScoreView"
@@ -328,8 +327,8 @@
                     android:layout_weight="4"
                     android:fontFamily="sans-serif"
                     android:text="@string/energy_burned"
-                    android:textSize="24sp"
-                    android:textStyle="normal|bold|italic" />
+                    android:textSize="22sp"
+                    android:textStyle="normal|bold" />
 
                 <TextView
                     android:id="@+id/TS_TotalEnergyView"
@@ -344,9 +343,9 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:text="@string/kcal"
-                    android:textSize="12sp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
 

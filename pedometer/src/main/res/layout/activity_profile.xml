@@ -42,7 +42,7 @@
                 android:focusable="false"
                 android:hint="@string/email"
                 android:inputType="text"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_name"
                 android:inputType="text"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -77,11 +77,11 @@
                 android:layout_width="5dp"
                 android:layout_height="wrap_content" />
 
-
             <Spinner
                 android:id="@+id/spinner_gender"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_drop_down_normal"
                 android:entries="@array/gender_selector"
                 android:popupBackground="@color/primary"
                 android:textSize="25sp" />
@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_age"
                 android:inputType="number"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -123,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_weight"
                 android:inputType="number"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -138,7 +138,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_height"
                 android:inputType="number"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
 
         </android.support.design.widget.TextInputLayout>
 

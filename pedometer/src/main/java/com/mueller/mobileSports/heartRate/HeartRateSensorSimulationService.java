@@ -103,14 +103,14 @@ public class HeartRateSensorSimulationService extends Service {
         }
         broadcastUpdate(ACTION_HRM_SIMULATION_CONNECTED);
         mHandler.postDelayed(mHeartRateSimulation, 0);
-        Log.e(TAG, "HeartRateSensorSimulation started.");
+        Log.i(TAG, "HeartRateSensorSimulation started.");
     }
 
     @Override
     public void onDestroy() {
         broadcastUpdate(ACTION_HRM_SIMULATION_DISCONNECTED);
         mHandler.removeCallbacks(mHeartRateSimulation);
-        Log.e(TAG, "HeartRateSensorSimulation destroyed.");
+        Log.i(TAG, "HeartRateSensorSimulation destroyed.");
         super.onDestroy();
     }
 

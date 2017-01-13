@@ -27,46 +27,49 @@ public class PedometerService extends Service implements SensorEventListener {
 
     private final static String TAG = PedometerService.class.getSimpleName();
     private SensorManager sensorManager;
-    private int stepsOverDay;
-    private int stepsOverWeek;
-    private int timeCount;
-    private int mCadenceStepCount;
+    private int stepsOverDay, stepsOverWeek, secondaryStepCount, totalExpenditureOverDay;
     private double stride;
     private SharedValues sharedValues;
     private Sensor mSensor;
     private Handler mHandler;
+
+    /*
+        Timer for calculating distance, cadence, speed, totelEnergyExpenditure.
+        Speed and cadence will be updated every 5 seconds
+        Energy every second
+     */
     private Runnable mTimer = new Runnable() {
         @Override
         public void run() {
-            timeCount++;
 
-            if (timeCount == 5) {
-                double cadence = calculateCadence(mCadenceStepCount, 5);
-                double distance = calculateDistance(stride, stepsOverDay);
-                double speed = calculateSpeed(stride, cadence);
-                float energy = calculateEnergyExpenditure(cadence);
-                DecimalFormat df = new DecimalFormat("#.##");
-                df.setRoundingMode(RoundingMode.CEILING);
+            Intent i = new Intent(VALUES_CHANGED);
+            DecimalFormat df = new DecimalFormat("#.##");
+            df.setRoundingMode(RoundingMode.CEILING);
 
-                cadence = Double.parseDouble(df.format(cadence));
-                distance = Double.parseDouble(df.format(distance));
-                speed = Double.parseDouble(df.format(speed));
-                energy = Float.parseFloat(df.format(energy));
+            double cadence = calculateCadence(secondaryStepCount, 5);
+            double speed = calculateSpeed(stride, cadence);
+            double energy = calculateEnergyExpenditureForOneStep(cadence);
+            double distance = calculateDistance(stride, stepsOverDay);
 
-                Intent i = new Intent(VALUES_CHANGED);
-                i.putExtra("cadenceValue", cadence);
-                i.putExtra("speedValue", speed);
-                i.putExtra("distanceValue", distance);
-                i.putExtra("energyExpenditure", energy);
+            energy = energy * (double) secondaryStepCount;
 
-                sharedValues.saveFloat("distance", (float) distance);
-                sharedValues.saveFloat("energyExpenditureSteps", energy);
+            //formatting
+            cadence = Double.parseDouble(df.format(cadence));
+            speed = Double.parseDouble(df.format(speed));
+            totalExpenditureOverDay += Math.round(energy);
+            distance = Double.parseDouble(df.format(distance));
 
-                sendBroadcast(i);
-                mCadenceStepCount = 0;
-                timeCount = 0;
-            }
-            mHandler.postDelayed(this, 1000);
+            i.putExtra("cadenceValue", cadence);
+            i.putExtra("speedValue", speed);
+            i.putExtra("distanceValue", distance);
+            i.putExtra("energyExpenditureSteps", totalExpenditureOverDay);
+
+            sharedValues.saveFloat("distance", (float) distance);
+            sharedValues.saveInt("energyExpenditureSteps", totalExpenditureOverDay);
+
+            sendBroadcast(i);
+            secondaryStepCount = 0;
+            mHandler.postDelayed(this, 5000);
         }
 
     };
@@ -87,7 +90,8 @@ public class PedometerService extends Service implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         sharedValues.saveInt("stepsOverDay", stepsOverDay++);
         sharedValues.saveInt("stepsOverWeek", stepsOverWeek++);
-        mCadenceStepCount++;
+        secondaryStepCount++;
+
         Intent intent = new Intent(STEP_MESSAGE);
         intent.putExtra("steps", stepsOverDay);
         sendBroadcast(intent);
@@ -118,11 +122,12 @@ public class PedometerService extends Service implements SensorEventListener {
 
         stepsOverDay = sharedValues.getInt("stepsOverDay");
         stepsOverWeek = sharedValues.getInt("stepsOverWeek");
+        totalExpenditureOverDay = sharedValues.getInt("energyExpenditureSteps");
 
         mHandler.postDelayed(mTimer, 1000);
         stride = calculateStrideLength();
         sensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_FASTEST);
-        Log.e(TAG, "Sensor Listener Started.");
+        Log.i(TAG, "Sensor Listener Started.");
     }
 
     @Override
@@ -136,8 +141,8 @@ public class PedometerService extends Service implements SensorEventListener {
     }
 
     @Contract(pure = true)
-    private float calculateCadence(float stepCount, int timeWindow) {
-        return stepCount / (float) timeWindow;
+    private double calculateCadence(double stepCount, double timeWindow) {
+        return stepCount / timeWindow;
     }
 
     private double calculateStrideLength() {
@@ -164,21 +169,28 @@ public class PedometerService extends Service implements SensorEventListener {
         return (((steps / 2) * strideLength) / 1000); //km
     }
 
-    private float calculateEnergyExpenditure(double cadence) {
+    private double calculateEnergyExpenditureForOneStep(double cadence) {
         double energyExpenditure;
         double gravity = 9.81;
         double weight = UserSessionManager.getUserData().getWeight();
 
-        //Energy for lifting body in J
+        /*
+            This is a rather trivial implemententaion based on the energy needed to do one step
+            This result is based on the assumption that 1 step takes 1 second and
+            decides with help of the candence if the user is running or walking.
+            But again, this way of calculating is by no means accurate.
+            If you walk really fast, you cadence can easily be over 3.0
+            For this prototype this calculation is sufficient, but not for the real thing.
+         */
         if (cadence <= 3.0) {
-            energyExpenditure = weight * gravity * 0.03 * cadence;
+            //walking
+            energyExpenditure = weight * gravity * 0.03;
         } else {
-            energyExpenditure = weight * gravity * 0.07 * cadence;
+            //running
+            energyExpenditure = weight * gravity * 0.07;
         }
+        energyExpenditure = (energyExpenditure / 4.184);
+        return energyExpenditure;
 
-        energyExpenditure = (energyExpenditure / 4.184) / 1000;  // kCal
-        energyExpenditure = (energyExpenditure * stepsOverDay);
-
-        return Math.round(energyExpenditure);
     }
 }
