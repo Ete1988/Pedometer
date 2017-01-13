@@ -1,31 +1,34 @@
 package com.mueller.mobileSports.general;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.mueller.mobileSports.pedometer.MainActivity.R;
-import com.mueller.mobileSports.pedometer.sharedValues;
+import com.mueller.mobileSports.user.UserData;
+import com.mueller.mobileSports.user.UserSessionManager;
+
+import java.util.Locale;
+
+/**
+ * Created by Ete on 11/10/2016.
+ * <p>
+ * Activity that offers methods to adjust app relevant data.
+ */
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private int physicalActivityLevel;
-    private int goal;
-    private TextView level;
-    private TextView stepGoal;
-    private sharedValues values;
-
-    private String[] goal_arr = {"5000", "6000", "7000", "8000", "9000", "10000", "Other? Please set here!"};
-
-    private String[] actLevel_arr = {"0: Avoid walking or exertion, for example, always use elevator, drive " +
+    private final String[] goalsValuesArray = {"5000", "6000", "7000", "8000", "9000", "10000", "Other? Please set here!"};
+    private final String[] activityLevelTextArray = {"0: Avoid walking or exertion, for example, always use elevator, drive " +
             "whenever possible instead of walking",
             "1: Walk for pleasure, routinely use stairs, occasionally exercise " +
                     "sufficiently to cause heavy breathing or perspiration",
@@ -40,167 +43,240 @@ public class SettingsActivity extends AppCompatActivity {
             "7: run over 10 miles (16 km) per week or spend over 3 hours per week " +
                     "in comparable physical activity"
     };
+    private int activityLevel, stepGoal, restingHeartRate, heartRateMax;
+    private TextView mActivityLevelText, mCurrentStepGoalText, mRestingHeartRate, mHeartRateMax;
+    private UserSessionManager userSessionManager;
+    private Button mSaveBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        level = (TextView) findViewById(R.id.level);
-        stepGoal = (TextView) findViewById(R.id.stepGoalView);
-        values = sharedValues.getInstance(this);
-        physicalActivityLevel = values.getInt("physicalActivityLevel");
-        goal = values.getInt("stepGoal");
-        setLevel();
-        //setGoal();
-
-        setSupportActionBar(myToolbar);
         setTitle("Settings");
+        init();
+        mSaveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateData();
+            }
+        });
     }
 
-    public void onClick(View v) {
-        if (v.getId() == R.id.editProfileButton) {
-            Intent intent = new Intent(SettingsActivity.this, ProfileActivity.class);
-            startActivity(intent);
+    /**
+     * Initializes most fields of activity
+     */
+    private void init() {
+        UserData userData = UserSessionManager.getUserData();
+        userSessionManager = new UserSessionManager(this);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        mSaveBtn = (Button) findViewById(R.id.SE_SaveChangesBtn);
+        mActivityLevelText = (TextView) findViewById(R.id.SE_TextActivityLevelView);
+        mCurrentStepGoalText = (TextView) findViewById(R.id.SE_TextStepGoalView);
+        mRestingHeartRate = (TextView) findViewById(R.id.SE_TextRestingHeartRateView);
+        mHeartRateMax = (TextView) findViewById(R.id.SE_TextHeartRateMaxView);
+        activityLevel = userData.getActivityLevel();
+        stepGoal = userData.getStepGoal();
+
+        mActivityLevelText.setText(String.format(Locale.getDefault(), "%d", activityLevel));
+
+        if(stepGoal == 0){
+            stepGoal = 5000;
+            mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", stepGoal));
+            userData.setStepGoal(stepGoal);
+        } else {
+            mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", stepGoal));
+        }
+
+        if (!(userData.getRestingHeartRate() == 0)) {
+            restingHeartRate = userData.getRestingHeartRate();
+        } else {
+            restingHeartRate = 60;
+        }
+
+        //If HRMax is set, get it
+        if (!(userData.getHeartRateMax() == 0)) {
+            heartRateMax = userData.getHeartRateMax();
+            //If HRMax is not set, check if Age is set and calculate HRMax based on it
+        } else if (!(userData.getAge() == 0)) {
+            heartRateMax = (int) (208 - (0.7 * (userData.getAge())));
+        } else {
+            heartRateMax = 0;
+        }
+
+
+        mRestingHeartRate.setText(String.format(Locale.getDefault(), "%d", restingHeartRate));
+        mHeartRateMax.setText(String.format(Locale.getDefault(), "%d", heartRateMax));
+    }
+
+    public void onClickSettingsActivity(View v) {
+        if (v.getId() == R.id.SE_GoalSelector) {
+            setGoalDialog();
+        } else if (v.getId() == R.id.SE_HeartRateMaxSelector) {
+            numberPickerDialog(120, 220, mHeartRateMax, "Set Maximum Heart Rate");
+        } else if (v.getId() == R.id.SE_LevelSelector) {
+            setActivityLevelDialog();
+        } else if (v.getId() == R.id.SE_RestingHeartRateSelector) {
+            numberPickerDialog(40, 130, mRestingHeartRate, "Set Resting Heart Rate");
+        } else if (v.getId() == R.id.SE_SaveChangesBtn) {
+            updateData();
         }
     }
 
-    public void setActivityLevelDialog(View v) {
-
-        AlertDialog.Builder activityLevelDialog = new AlertDialog.Builder(this);
-        activityLevelDialog.setTitle("Select your activity level");
-        activityLevelDialog.setSingleChoiceItems(actLevel_arr, -1, new DialogInterface
+    /**
+     * Method to set the activity level
+     */
+    public void setActivityLevelDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.MyDialogTheme);
+        dialog.setTitle("Select your activity");
+        dialog.setSingleChoiceItems(activityLevelTextArray, -1, new DialogInterface
                 .OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
-                physicalActivityLevel = item;
-                setLevel();
+                activityLevel = item;
+                mActivityLevelText.setText(String.format(Locale.getDefault(), "%d", activityLevel));
                 dialog.dismiss();
-
             }
         });
-        AlertDialog alert = activityLevelDialog.create();
+        AlertDialog alert = dialog.create();
         alert.show();
     }
 
-    public void setGoalDialog(View v) {
-
-        AlertDialog.Builder activityLevelDialog = new AlertDialog.Builder(this);
-        activityLevelDialog.setTitle("Set your goal for today");
-        activityLevelDialog.setSingleChoiceItems(goal_arr, -1, new DialogInterface
+    /**
+     * Method to set the stepGoal
+     */
+    public void setGoalDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.MyDialogTheme);
+        dialog.setTitle("Set your stepGoal for today");
+        dialog.setSingleChoiceItems(goalsValuesArray, -1, new DialogInterface
                 .OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
-                goal = item;
-                setGoal();
+                mapSelectedItemToGoal(item);
                 dialog.dismiss();
-
             }
         });
-        AlertDialog alert = activityLevelDialog.create();
+        AlertDialog alert = dialog.create();
         alert.show();
 
     }
 
-    public void editGoal() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Please enter daily Goal");
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
-        input.setRawInputType(Configuration.KEYBOARD_12KEY);
-        alert.setView(input);
-
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int positiveButton) {
-                String foo = input.getText().toString();
-                goal = Integer.parseInt(foo);
-                stepGoal.setText(input.getText());
-                values.saveInt("stepGoal", goal);
-                dialog.dismiss();
-
-            }
-        });
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int negativeButton) {
-                //Put actions for CANCEL button here, or leave in blank
-
-                stepGoal.setText(Integer.toString(values.getInt("stepGoal")));
-                dialog.dismiss();
-
-            }
-        });
-        alert.show();
-
-    }
-
-    private void setLevel() {
-
-        switch (physicalActivityLevel) {
+    //Maps the selected item from SetGoalDialog to the widget and sharedValue
+    private void mapSelectedItemToGoal(int item) {
+        switch (item) {
             case 0:
-                level.setText("0");
+                stepGoal = 5000;
+                mCurrentStepGoalText.setText(R.string.fiveTH);
                 break;
             case 1:
-                level.setText("1");
+                stepGoal = 6000;
+                mCurrentStepGoalText.setText(R.string.sixTH);
                 break;
             case 2:
-                level.setText("2");
+                stepGoal = 7000;
+                mCurrentStepGoalText.setText(R.string.sevenTH);
                 break;
             case 3:
-                level.setText("3");
+                stepGoal = 8000;
+                mCurrentStepGoalText.setText(R.string.eigthTH);
                 break;
             case 4:
-                level.setText("4");
+                stepGoal = 9000;
+                mCurrentStepGoalText.setText(R.string.itsOverNineTHousand);
                 break;
             case 5:
-                level.setText("5");
-                break;
-            case 6:
-                level.setText("6");
-                break;
-            case 7:
-                level.setText("7");
-                break;
-            default:
-                level.setText(" ");
-                break;
-        }
-
-        values.saveInt("physicalActivityLevel", physicalActivityLevel);
-    }
-
-    private void setGoal() {
-        switch (goal) {
-
-            case 0:
-                stepGoal.setText("5000");
-                goal = 5000;
-                break;
-            case 1:
-                stepGoal.setText("6000");
-                goal = 6000;
-                break;
-            case 2:
-                stepGoal.setText("7000");
-                goal = 7000;
-                break;
-            case 3:
-                stepGoal.setText("8000");
-                goal = 8000;
-                break;
-            case 4:
-                stepGoal.setText("9000");
-                goal = 9000;
-                break;
-            case 5:
-                stepGoal.setText("10000");
-                goal = 10000;
+                stepGoal = 10000;
+                mCurrentStepGoalText.setText(R.string.tenTH);
                 break;
             case 6:
                 editGoal();
                 break;
-            default:
-                stepGoal.setText(Integer.toString(values.getInt("stepGoal")));
-                break;
+
         }
-        values.saveInt("stepGoal", goal);
+    }
+
+    //Edit dialog for stepGoal
+    private void editGoal() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.MyDialogTheme);
+        dialog.setTitle("Please enter daily Goal");
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        input.setRawInputType(Configuration.KEYBOARD_12KEY);
+        dialog.setView(input);
+        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int positiveButton) {
+                String foo = input.getText().toString();
+                stepGoal = Integer.parseInt(foo);
+                mCurrentStepGoalText.setText(input.getText());
+                dialog.dismiss();
+            }
+        });
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int negativeButton) {
+                //Put actions for CANCEL button here, or leave in blank
+                mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", stepGoal));
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = dialog.create();
+        alert.show();
+    }
+
+    /**
+     * Safe and persist userdata on server
+     */
+    public void updateData() {
+        UserData userData = UserSessionManager.getUserData();
+
+        userData.setStepGoal(stepGoal);
+        userData.setActivityLevel(activityLevel);
+        userData.setHeartRateMax(heartRateMax);
+        userData.setRestingHeartRate(restingHeartRate);
+        UserSessionManager.setUserData(userData);
+        userSessionManager.uploadUserData(this, true, false, false);
+    }
+
+    @Override
+    protected void onResume() {
+        userSessionManager.checkUserState();
+        super.onResume();
+    }
+
+    /**
+     * Method to generate numberPicker dialog
+     *
+     * @param min min number to pick
+     * @param max max number to pick
+     * @param textView textview to display picked number
+     * @param title title of to be created numberpicker
+     */
+    private void numberPickerDialog(int min, int max, final TextView textView, final String title) {
+        NumberPicker myNumberPicker = new NumberPicker(this);
+        myNumberPicker.setMinValue(min);
+        myNumberPicker.setMaxValue(max);
+
+        NumberPicker.OnValueChangeListener myValChangeListener = new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                textView.setText(String.format(Locale.getDefault(), "%d", newVal));
+            }
+        };
+
+        myNumberPicker.setOnValueChangedListener(myValChangeListener);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.MyDialogTheme).setView(myNumberPicker);
+        dialog.setTitle(title);
+
+        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (textView.getId() == mRestingHeartRate.getId()) {
+                    restingHeartRate = Integer.parseInt(mRestingHeartRate.getText().toString());
+                } else if (textView.getId() == mHeartRateMax.getId()) {
+                    heartRateMax = Integer.parseInt(mHeartRateMax.getText().toString());
+                }
+            }
+        });
+        AlertDialog alert = dialog.create();
+        alert.show();
+
     }
 }
 

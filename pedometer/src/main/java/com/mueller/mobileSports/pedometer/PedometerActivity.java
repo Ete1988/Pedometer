@@ -1,13 +1,13 @@
 package com.mueller.mobileSports.pedometer;
 
 
+import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,51 +17,98 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.backendless.Backendless;
-import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessFault;
 import com.lylc.widget.circularprogressbar.CircularProgressBar;
-import com.mueller.mobileSports.general.LoginActivity;
 import com.mueller.mobileSports.general.SettingsActivity;
-import com.mueller.mobileSports.general.StatisticsActivity;
+import com.mueller.mobileSports.general.SharedValues;
+import com.mueller.mobileSports.heartRate.HeartRateActivity;
+import com.mueller.mobileSports.heartRate.HeartRateSensorService;
+import com.mueller.mobileSports.heartRate.HeartRateSensorSimulationService;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
+import com.mueller.mobileSports.user.ProfileActivity;
+import com.mueller.mobileSports.user.UserSessionManager;
+
+import java.util.Locale;
+
+/**
+ * Created by Ete
+ * <p>
+ * Activity meant for the pedometer app mode
+ */
+public class PedometerActivity extends AppCompatActivity {
 
 
-public class PedometerActivity extends AppCompatActivity implements SensorEventListener {
-
+    boolean doubleBackToExitPressedOnce = false;
+    private UserSessionManager userSessionManager;
     private CircularProgressBar cBar;
-    private SensorManager sensorManager;
-    private TextView date;
-    private int stepsOverWeek;
-    private int stepsOverDay;
-    private sharedValues values;
+    private final BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (PedometerService.STEP_MESSAGE.equals(action)) {
+                int steps = intent.getIntExtra("steps", 0);
+                cBar.setProgress(steps);
+                cBar.setTitle(Integer.toString(steps));
+
+            } else if (PedometerService.VALUES_CHANGED.equals(action)) {
+                //TODO format all
+                mCadence.setText(String.format(Locale.getDefault(), "%.2f", intent.getDoubleExtra("cadenceValue", 0.0)));
+                mDistance.setText(String.format(Locale.getDefault(), "%.2f", intent.getDoubleExtra("distanceValue", 0.0)));
+                mSpeed.setText(String.format(Locale.getDefault(), "%.2f", intent.getDoubleExtra("speedValue", 0.0)));
+                mEnergyExpenditure.setText(String.format(Locale.getDefault(), "%d", intent.getIntExtra("energyExpenditureSteps", 0)));
+
+            }
+        }
+    };
+    private TextView mDate, mCadence, mSpeed, mDistance, mEnergyExpenditure;
+    private SharedValues sharedValues;
+
+    private static IntentFilter updateIntentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(PedometerService.STEP_MESSAGE);
+        intentFilter.addAction(PedometerService.VALUES_CHANGED);
+        return intentFilter;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedometer);
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-        values = sharedValues.getInstance(this);
-        date = (TextView) findViewById(R.id.date);
-        cBar = (CircularProgressBar) findViewById(R.id.circularprogressbar3);
-        cBar.setSubTitle("Steps");
-        values.checkTime();
-        getData();
+        init();
+        registerReceiver(mUpdateReceiver, updateIntentFilter());
+        if (!isMyServiceRunning(PedometerService.class)) {
+            Intent intent = new Intent(PedometerActivity.this, PedometerService.class);
+            startService(intent);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        userSessionManager.checkUserState();
+        mapDataToView();
+        registerReceiver(mUpdateReceiver, updateIntentFilter());
     }
 
 
-    private void getData() {
-        stepsOverDay = values.getInt("dayCount");
-        stepsOverWeek = values.getInt("weekCount");
-        date.setText(values.getString("checkDate"));
-        cBar.setMax(values.getInt("stepGoal"));
+    @Override
+    protected void onPause() {
+        tryToUnregisterReceiver(mUpdateReceiver);
+        super.onPause();
     }
 
-    private void updateData() {
-        values.saveInt("dayCount", stepsOverDay);
-        values.saveInt("weekCount", stepsOverWeek);
+    public void onBackPressed() {
+
+        if (doubleBackToExitPressedOnce) {
+            moveTaskToBack(true);
+        }
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Press Back again to leave", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 5000);
     }
 
     @Override
@@ -71,84 +118,91 @@ public class PedometerActivity extends AppCompatActivity implements SensorEventL
         return true;
     }
 
-    public void onClick(View v) {
-        if (v.getId() == R.id.statsBtn) {
-            updateData();
-            Intent intent = new Intent(PedometerActivity.this, StatisticsActivity.class);
-            startActivity(intent);
-        }
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //Only one button for now.
+
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent i = new Intent(PedometerActivity.this, SettingsActivity.class);
+            case R.id.menu_settings:
+                Intent i = new Intent(this, SettingsActivity.class);
                 startActivity(i);
                 break;
-            case R.id.action_logout:
-                Backendless.UserService.logout(new AsyncCallback<Void>() {
-                    @Override
-                    public void handleResponse(Void aVoid) {
-                        Toast.makeText(getBaseContext(), "You logged out!", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(PedometerActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void handleFault(BackendlessFault backendlessFault) {
-                        Toast.makeText(getBaseContext(), "Log Out failed!", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-            default:
+            case R.id.menu_logout:
+                userSessionManager.uploadUserData(this, true, true, true);
+                break;
+            case R.id.menu_profile:
+                Intent i2 = new Intent(this, ProfileActivity.class);
+                startActivity(i2);
                 break;
         }
         return true;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getData();
-        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        if (countSensor != null) {
-            sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
-        } else {
-            Toast.makeText(this, "Count sensor not available!", Toast.LENGTH_LONG).show();
-        }
+    /**
+     * Initializes most fields of activity
+     */
+    private void init() {
+        userSessionManager = new UserSessionManager(this);
+        sharedValues = SharedValues.getInstance(this);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        setTitle("Pedometer");
+        mDate = (TextView) findViewById(R.id.PF_DateView);
+        mCadence = (TextView) findViewById(R.id.PF_CadenceView);
+        mSpeed = (TextView) findViewById(R.id.PF_SpeedView);
+        mDistance = (TextView) findViewById(R.id.PF_DistanceView);
+        mEnergyExpenditure = (TextView) findViewById(R.id.PF_EnergyExpenditure);
+        cBar = (CircularProgressBar) findViewById(R.id.circularprogressbar3);
+        cBar.setSubTitle("Steps");
+    }
 
+    /**
+     * Maps userdata to widgets in view
+     */
+    private void mapDataToView() {
+        mDate.setText(sharedValues.getString("sessionDay"));
+        cBar.setTitle(Integer.toString(sharedValues.getInt("stepsOverDay")));
+        cBar.setProgress(sharedValues.getInt("stepsOverDay"));
+        cBar.setMax(UserSessionManager.getUserData().getStepGoal());
+    }
+
+    public void onClickPedometerActivity(View v) {
+        if (v.getId() == R.id.PM_HeartRateBtn) {
+            Intent i = new Intent(this, HeartRateActivity.class);
+            startActivity(i);
+        }
+    }
+
+    /**
+     * Quick check if the given Service class is already running
+     *
+     * @param serviceClass to be checked service class
+     * @return true iff given service class is already running
+     */
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void tryToUnregisterReceiver(BroadcastReceiver myReceiver) {
+        try {
+            unregisterReceiver(myReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void onDestroy() {
+        userSessionManager.uploadUserData(this, false, false, true);
+        stopService(new Intent(this, PedometerService.class));
+        stopService(new Intent(this, HeartRateSensorService.class));
+        stopService(new Intent(this, HeartRateSensorSimulationService.class));
         super.onDestroy();
-        updateData();
-
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        updateData();
-        // if you unregister the last listener, the hardware will stop detecting step events
-        //sensorManager.unregisterListener(this);
-
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        stepsOverDay++;
-        stepsOverWeek++;
-        cBar.setProgress(stepsOverDay);
-        cBar.setTitle(Integer.toString(stepsOverDay));
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
 }
 

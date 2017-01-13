@@ -1,46 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Pedometer</string>
-    <string name="title_activity_account">AccountActivity</string>
-    <string name="title_activity_settings">SettingsActivity</string>
-    <string name="statistics">Statistics</string>
-    <string name="settings">Settings</string>
-    <string name="steps_this_week">Steps this week:</string>
-    <string name="setGoals">Set Goals</string>
-    <string name="accountDetails">Edit Profile</string>
-    <string name="test">test</string>
-    <string name="title_activity_profile">ProfileActivity</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">Step Up</string>
+    <string name="emptyString" />
+
+    <!-- Strings related to pdeometer -->
+    <string name="pedoTitle">STEPS</string>
+    <string name="cadence">Cadence:</string>
+    <string name="steps_s">Steps/s</string>
+    <string name="speed">Speed:</string>
+    <string name="km_h">km/h</string>
+    <string name="distance">Distance:</string>
+    <string name="km">km</string>
+
+    <!-- Strings related to settings layout -->
+    <string name="activity_level">Activity level:</string>
+    <string name="set_activity_level">set activity level</string>
+    <string name="set_goal">Set goal</string>
+    <string name="fiveTH">5000</string>
+    <string name="sixTH">6000</string>
+    <string name="sevenTH">7000</string>
+    <string name="eigthTH">8000</string>
+    <string name="itsOverNineTHousand">9000</string>
+    <string name="tenTH">10000</string>
+    <string name="general">General</string>
+    <string name="resting_heart_rate">Resting Heart Rate:</string>
+    <string name="maximum_heart_rate">Maximum Heart Rate:</string>
+    <string name="step_goal">Step Goal:</string>
+
+
+    <!-- Strings related to profile layout -->
     <string name="hint_name">Name</string>
-    <string name="hint_height">Height</string>
+    <string name="hint_height">Height in cm</string>
     <string name="hint_age">Age</string>
     <string name="save">Save changes</string>
-    <string name="hint_gender">Gender</string>
     <string name="hint_weight">Weight in Kg</string>
-    <string name="err_msg_email">Enter valid height address</string>
-    <string name="title_activity_login">Sign in</string>
+    <string name="email">E-Mail</string>
+    <string name="gender">Gender:</string>
+    <string-array name="gender_selector">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
 
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
+    <!-- Strings related to heart rate layout -->
+    <string name="default_timer">00:00:00</string>
+    <string name="average">Average:</string>
+    <string name="minimum">Minimum:</string>
+    <string name="maximum">Maximum:</string>
+    <string name="heart_rate">Heart Rate:</string>
+    <string name="percentage_of_heart_rate">Percentage of HRmax:</string>
+    <string name="bpm">bpm</string>
+    <string name="percentUnit">%</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="bluetooth_status">Bluetooth Status:</string>
+    <string name="search_bluetooth_device">Connect Device</string>
+    <string name="go_to_session">Go to Session</string>
+
+    <!-- Strings related to login layout -->
     <string name="action_sign_in">Sign in</string>
     <string name="action_register">No Account yet? Register here!</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This height address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing height
-        completions."
-    </string>
-    <string name="title_activity_register">RegisterActivity</string>
-    <string name="title_activity_statistics">Statistics</string>
-    <string name="emptyString" />
-    <string name="set_goals">Set Goals</string>
-    <string name="steps_today">Steps today</string>
-    <string name="title_activity_par_quest">parQuest</string>
-    <string name="activity_level">Activity level:</string>
-    <string name="level">level</string>
-    <string name="set_activity_level">set activity level</string>
+
+    <!-- Strings related to register layout -->
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="create_account">Create Account</string>
+    <string name="already_have_an_account_login">Already have an account? Login</string>
+
+
+    <!-- Training Session -->
+    <string name="stop">Stop</string>
+    <string name="resume">Resume</string>
+    <string name="start_session">Start Session</string>
+    <string name="trimp_score">TRIMP Score:</string>
+    <string name="energy_expenditure">Energy Expenditure:</string>
+    <string name="joules_min">J/min</string>
+    <string name="kcal">kCal</string>
+    <string name="energy_burned">Energy burned:</string>
+
+    <!-- Bluetooth Search -->
+    <string name="ble_not_supported">BLE is not supported</string>
+    <string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
+    <string name="devices">Devices:</string>
+    <string name="start_device_scan">Start Device Scan</string>
+    <string name="stop_device_scan">Stop Device Scan</string>
+    <string name="use_simulator">Use Simulator</string>
+    <string name="connect_to_device">Connect to device?</string>
+    <string name="unknown">Unknown</string>
+    <string name="pause">Pause</string>
+    <string name="scan">Scan</string>
+
+    <!-- Main Menu -->
+    <string name="settings">Settings</string>
+    <string name="profile">Profile</string>
+    <string name="logout">Logout</string>
+    <string name="welcome_to_step_up">Welcome to Step Up!</string>
+    <string name="login">Login</string>
+    <string name="cal">Cal</string>
+
+
 </resources>

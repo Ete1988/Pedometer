@@ -9,10 +9,9 @@
         android:id="@+id/my_toolbar"
         android:layout_width="fill_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
+        android:background="@color/primary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
 
 
     <LinearLayout
@@ -27,74 +26,106 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:theme="@style/TextLabel">
 
             <EditText
                 android:id="@+id/input_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:hint="Name" />
+                android:hint="@string/hint_name"
+                android:inputType="text" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:theme="@style/TextLabel">
 
             <EditText
                 android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email"
-                android:inputType="textEmailAddress"/>
+                android:hint="@string/email"
+                android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:theme="@style/TextLabel">
 
             <EditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"
-                android:inputType="textPassword"/>
+                android:hint="@string/password"
+                android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:theme="@style/TextLabel">
 
             <EditText
                 android:id="@+id/confirmpassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Confirm Password"
-                android:inputType="textPassword"/>
+                android:hint="@string/confirm_password"
+                android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
-
-        <Button android:id="@+id/createAccount_button"
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="25sp" />
+        <Button
+            android:id="@+id/createAccount_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create Account"
-            android:layout_marginTop="40dp"
-            android:textColor="@android:color/black"
-            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_gravity="center"
-            android:textStyle="normal|bold"
-            android:fontFamily="sans-serif-medium" />
+            android:layout_marginTop="40dp"
+            android:background="#fcd0f9"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/create_account"
+            android:textColor="@android:color/black"
+            android:textStyle="normal|bold" />
 
-        <TextView android:id="@+id/link_login"
+        <TextView
+            android:id="@+id/link_login"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:text="Already have an account? Login"
             android:gravity="center"
-            android:textSize="16dip"
             android:onClick="onClick"
-            android:paddingTop="20dp"/>
+            android:paddingTop="20dp"
+            android:text="@string/already_have_an_account_login"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imgTool"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@mipmap/app_icon" />
+
+    </RelativeLayout>
+
+
 </android.support.design.widget.CoordinatorLayout>
+
+
+
+
+
+
+
+
+

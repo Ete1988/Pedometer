@@ -22,6 +22,12 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.android.support:design:24.0.0'
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile project(':library')
+    compile project(':libary')
     compile project(':backendless')
+    compile files('D:/PersonalStuff/Uni/Programmierung/Android/MobileSports/Pedometer/Libs/opencsv-3.8.jar')
+    //compile files('C:/Users/Sandra/Desktop/MobileSports/Pedometer/Libs/opencsv-3.8.jar')
+
+
+    compile 'org.jetbrains:annotations-java5:15.0'
+    compile 'de.hdodenhof:circleimageview:1.3.0'
 }

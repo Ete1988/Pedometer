@@ -1,10 +1,27 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:colorAccent">@color/circular_progress_default_background</item>
+
     </style>
 
-    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_screen</item>
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@android:color/holo_purple</item>
     </style>
 
-    </resources>
+    <style name="mySpinner" parent="@android:style/Widget.DropDownItem.Spinner">
+        <item name="colorControlNormal">#eaeaea</item>
+        <item name="colorControlActivated">#000000</item>
+        <item name="colorControlHighlight">#000000</item>
+    </style>
+
+    <style name="TextLabel" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorHint">@color/textColor</item>
+        <item name="android:textSize">20sp</item>
+
+    </style>
+
+</resources>
