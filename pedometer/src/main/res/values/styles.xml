@@ -1,13 +1,24 @@
 <resources>
 
-    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_screen</item>
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowContentOverlay">@null</item>
+    <!-- inherit from the material theme -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Main theme colors -->
+        <!--   darker variant for the status bar and contextual app bars -->
+        <item name="android:colorPrimaryDark">@color/primaryDark</item>
 
+        <item name="android:textColor">@color/textColor</item>
+
+        <!--   theme UI controls like checkboxes and text fields -->
+        <item name="android:colorAccent">@color/circular_progress_default_background</item>
     </style>
 
     <style name="mySpinner" parent="@android:style/Widget.DropDownItem.Spinner" />
+
+    <style name="TextLabel" parent="ThemeOverlay.AppCompat.Light">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">@color/textColor</item>
+        <item name="android:textSize">20sp</item>
+
+    </style>
 
 </resources>

@@ -47,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        setTitle("Create Step Up account");
+        setTitle("Create Account");
         ButterKnife.bind(this);
 
         _signupButton.setOnClickListener(new View.OnClickListener() {

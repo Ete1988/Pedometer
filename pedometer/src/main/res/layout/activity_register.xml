@@ -9,10 +9,9 @@
         android:id="@+id/my_toolbar"
         android:layout_width="fill_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
+        android:background="@color/primary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
 
 
     <LinearLayout
@@ -27,7 +26,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:theme="@style/TextLabel">
 
             <EditText
                 android:id="@+id/input_name"
@@ -39,7 +39,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:theme="@style/TextLabel">
 
             <EditText
                 android:id="@+id/input_email"
@@ -51,7 +52,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:theme="@style/TextLabel">
 
             <EditText
                 android:id="@+id/password"
@@ -63,7 +65,8 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:theme="@style/TextLabel">
 
             <EditText
                 android:id="@+id/confirmpassword"
@@ -73,14 +76,16 @@
                 android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
-
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="25sp" />
         <Button
             android:id="@+id/createAccount_button"
-            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="40dp"
+            android:background="#fcd0f9"
             android:fontFamily="sans-serif-medium"
             android:text="@string/create_account"
             android:textColor="@android:color/black"
@@ -95,9 +100,24 @@
             android:onClick="onClick"
             android:paddingTop="20dp"
             android:text="@string/already_have_an_account_login"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imgTool"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@mipmap/app_icon" />
+
+    </RelativeLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>
 

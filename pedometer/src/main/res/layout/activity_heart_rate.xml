@@ -9,7 +9,7 @@
         android:id="@+id/my_toolbar"
         android:layout_width="fill_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/primary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -82,8 +82,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="#fcd0f9"
                 android:onClick="onClickHeartRateActivity"
                 android:text="@string/search_bluetooth_device" />
+
+            <android.support.v4.widget.Space
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.1" />
 
             <Button
                 android:id="@+id/HR_disconnectDeviceBtn"
@@ -91,7 +97,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="#fcd0f9"
                 android:onClick="onClickHeartRateActivity"
+
                 android:text="Disconnect device" />
 
         </LinearLayout>
@@ -265,10 +273,10 @@
 
         <Button
             android:id="@+id/HR_startSessionBtn"
-            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="#fcd0f9"
             android:onClick="onClickHeartRateActivity"
             android:text="@string/go_to_session" />
 
@@ -282,7 +290,7 @@
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:background="@color/black_overlay"
+        android:background="@color/lower_toolbar"
         android:gravity="center"
         android:orientation="horizontal"
         android:visibility="visible">

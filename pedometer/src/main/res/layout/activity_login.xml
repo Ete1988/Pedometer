@@ -11,9 +11,9 @@
         android:id="@+id/my_toolbar"
         android:layout_width="fill_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/primary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -26,23 +26,29 @@
         android:paddingTop="@dimen/activity_vertical_margin">
 
         <!-- Login progress -->
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="20sp" />
 
-    <TextView
+        <TextView
             android:id="@+id/welcome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="cursive"
-        android:gravity="center"
-        android:text="Welcome to Step Up!"
-        android:textColor="@color/myTitleColor"
-        android:textSize="35sp"
+            android:gravity="center"
+            android:text="@string/welcome_to_step_up"
+            android:textColor="@color/myTitleColor"
+            android:textSize="35sp"
             android:textStyle="bold" />
 
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="90sp" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="100dp">
+            android:theme="@style/TextLabel">
 
             <EditText
                 android:id="@+id/input_email"
@@ -50,12 +56,14 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
-                android:textSize="20dp" />
+                android:textColor="@color/textColor"
+                android:textSize="20sp" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:theme="@style/TextLabel">
 
             <EditText
                 android:id="@+id/password"
@@ -63,16 +71,17 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
                 android:inputType="textPassword"
-                android:textSize="20dp" />
+                android:textColor="@color/textColor"
+                android:textSize="20sp" />
         </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/email_sign_in_button"
-            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="50dp"
+            android:background="#fcd0f9"
             android:onClick="onClick"
             android:text="@string/action_sign_in"
             android:textStyle="bold" />
@@ -87,6 +96,18 @@
             android:text="@string/action_register"
             android:textStyle="bold" />
 
-
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imgTool"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@mipmap/app_icon" />
+
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

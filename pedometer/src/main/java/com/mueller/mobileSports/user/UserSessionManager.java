@@ -159,7 +159,7 @@ public class UserSessionManager {
                     logoutUser(showProgressBar);
                 } else if (showProgressBar) {
                     progress.dismiss();
-                    Toast.makeText(context, "Success!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Saved!", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -167,7 +167,7 @@ public class UserSessionManager {
             public void handleFault(BackendlessFault backendlessFault) {
 
                 if (showProgressBar) {
-                    Toast.makeText(context, "Some error occurred, please try again.!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "An error occurred, please try again.!", Toast.LENGTH_LONG).show();
                     progress.dismiss();
                 }
                 System.err.println(backendlessFault.toString());
@@ -446,10 +446,11 @@ public class UserSessionManager {
             }
             //Userdata
             sharedValues.saveInt("heartRateMax", userData.getHeartRateMax());
+            sharedValues.saveInt("stepGoal", userData.getStepGoal());
 
             //PedometerValues
             sharedValues.saveInt("stepsOverDay", pedometerData.getDailyStepCount());
-        sharedValues.saveInt("stepsOverWeek", pedometerData.getWeeklyStepCount());
+            sharedValues.saveInt("stepsOverWeek", pedometerData.getWeeklyStepCount());
             sharedValues.saveFloat("energyExpenditureSteps", pedometerData.getEnergyExpenditureSteps());
             sharedValues.saveFloat("distance", (float) pedometerData.getDistance());
 

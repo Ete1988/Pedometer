@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.backendless.Backendless;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
 import com.mueller.mobileSports.user.UserSessionManager;
@@ -25,6 +26,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String APP_ID = "61D5CC9D-40B5-4853-FF2F-BCFDD7F64700";
+        String APPVERSION = "v1";
+        String SECRET_KEY = "76967CB3-F1DE-308D-FF0F-6BA915A44300";
+        Backendless.initApp(this, APP_ID, SECRET_KEY, APPVERSION);
         setContentView(R.layout.activity_login);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);

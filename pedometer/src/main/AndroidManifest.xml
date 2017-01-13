@@ -20,15 +20,16 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/app_icon"
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
+        android:theme="@style/AppTheme">
 
-        <!-- Splash screen on startup -->
+        <!-- Login screen on startup -->
         <activity
-            android:name="com.mueller.mobileSports.general.SplashActivity"
-            android:label="@string/app_name"
-            android:theme="@style/SplashTheme">
+            android:name="com.mueller.mobileSports.account.LoginActivity"
+            android:label="Step Up"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,11 +38,8 @@
         </activity>
         <activity
             android:name="com.mueller.mobileSports.pedometer.PedometerActivity"
-            android:label="@string/app_name" />
-        <activity
-            android:name="com.mueller.mobileSports.account.LoginActivity"
-            android:label="Login"
-            android:launchMode="singleTask" />
+            android:label="Pedometer" />
+
         <activity
             android:name="com.mueller.mobileSports.general.SettingsActivity"
             android:label="Settings"

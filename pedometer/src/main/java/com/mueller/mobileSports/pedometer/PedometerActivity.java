@@ -45,8 +45,10 @@ public class PedometerActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (PedometerService.STEP_MESSAGE.equals(action)) {
-                cBar.setProgress(intent.getIntExtra("stepValue", 0));
-                cBar.setTitle(Integer.toString(intent.getIntExtra("steps", 0)));
+                int steps = intent.getIntExtra("steps", 0);
+                cBar.setProgress(steps);
+                cBar.setTitle(Integer.toString(steps));
+
             } else if (PedometerService.VALUES_CHANGED.equals(action)) {
                 //TODO format all
                 mCadence.setText(String.format(Locale.getDefault(), "%.2f", intent.getDoubleExtra("cadenceValue", 0.0)));
@@ -145,15 +147,14 @@ public class PedometerActivity extends AppCompatActivity {
         sharedValues = SharedValues.getInstance(this);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        setTitle("Step Up");
+        setTitle("Pedometer");
         mDate = (TextView) findViewById(R.id.PF_DateView);
         mCadence = (TextView) findViewById(R.id.PF_CadenceView);
         mSpeed = (TextView) findViewById(R.id.PF_SpeedView);
         mDistance = (TextView) findViewById(R.id.PF_DistanceView);
         mEnergyExpenditure = (TextView) findViewById(R.id.PF_EnergyExpenditure);
         cBar = (CircularProgressBar) findViewById(R.id.circularprogressbar3);
-        cBar.setSubTitle("");
-        cBar.setBackgroundColor(5);
+        cBar.setSubTitle("Steps");
     }
 
     /**
@@ -163,7 +164,7 @@ public class PedometerActivity extends AppCompatActivity {
         mDate.setText(sharedValues.getString("sessionDay"));
         cBar.setTitle(Integer.toString(sharedValues.getInt("stepsOverDay")));
         cBar.setProgress(sharedValues.getInt("stepsOverDay"));
-        cBar.setMax(sharedValues.getInt("stepGoal"));
+        cBar.setMax(UserSessionManager.getUserData().getStepGoal());
     }
 
     public void onClickPedometerActivity(View v) {

@@ -12,46 +12,9 @@
         android:id="@+id/my_toolbar"
         android:layout_width="fill_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/primary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/PF_LayoutDateView"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <android.support.v4.widget.Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:text="@string/pedoTitle"
-            android:textSize="24sp"
-            android:textStyle="normal|bold|italic" />
-
-        <android.support.v4.widget.Space
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
-
-    </LinearLayout>
-
-
-    <com.lylc.widget.circularprogressbar.CircularProgressBar
-        android:id="@+id/circularprogressbar3"
-        style="@style/Widget.ProgressBar.CircularProgressBar"
-        android:layout_width="150dip"
-        android:layout_height="150dip"
-        android:layout_below="@+id/linearLayout"
-        android:layout_centerHorizontal="true"
-        circular:cpb_subtitle="subtitle"
-        circular:cpb_title="Title" />
 
 
     <LinearLayout
@@ -221,7 +184,8 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/black_overlay"
+        android:layout_alignParentStart="true"
+        android:background="@color/lower_toolbar"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -238,6 +202,30 @@
             android:src="@mipmap/ic_heart"
             android:visibility="visible" />
 
+
+    </LinearLayout>
+
+    <com.lylc.widget.circularprogressbar.CircularProgressBar
+        android:id="@+id/circularprogressbar3"
+        style="@style/Widget.ProgressBar.CircularProgressBar"
+        android:layout_width="150dip"
+        android:layout_height="150dip"
+        android:layout_below="@+id/linearLayout"
+        android:layout_centerHorizontal="true"
+        circular:cpb_title="Title" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/PF_LayoutDateView"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
 
     </LinearLayout>
 

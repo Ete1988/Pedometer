@@ -13,7 +13,7 @@
         android:id="@+id/my_toolbar"
         android:layout_width="fill_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/primary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -220,6 +220,7 @@
                 android:paddingStart="15dp">
 
                 <TextView
+                    android:id="@+id/textHeart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
@@ -261,18 +262,21 @@
                 </RelativeLayout>
             </LinearLayout>
 
-
         </LinearLayout>
-    </LinearLayout>
 
-    <Button
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="150sp" />
+
+        <Button
         android:id="@+id/SE_SaveChangesBtn"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="match_parent"
+            android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:background="#fcd0f9"
         android:onClick="onClickSettingsActivity"
-        android:text="@string/save" />
+            android:text="@string/save" />
 
+    </LinearLayout>
 
 </RelativeLayout>

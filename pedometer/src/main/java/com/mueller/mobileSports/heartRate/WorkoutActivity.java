@@ -75,7 +75,7 @@ public class WorkoutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_workout);
+        setContentView(R.layout.activity_heart_session);
         init();
         if (timerRunning) {
             registerReceiver(mUpdateReceiver, updateIntentFilter());

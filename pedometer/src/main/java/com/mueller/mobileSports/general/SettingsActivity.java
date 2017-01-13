@@ -127,9 +127,9 @@ public class SettingsActivity extends AppCompatActivity {
      * Method to set the activity level
      */
     public void setActivityLevelDialog() {
-        AlertDialog.Builder activityLevelDialog = new AlertDialog.Builder(this);
-        activityLevelDialog.setTitle("Select your activity mActivityLevelText");
-        activityLevelDialog.setSingleChoiceItems(activityLevelTextArray, -1, new DialogInterface
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Select your activity");
+        dialog.setSingleChoiceItems(activityLevelTextArray, -1, new DialogInterface
                 .OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 activityLevel = item;
@@ -137,25 +137,27 @@ public class SettingsActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        AlertDialog alert = activityLevelDialog.create();
+        AlertDialog alert = dialog.create();
         alert.show();
+        alert.getWindow().setBackgroundDrawableResource(android.R.color.holo_purple);
     }
 
     /**
      * Method to set the stepGoal
      */
     public void setGoalDialog() {
-        AlertDialog.Builder activityLevelDialog = new AlertDialog.Builder(this);
-        activityLevelDialog.setTitle("Set your stepGoal for today");
-        activityLevelDialog.setSingleChoiceItems(goalsValuesArray, -1, new DialogInterface
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Set your stepGoal for today");
+        dialog.setSingleChoiceItems(goalsValuesArray, -1, new DialogInterface
                 .OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 mapSelectedItemToGoal(item);
                 dialog.dismiss();
             }
         });
-        AlertDialog alert = activityLevelDialog.create();
+        AlertDialog alert = dialog.create();
         alert.show();
+        alert.getWindow().setBackgroundDrawableResource(android.R.color.holo_purple);
 
     }
 
@@ -195,13 +197,13 @@ public class SettingsActivity extends AppCompatActivity {
 
     //Edit dialog for stepGoal
     private void editGoal() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Please enter daily Goal");
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Please enter daily Goal");
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         input.setRawInputType(Configuration.KEYBOARD_12KEY);
-        alert.setView(input);
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        dialog.setView(input);
+        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int positiveButton) {
                 String foo = input.getText().toString();
                 stepGoal = Integer.parseInt(foo);
@@ -209,14 +211,16 @@ public class SettingsActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int negativeButton) {
                 //Put actions for CANCEL button here, or leave in blank
                 mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", stepGoal));
                 dialog.dismiss();
             }
         });
+        AlertDialog alert = dialog.create();
         alert.show();
+        alert.getWindow().setBackgroundDrawableResource(android.R.color.holo_purple);
     }
 
     /**
@@ -251,6 +255,7 @@ public class SettingsActivity extends AppCompatActivity {
         NumberPicker myNumberPicker = new NumberPicker(this);
         myNumberPicker.setMinValue(min);
         myNumberPicker.setMaxValue(max);
+
         NumberPicker.OnValueChangeListener myValChangeListener = new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
@@ -259,10 +264,10 @@ public class SettingsActivity extends AppCompatActivity {
         };
 
         myNumberPicker.setOnValueChangedListener(myValChangeListener);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this).setView(myNumberPicker);
-        builder.setTitle(title);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this).setView(myNumberPicker);
+        dialog.setTitle(title);
 
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (textView.getId() == mRestingHeartRate.getId()) {
@@ -272,7 +277,10 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
         });
-        builder.show();
+        AlertDialog alert = dialog.create();
+        alert.show();
+        alert.getWindow().setBackgroundDrawableResource(android.R.color.holo_purple);
+
     }
 }
 

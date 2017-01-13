@@ -40,7 +40,7 @@ import android.widget.ProgressBar;
 public class CircularProgressBar extends ProgressBar{
 	private static final String TAG = "CircularProgressBar";
 
-	private static final int STROKE_WIDTH = 20;
+	private static final int STROKE_WIDTH = 30;
 	private final RectF mCircleBounds = new RectF();
 	private final Paint mProgressColorPaint = new Paint();
 	private final Paint mBackgroundColorPaint = new Paint();
@@ -125,13 +125,13 @@ public class CircularProgressBar extends ProgressBar{
 		mBackgroundColorPaint.setStyle(Paint.Style.STROKE);
 		mBackgroundColorPaint.setStrokeWidth(mStrokeWidth);
 
-		mTitlePaint.setTextSize(60);
+		mTitlePaint.setTextSize(110);
 		mTitlePaint.setStyle(Style.FILL);
 		mTitlePaint.setAntiAlias(true);
 		mTitlePaint.setTypeface(Typeface.create("Roboto-Thin", Typeface.NORMAL));
 		mTitlePaint.setShadowLayer(0.1f, 0, 1, Color.GRAY);
 
-		mSubtitlePaint.setTextSize(20);
+		mSubtitlePaint.setTextSize(60);
 		mSubtitlePaint.setStyle(Style.FILL);
 		mSubtitlePaint.setAntiAlias(true);
 		mSubtitlePaint.setTypeface(Typeface.create("Roboto-Thin", Typeface.BOLD));
