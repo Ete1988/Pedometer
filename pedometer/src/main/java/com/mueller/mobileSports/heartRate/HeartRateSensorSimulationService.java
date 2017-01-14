@@ -17,9 +17,8 @@ import java.io.InputStreamReader;
 
 /**
  * Created by Ete on 15/12/2016.
- *
+ * <p>
  * Class to simulate an connected BLE HeartRate device
- *
  */
 
 public class HeartRateSensorSimulationService extends Service {

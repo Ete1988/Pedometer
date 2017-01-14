@@ -5,7 +5,6 @@ import java.util.ArrayList;
 /**
  * Created by Sandra on 24.11.2016.
  * Data object for UserData
- *
  */
 
 public class UserData {

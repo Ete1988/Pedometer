@@ -3,7 +3,6 @@ package com.mueller.mobileSports.heartRate;
 /**
  * Created by Ete on 22/12/2016.
  * Data object for HeartRateData
- *
  */
 
 public class HeartRateData {

@@ -3,7 +3,6 @@ package com.mueller.mobileSports.pedometer;
 /**
  * Created by Ete on 22/12/2016.
  * Data object for PedometerData
- *
  */
 
 public class PedometerData {

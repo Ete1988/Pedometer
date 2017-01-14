@@ -101,7 +101,7 @@ public class SettingsActivity extends GenericActivity {
 
         mActivityLevelText.setText(String.format(Locale.getDefault(), "%d", activityLevel));
 
-        if(stepGoal == 0){
+        if (stepGoal == 0) {
             stepGoal = 5000;
             mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", stepGoal));
             userData.setStepGoal(stepGoal);
@@ -264,10 +264,10 @@ public class SettingsActivity extends GenericActivity {
     /**
      * Method to generate numberPicker dialog
      *
-     * @param min min number to pick
-     * @param max max number to pick
+     * @param min      min number to pick
+     * @param max      max number to pick
      * @param textView textview to display picked number
-     * @param title title of to be created numberpicker
+     * @param title    title of to be created numberpicker
      */
     private void numberPickerDialog(int min, int max, final TextView textView, final String title) {
         NumberPicker myNumberPicker = new NumberPicker(this);

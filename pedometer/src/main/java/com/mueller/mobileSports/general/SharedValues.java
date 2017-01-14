@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
  * <p>
  * Class to managed shared preferences for all activities in the app
  * After some refactoring nearly not used anymore.
- *
  */
 
 
@@ -111,6 +110,7 @@ public class SharedValues {
 
     /**
      * Method ti remove a specific entry from the sharedValues
+     *
      * @param key corresponding key for the to be removed value
      */
     public void removeEntry(String key) {

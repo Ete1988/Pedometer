@@ -127,7 +127,6 @@ public class ProfileActivity extends GenericActivity {
     }
 
 
-
     /**
      * Maps userdata to widgets in view
      */
@@ -135,7 +134,7 @@ public class ProfileActivity extends GenericActivity {
 
         if (Objects.equals(username, "")) {
             mInputUserName.setText("");
-            }else {
+        } else {
             mInputUserName.setText(username);
         }
 

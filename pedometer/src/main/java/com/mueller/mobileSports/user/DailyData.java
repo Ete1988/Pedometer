@@ -9,9 +9,8 @@ import java.util.Locale;
 
 /**
  * Created by Ete on 11/01/2017.
- *
+ * <p>
  * Dataobject to store the pedometer and heartrate data for a specific day
- *
  */
 
 class DailyData {

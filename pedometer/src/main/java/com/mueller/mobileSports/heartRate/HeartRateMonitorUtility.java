@@ -12,7 +12,6 @@ import java.util.Objects;
 /**
  * Created by Ete on 18/12/2016.
  * Utility class offering different calculations concerning the heart rate monitoring
- *
  */
 
 class HeartRateMonitorUtility {

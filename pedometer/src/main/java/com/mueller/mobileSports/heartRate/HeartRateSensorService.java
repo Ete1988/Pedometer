@@ -21,10 +21,9 @@ import java.util.UUID;
 
 /**
  * Created by Ete on 28/12/2016.
- *
+ * <p>
  * ServiceClass to handle communication with a BLE Heart Rate device
  * Based on Android API Example for BLE;
- *
  */
 
 public class HeartRateSensorService extends Service {
@@ -166,7 +165,6 @@ public class HeartRateSensorService extends Service {
 
     /**
      * Initializes a reference to the local Bluetooth adapter.
-     *
      */
     public void initialize() {
 
@@ -196,7 +194,6 @@ public class HeartRateSensorService extends Service {
      *
      * @param characteristic Characteristic to act on.
      * @param enabled        If true, enable notification.  False otherwise.
-     *
      */
     public void setCharacteristicNotification(BluetoothGattCharacteristic characteristic,
                                               boolean enabled) {
