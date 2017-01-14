@@ -1,17 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/myHeartRateView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background">
 
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        android:layout_width="fill_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/primary"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,18 +28,19 @@
                 android:textStyle="normal|bold" />
 
 
-        <TextView
-            android:id="@+id/HR_connectionStateView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="@string/disconnected" />
+            <TextView
+                android:id="@+id/HR_connectionStateView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="@string/disconnected" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -282,34 +275,5 @@
 
 
     </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/HE_Bottombar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:background="@color/lower_toolbar"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:visibility="visible">
-
-        <ImageButton
-            android:id="@+id/HRM_PedometerBtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="20dp"
-            android:background="@null"
-            android:clickable="true"
-            android:contentDescription="@string/emptyString"
-            android:onClick="onClickHeartRateActivity"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_steps" />
-
-
-    </LinearLayout>
-
 
 </RelativeLayout>

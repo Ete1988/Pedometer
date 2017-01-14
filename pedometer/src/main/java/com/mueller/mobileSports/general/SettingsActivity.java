@@ -4,15 +4,18 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.mueller.mobileSports.heartRate.GenericActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.user.UserData;
 import com.mueller.mobileSports.user.UserSessionManager;
@@ -25,7 +28,7 @@ import java.util.Locale;
  * Activity that offers methods to adjust app relevant data.
  */
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends GenericActivity {
 
     private final String[] goalsValuesArray = {"5000", "6000", "7000", "8000", "9000", "10000", "Other? Please set here!"};
     private final String[] activityLevelTextArray = {"0: Avoid walking or exertion, for example, always use elevator, drive " +
@@ -51,9 +54,17 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-        setTitle("Settings");
+        setContentView(R.layout.generic_layout);
         init();
+        setUpNavigation();
+
+        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.frame);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View childLayout = inflater.inflate(R.layout.settings_view,
+                (ViewGroup) findViewById(R.id.mySettingsView));
+        frameLayout.addView(childLayout);
+        initializeViews();
+
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,10 +73,20 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void init() {
+        super.init();
+    }
+
+    @Override
+    protected void setUpNavigation() {
+        super.setUpNavigation();
+    }
+
     /**
      * Initializes most fields of activity
      */
-    private void init() {
+    private void initializeViews() {
         UserData userData = UserSessionManager.getUserData();
         userSessionManager = new UserSessionManager(this);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);

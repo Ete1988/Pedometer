@@ -4,8 +4,8 @@
     <string name="app_name">Step Up</string>
     <string name="emptyString" />
 
-    <!-- Strings related to pdeometer -->
-    <string name="pedoTitle">STEPS</string>
+    <!-- Strings related to pedeometer -->
+    <string name="pedometer">Pedometer</string>
     <string name="cadence">Cadence:</string>
     <string name="steps_s">Steps/s</string>
     <string name="speed">Speed:</string>
@@ -97,6 +97,11 @@
     <string name="welcome_to_step_up">Welcome to Step Up!</string>
     <string name="login">Login</string>
     <string name="cal">Cal</string>
+
+
+    <string name="closeDrawer">Navigation View</string>
+    <string name="openDrawer">Navigation View Closed</string>
+    <string name="trainings_session">Trainings Session</string>
 
 
 </resources>

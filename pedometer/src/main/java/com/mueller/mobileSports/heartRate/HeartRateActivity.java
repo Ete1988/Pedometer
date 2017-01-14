@@ -6,21 +6,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mueller.mobileSports.general.BluetoothScanActivity;
-import com.mueller.mobileSports.general.SettingsActivity;
 import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
-import com.mueller.mobileSports.pedometer.PedometerActivity;
-import com.mueller.mobileSports.user.ProfileActivity;
 import com.mueller.mobileSports.user.UserData;
 import com.mueller.mobileSports.user.UserSessionManager;
 
@@ -32,7 +27,7 @@ import java.util.Locale;
  * Activity meant for the heart rate monitoring app mode
  */
 
-public class HeartRateActivity extends AppCompatActivity {
+public class HeartRateActivity extends GenericActivity {
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
@@ -79,10 +74,23 @@ public class HeartRateActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void setUpNavigation() {
+        super.setUpNavigation();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_heart_rate);
+        setContentView(R.layout.generic_layout);
         init();
+        setUpNavigation();
+        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.frame);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View childLayout = inflater.inflate(R.layout.heart_rate_view,
+                (ViewGroup) findViewById(R.id.myHeartRateView));
+        frameLayout.addView(childLayout);
+        initializeViews();
+
     }
 
     @Override
@@ -107,41 +115,18 @@ public class HeartRateActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
-    }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.menu_settings:
-                Intent i = new Intent(this, SettingsActivity.class);
-                startActivity(i);
-                break;
-            case R.id.menu_logout:
-                userSessionManager.uploadUserData(this, true, true, true);
-                break;
-            case R.id.menu_profile:
-                Intent i2 = new Intent(this, ProfileActivity.class);
-                startActivity(i2);
-                break;
-        }
-        return true;
+    protected void init() {
+        super.init();
     }
 
     /**
      * Initializes most fields of activity
      */
-    private void init() {
+    private void initializeViews() {
         sharedValues = SharedValues.getInstance(this);
-
         userSessionManager = new UserSessionManager(this);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
         mHeartRate = (TextView) findViewById(R.id.HR_heartRateView);
         mAverageHeartRate = (TextView) findViewById(R.id.HR_averageHeartRateView);
         mMaxHearRate = (TextView) findViewById(R.id.HR_maxHeartRateView);
@@ -194,34 +179,6 @@ public class HeartRateActivity extends AppCompatActivity {
             mAverageHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("averageHeartRate")));
             mConnectedDeviceName.setText(sharedValues.getString("deviceName"));
 
-        }
-    }
-
-    public void onClickHeartRateActivity(View v) {
-        Intent i;
-        if (v.getId() == R.id.HR_searchDeviceBtn) {
-            i = new Intent(this, BluetoothScanActivity.class);
-            startActivity(i);
-        } else if (v.getId() == R.id.HR_startSessionBtn) {
-            if (checkIfSessionCanBeStarted()) {
-                i = new Intent(this, HRSessionActivity.class);
-                startActivity(i);
-            } else {
-                Toast.makeText(this, "No Heart Rate Sensor connected!", Toast.LENGTH_LONG).show();
-            }
-        } else if (v.getId() == R.id.HRM_PedometerBtn) {
-            i = new Intent(this, PedometerActivity.class);
-            startActivity(i);
-        } else if (v.getId() == R.id.HR_disconnectDeviceBtn) {
-            if (isMyServiceRunning(HeartRateSensorService.class)) {
-                stopService(new Intent(this, HeartRateSensorService.class));
-                sharedValues.removeEntry("deviceName");
-            } else if (isMyServiceRunning(HeartRateSensorSimulationService.class)) {
-                stopService(new Intent(this, HeartRateSensorSimulationService.class));
-                sharedValues.removeEntry("deviceName");
-            } else {
-                Toast.makeText(this, "No Heart Rate Sensor connected!", Toast.LENGTH_LONG).show();
-            }
         }
     }
 
@@ -281,6 +238,31 @@ public class HeartRateActivity extends AppCompatActivity {
 
         return isMyServiceRunning(HeartRateSensorService.class) || isMyServiceRunning(HeartRateSensorSimulationService.class);
 
+    }
+
+    public void onClickHeartRateActivity(View v) {
+        Intent i;
+        if (v.getId() == R.id.HR_searchDeviceBtn) {
+            i = new Intent(this, BluetoothScanActivity.class);
+            startActivity(i);
+        } else if (v.getId() == R.id.HR_startSessionBtn) {
+            if (checkIfSessionCanBeStarted()) {
+                i = new Intent(this, HRSessionActivity.class);
+                startActivity(i);
+            } else {
+                Toast.makeText(this, "No Heart Rate Sensor connected!", Toast.LENGTH_LONG).show();
+            }
+        } else if (v.getId() == R.id.HR_disconnectDeviceBtn) {
+            if (isMyServiceRunning(HeartRateSensorService.class)) {
+                stopService(new Intent(this, HeartRateSensorService.class));
+                sharedValues.removeEntry("deviceName");
+            } else if (isMyServiceRunning(HeartRateSensorSimulationService.class)) {
+                stopService(new Intent(this, HeartRateSensorSimulationService.class));
+                sharedValues.removeEntry("deviceName");
+            } else {
+                Toast.makeText(this, "No Heart Rate Sensor connected!", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
 
