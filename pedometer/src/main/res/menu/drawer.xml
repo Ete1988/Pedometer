@@ -3,15 +3,16 @@
 
     <group android:checkableBehavior="single">
 
-        <item
-            android:id="@+id/HeartRateBtn"
-            android:checked="false"
-            android:title="@string/heart_rate" />
+
         <item
             android:id="@+id/PedometerBtn"
             android:checked="false"
             android:title="@string/pedometer" />
 
+        <item
+            android:id="@+id/HeartRateBtn"
+            android:checked="false"
+            android:title="@string/heart_rate" />
         <item
             android:id="@+id/SettingsBtn"
             android:checked="false"

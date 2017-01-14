@@ -15,8 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lylc.widget.circularprogressbar.CircularProgressBar;
+import com.mueller.mobileSports.general.GenericActivity;
 import com.mueller.mobileSports.general.SharedValues;
-import com.mueller.mobileSports.heartRate.GenericActivity;
 import com.mueller.mobileSports.heartRate.HeartRateSensorService;
 import com.mueller.mobileSports.heartRate.HeartRateSensorSimulationService;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
@@ -177,5 +177,14 @@ public class PedometerActivity extends GenericActivity {
         super.onDestroy();
     }
 
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        if (v.getId() == R.id.logOutBtn) {
+            UserSessionManager userSessionManager = new UserSessionManager(this);
+            userSessionManager.uploadUserData(this, true, true, true);
+        }
+    }
 }
+
 

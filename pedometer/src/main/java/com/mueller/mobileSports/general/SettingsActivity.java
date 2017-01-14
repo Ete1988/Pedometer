@@ -15,7 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
-import com.mueller.mobileSports.heartRate.GenericActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.user.UserData;
 import com.mueller.mobileSports.user.UserSessionManager;
@@ -298,6 +297,15 @@ public class SettingsActivity extends GenericActivity {
         AlertDialog alert = dialog.create();
         alert.show();
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        if (v.getId() == R.id.logOutBtn) {
+            UserSessionManager userSessionManager = new UserSessionManager(this);
+            userSessionManager.uploadUserData(this, true, true, true);
+        }
     }
 }
 

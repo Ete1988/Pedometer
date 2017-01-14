@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.heartRate;
+package com.mueller.mobileSports.general;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,13 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 
-import com.mueller.mobileSports.general.SettingsActivity;
+import com.mueller.mobileSports.heartRate.HeartRateActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
 import com.mueller.mobileSports.user.ProfileActivity;
 
-public class GenericActivity extends AppCompatActivity {
+public class GenericActivity extends AppCompatActivity implements View.OnClickListener {
 
     protected Toolbar toolbar;
     protected NavigationView navigationView;
@@ -32,6 +33,8 @@ public class GenericActivity extends AppCompatActivity {
     protected void init() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ImageButton imgBtn = (ImageButton) findViewById(R.id.logOutBtn);
+        imgBtn.setOnClickListener(this);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
@@ -85,5 +88,9 @@ public class GenericActivity extends AppCompatActivity {
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
+    }
+
+    @Override
+    public void onClick(View v) {
     }
 }

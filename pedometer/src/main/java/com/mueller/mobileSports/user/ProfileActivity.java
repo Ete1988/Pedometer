@@ -12,7 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.mueller.mobileSports.heartRate.GenericActivity;
+import com.mueller.mobileSports.general.GenericActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
 
@@ -219,6 +219,15 @@ public class ProfileActivity extends GenericActivity {
             } else {
                 updateData(true);
             }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        if (v.getId() == R.id.logOutBtn) {
+            UserSessionManager userSessionManager = new UserSessionManager(this);
+            userSessionManager.uploadUserData(this, true, true, true);
         }
     }
 }

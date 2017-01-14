@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mueller.mobileSports.general.BluetoothScanActivity;
+import com.mueller.mobileSports.general.GenericActivity;
 import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.user.UserData;
@@ -262,6 +263,15 @@ public class HeartRateActivity extends GenericActivity {
             } else {
                 Toast.makeText(this, "No Heart Rate Sensor connected!", Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        if (v.getId() == R.id.logOutBtn) {
+            UserSessionManager userSessionManager = new UserSessionManager(this);
+            userSessionManager.uploadUserData(this, true, true, true);
         }
     }
 }
