@@ -42,12 +42,17 @@
         <item>Female</item>
     </string-array>
 
+    <string-array name="activity_selector">
+        <item>Heart Rate</item>
+        <item>Steps</item>
+    </string-array>
+
     <!-- Strings related to heart rate layout -->
     <string name="default_timer">00:00:00</string>
     <string name="average">Average:</string>
     <string name="minimum">Minimum:</string>
     <string name="maximum">Maximum:</string>
-    <string name="heart_rate">Heart Rate:</string>
+    <string name="heart_rate">Heart Rate</string>
     <string name="percentage_of_heart_rate">Percentage of HRmax:</string>
     <string name="bpm">bpm</string>
     <string name="percentUnit">%</string>
@@ -102,6 +107,13 @@
     <string name="closeDrawer">Navigation View</string>
     <string name="openDrawer">Navigation View Closed</string>
     <string name="trainings_session">Trainings Session</string>
+    <string name="statistics">Statistics</string>
+    <string name="choose_date">Please select date and activity</string>
+    <string name="set_date">From Date:</string>
+    <string name="set_date2">To Date:</string>
+    <string name="disconnect_device">Disconnect device</string>
+    <string name="selected_interval">Selected Interval</string>
+    <string name="activity">Activity</string>
 
 
 </resources>

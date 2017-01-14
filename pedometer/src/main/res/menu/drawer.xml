@@ -7,21 +7,32 @@
         <item
             android:id="@+id/PedometerBtn"
             android:checked="false"
+            android:icon="@mipmap/ic_steps"
             android:title="@string/pedometer" />
 
         <item
             android:id="@+id/HeartRateBtn"
             android:checked="false"
+            android:icon="@mipmap/ic_heart"
             android:title="@string/heart_rate" />
+
         <item
             android:id="@+id/SettingsBtn"
             android:checked="false"
+            android:icon="@mipmap/settings_icon"
             android:title="@string/settings" />
 
         <item
             android:id="@+id/ProfileBtn"
             android:checked="false"
+            android:icon="@mipmap/ic_profile"
             android:title="@string/profile" />
+
+        <item
+            android:id="@+id/StatisticsBtn"
+            android:checked="false"
+            android:icon="@mipmap/statistics_icon"
+            android:title="@string/statistics" />
 
     </group>
 </menu>

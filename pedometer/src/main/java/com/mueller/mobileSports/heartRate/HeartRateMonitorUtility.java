@@ -3,6 +3,7 @@ package com.mueller.mobileSports.heartRate;
 import android.content.Context;
 
 import com.mueller.mobileSports.general.SharedValues;
+import com.mueller.mobileSports.user.UserData;
 import com.mueller.mobileSports.user.UserSessionManager;
 
 import java.math.RoundingMode;
@@ -87,9 +88,17 @@ class HeartRateMonitorUtility {
     }
 
     int calculateTRIMP(int minutes) {
+        UserData userData = UserSessionManager.getUserData();
+        int restingHeartRate;
         double x;
-        double x1 = sharedValues.getInt("averageHeartRate") - sharedValues.getInt("minHeartRate");
-        double x2 = sharedValues.getInt("maxHeartRate") - sharedValues.getInt("minHeartRate");
+        if (!(userData.getRestingHeartRate() == 0)) {
+            restingHeartRate = userData.getRestingHeartRate();
+        } else {
+            restingHeartRate = 60;
+        }
+
+        double x1 = sharedValues.getInt("averageHeartRate") - restingHeartRate;
+        double x2 = sharedValues.getInt("maxHeartRate") - restingHeartRate;
         if (!(x2 == 0)) {
             x = x1 / x2;
         } else {
@@ -112,10 +121,18 @@ class HeartRateMonitorUtility {
     }
 
     private void calculatePercentOfHrMax(int heartRate) {
+        UserData userData = UserSessionManager.getUserData();
 
-        int heartRateMax = sharedValues.getInt("heartRateMax");
+        int heartRateMax;
+
+        if (!(userData.getHeartRateMax() == 0)) {
+            heartRateMax = userData.getHeartRateMax();
+        } else if (!(userData.getAge() == 0)) {
+            heartRateMax = (int) (208 - (0.7 * (userData.getAge())));
+        } else {
+            heartRateMax = 0;
+        }
         sharedValues.saveInt("percentOfHRMax", ((heartRate * 100) / heartRateMax));
-
     }
 
     private void calculateMaxHeartRate(int heartRate) {

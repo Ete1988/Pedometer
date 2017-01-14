@@ -1,5 +1,6 @@
 package com.mueller.mobileSports.general;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -21,6 +22,7 @@ public class GenericActivity extends AppCompatActivity implements View.OnClickLi
     protected Toolbar toolbar;
     protected NavigationView navigationView;
     protected DrawerLayout drawerLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,10 @@ public class GenericActivity extends AppCompatActivity implements View.OnClickLi
                         i = new Intent(getApplicationContext(), ProfileActivity.class);
                         startActivity(i);
                         return true;
+                    case R.id.StatisticsBtn:
+                        i = new Intent(getApplicationContext(), StatisticsActivity.class);
+                        startActivity(i);
+                        return true;
                     default:
                         return true;
                 }
@@ -93,4 +99,6 @@ public class GenericActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
     }
+
+
 }

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -56,7 +57,8 @@ public class SettingsActivity extends GenericActivity {
         setContentView(R.layout.generic_layout);
         init();
         setUpNavigation();
-
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.getMenu().findItem(R.id.SettingsBtn).setChecked(true);
         FrameLayout frameLayout = (FrameLayout) findViewById(R.id.frame);
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
         View childLayout = inflater.inflate(R.layout.settings_view,

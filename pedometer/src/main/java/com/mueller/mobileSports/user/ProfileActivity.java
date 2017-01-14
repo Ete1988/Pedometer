@@ -3,6 +3,7 @@ package com.mueller.mobileSports.user;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,8 @@ public class ProfileActivity extends GenericActivity {
         setContentView(R.layout.generic_layout);
         init();
         setUpNavigation();
-
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.getMenu().findItem(R.id.ProfileBtn).setChecked(true);
         FrameLayout frameLayout = (FrameLayout) findViewById(R.id.frame);
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
         View childLayout = inflater.inflate(R.layout.profile_view,
@@ -230,5 +232,7 @@ public class ProfileActivity extends GenericActivity {
             userSessionManager.uploadUserData(this, true, true, true);
         }
     }
+
+
 }
 

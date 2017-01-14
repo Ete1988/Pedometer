@@ -10,7 +10,10 @@ import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mueller.mobileSports.general.SharedValues;
@@ -72,6 +75,17 @@ public class HRSessionActivity extends AppCompatActivity {
         return intentFilter;
     }
 
+    private void anim(boolean check) {
+        Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake);
+        ImageView myButton = (ImageView) findViewById(R.id.heartBtn);
+
+        if (check) {
+            myButton.setAnimation(shake);
+        } else {
+            myButton.clearAnimation();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,15 +94,17 @@ public class HRSessionActivity extends AppCompatActivity {
         if (timerRunning) {
             registerReceiver(mUpdateReceiver, updateIntentFilter());
         }
+
     }
+
 
     @Override
     protected void onResume() {
         super.onResume();
         if (timerRunning) {
             registerReceiver(mUpdateReceiver, updateIntentFilter());
-        }
 
+        }
         start_time += System.currentTimeMillis() - paused;
     }
 
@@ -149,6 +165,7 @@ public class HRSessionActivity extends AppCompatActivity {
             timerRunning = true;
             myButton = (Button) findViewById(R.id.TS_StartSessionBtn);
             myButton.setVisibility(View.GONE);
+            anim(true);
         } else if (v.getId() == R.id.TS_PauseSessionBtn) {
             myButton = (Button) findViewById(R.id.TS_PauseSessionBtn);
             if (timerRunning) {
@@ -157,15 +174,18 @@ public class HRSessionActivity extends AppCompatActivity {
                 mHandler.removeCallbacks(mTimerRunnable);
                 myButton.setText(R.string.resume);
                 timerRunning = false;
+                anim(false);
             } else {
                 start_time = SystemClock.uptimeMillis();
                 registerReceiver(mUpdateReceiver, updateIntentFilter());
                 mHandler.postDelayed(mTimerRunnable, 0);
                 timerRunning = true;
+                anim(true);
                 myButton.setText(R.string.pause);
             }
         } else if (v.getId() == R.id.TS_StopSessionBtn) {
             timerRunning = false;
+            anim(false);
             mHandler.removeCallbacks(mTimerRunnable);
             HeartRateMonitorUtility utility = new HeartRateMonitorUtility(this);
             int trimp = utility.calculateTRIMP(time_minutes);

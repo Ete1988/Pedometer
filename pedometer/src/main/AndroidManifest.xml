@@ -58,6 +58,10 @@
             android:name="com.mueller.mobileSports.heartRate.HeartRateActivity"
             android:label="Heart-Rate Monitor" />
         <activity android:name="com.mueller.mobileSports.general.BluetoothScanActivity" />
+        <activity
+            android:name="com.mueller.mobileSports.general.StatisticsActivity"
+            android:label="Statistics"
+            android:windowSoftInputMode="adjustPan" />
 
         <service
             android:name="com.mueller.mobileSports.pedometer.PedometerService"
@@ -72,7 +76,7 @@
             android:name="com.mueller.mobileSports.heartRate.HeartRateSensorService"
             android:enabled="true" />
 
-        <activity android:name="com.mueller.mobileSports.heartRate.HRSessionActivity"></activity>
+        <activity android:name="com.mueller.mobileSports.heartRate.HRSessionActivity" />
     </application>
 
 </manifest>

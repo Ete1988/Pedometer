@@ -42,10 +42,13 @@ public class UserSessionManager {
     private SharedValues sharedValues;
     private Context context;
 
+    //TODO remove context everywhere?;
+
     // Constructor
     public UserSessionManager(Context context) {
         this.context = context;
         sharedValues = SharedValues.getInstance(context);
+        getCurrentDateAsString();
     }
 
     public static UserData getUserData() {
@@ -64,7 +67,6 @@ public class UserSessionManager {
               This was implemented to prevent some data conflicts since loading data from backendless
             sometimes takes longer than expected and the user would be provided with false data on the pedometer view.
              */
-
             progress = new ProgressDialog(context);
             progress.setTitle("Loading Data");
             progress.setMessage("Please wait...");
@@ -428,18 +430,26 @@ public class UserSessionManager {
         context.startActivity(i);
     }
 
-    private void mapDataToSharedValue(final Intent intent) {
-        ArrayList<DailyData> data = userData.getDailyData();
-        boolean newDay;
+    public String getCurrentDateAsString() {
         Date now = new Date();
         SimpleDateFormat currDate = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        sharedValues.saveString("sessionDay", currDate.format(now));
+        return currDate.format(now);
+    }
+
+
+    private void mapDataToSharedValue(final Intent intent) {
+
+        ArrayList<DailyData> data = userData.getDailyData();
+        boolean newDay;
         DailyData dailyData;
         PedometerData pedometerData;
         HeartRateData heartRateData;
 
         if (!(data.size() == 0)) {
             //Same date --> data from today
-            if (data.get(data.size() - 1).getSessionDay().equals(currDate.format(now))) {
+            if (data.get(data.size() - 1).getSessionDay().equals(getCurrentDateAsString())) {
+
                 dailyData = data.get(data.size() - 1);
                 pedometerData = dailyData.getPedometerData();
                 heartRateData = dailyData.getHeartRateData();
@@ -448,7 +458,6 @@ public class UserSessionManager {
                 //New Day
                 pedometerData = new PedometerData();
                 heartRateData = new HeartRateData();
-                sharedValues.saveString("sessionDay", currDate.format(now));
                 newDay = true;
             }
 
@@ -490,7 +499,6 @@ public class UserSessionManager {
 
         //First time
         if (data.size() == 0) {
-
             dailyData = new DailyData();
         } else {
             //Same Day

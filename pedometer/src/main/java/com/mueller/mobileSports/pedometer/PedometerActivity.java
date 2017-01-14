@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.NavigationView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,8 @@ public class PedometerActivity extends GenericActivity {
         setContentView(R.layout.generic_layout);
         init();
         setUpNavigation();
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.getMenu().findItem(R.id.PedometerBtn).setChecked(true);
 
         FrameLayout frameLayout = (FrameLayout) findViewById(R.id.frame);
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
