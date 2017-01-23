@@ -216,6 +216,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
                     }
                 }
 
+                assert mBluetoothAdapter != null;
                 if (mBluetoothAdapter.isEnabled()) {
                     if (!mScanning) {
                         scanLeDevice(true);
