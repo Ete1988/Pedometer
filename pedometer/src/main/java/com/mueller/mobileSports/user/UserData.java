@@ -26,10 +26,11 @@ public class UserData {
     UserData() {
         dailyData = new ArrayList<>();
         this.gender = "Male";
+        this.stepGoal = 7000;
     }
 
 
-    ArrayList<DailyData> getDailyData() {
+    public ArrayList<DailyData> getDailyData() {
         return dailyData;
     }
 
@@ -69,7 +70,7 @@ public class UserData {
         this.objectId = objectId;
     }
 
-    String getUsername() {
+    public String getUsername() {
         return username;
     }
 

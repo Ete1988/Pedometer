@@ -12,7 +12,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/textView1"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -22,31 +22,33 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Button
-            android:id="@+id/fDateBtn"
+            android:id="@+id/fromDateBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="50dp"
             android:background="#fcd0f9"
-            android:onClick="setDate"
-            android:text="@string/set_date" />
+            android:onClick="setFromDate"
+            android:text="@string/set_date"
+            android:textStyle="bold" />
 
 
         <Button
-            android:id="@+id/tDateBtn"
+            android:id="@+id/toDateBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="110dp"
             android:background="#fcd0f9"
-            android:onClick="setDate"
-            android:text="@string/set_date2" />
+            android:onClick="setFromDate"
+            android:text="@string/set_date2"
+            android:textStyle="bold" />
 
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/fromDateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -56,7 +58,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/toDateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -69,7 +71,7 @@
             android:id="@+id/mySpace2"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_below="@id/tDateBtn" />
+            android:layout_below="@id/toDateBtn" />
 
         <LinearLayout
             android:id="@+id/spinner"
@@ -107,13 +109,16 @@
             android:layout_height="30dp"
             android:layout_below="@id/spinner" />
 
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/chart"
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/LineChart1"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@id/mySpace" />
+            android:layout_below="@id/mySpace"
+            android:visibility="gone" />
+
+
     </RelativeLayout>
 
 </ScrollView>

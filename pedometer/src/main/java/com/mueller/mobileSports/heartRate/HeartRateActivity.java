@@ -16,10 +16,11 @@ import android.widget.Toast;
 
 import com.mueller.mobileSports.general.BluetoothScanActivity;
 import com.mueller.mobileSports.general.GenericActivity;
-import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
+import com.mueller.mobileSports.session.TrainingSessionActivity;
 import com.mueller.mobileSports.user.UserData;
 import com.mueller.mobileSports.user.UserSessionManager;
+import com.mueller.mobileSports.utility.SharedValues;
 
 import java.util.Locale;
 
@@ -35,9 +36,7 @@ public class HeartRateActivity extends GenericActivity {
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     public static final String EXTRAS_START_SERVICE = "BIND_SERVICE";
     public static final String EXTRAS_START_SIMULATION_SERVICE = "BIND_SIMULATION_SERVICE";
-    private String mDeviceAddress;
-    private String mDeviceName;
-
+    private String mDeviceAddress, mDeviceName;
     private boolean startSimulationSensorService = false;
     private boolean startRealSensorService = false;
     private SharedValues sharedValues;
@@ -52,8 +51,8 @@ public class HeartRateActivity extends GenericActivity {
                 updateConnectionState(R.string.disconnected);
             } else if (HeartRateSensorService.ACTION_DATA_AVAILABLE.equals(action)) {
                 displayData(intent.getStringExtra(HeartRateSensorService.EXTRA_DATA));
-            } else if (HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_STEP_DETECTED.equals(action)) {
-                displayData(intent.getStringExtra(HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_STEP_DETECTED));
+            } else if (HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_HEART_RATE_DETECTED.equals(action)) {
+                displayData(intent.getStringExtra(HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_HEART_RATE_DETECTED));
             } else if (HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_CONNECTED.equals(action)) {
                 updateConnectionState(R.string.connected);
             } else if (HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_DISCONNECTED.equals(action)) {
@@ -65,7 +64,7 @@ public class HeartRateActivity extends GenericActivity {
 
     private static IntentFilter updateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_STEP_DETECTED);
+        intentFilter.addAction(HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_HEART_RATE_DETECTED);
         intentFilter.addAction(HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_CONNECTED);
         intentFilter.addAction(HeartRateSensorSimulationService.ACTION_HRM_SIMULATION_DISCONNECTED);
         intentFilter.addAction(HeartRateSensorService.ACTION_GATT_CONNECTED);
@@ -181,7 +180,7 @@ public class HeartRateActivity extends GenericActivity {
             mMaxHearRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("maxHeartRate")));
             mMinHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("minHeartRate")));
             mHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("currentHeartRate")));
-            mAverageHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("averageHeartRate")));
+            mAverageHeartRate.setText(String.format(Locale.getDefault(), "%03d", sharedValues.getInt("averageHeartRateOverDay")));
             mConnectedDeviceName.setText(sharedValues.getString("deviceName"));
 
         }
@@ -252,7 +251,7 @@ public class HeartRateActivity extends GenericActivity {
             startActivity(i);
         } else if (v.getId() == R.id.HR_startSessionBtn) {
             if (checkIfSessionCanBeStarted()) {
-                i = new Intent(this, HRSessionActivity.class);
+                i = new Intent(this, TrainingSessionActivity.class);
                 startActivity(i);
             } else {
                 Toast.makeText(this, "No Heart Rate Sensor connected!", Toast.LENGTH_LONG).show();
@@ -270,13 +269,6 @@ public class HeartRateActivity extends GenericActivity {
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        if (v.getId() == R.id.logOutBtn) {
-            UserSessionManager userSessionManager = new UserSessionManager(this);
-            userSessionManager.uploadUserData(this, true, true, true);
-        }
-    }
+
 }
 

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context="com.mueller.mobileSports.heartRate.HRSessionActivity">
+    tools:context="com.mueller.mobileSports.session.TrainingSessionActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -39,12 +39,13 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/textView7"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
                     android:fontFamily="sans-serif"
-                    android:text="@string/heart_rate"
-                    android:textSize="24sp"
+                    android:text="@string/heart_rate2"
+                    android:textSize="18sp"
                     android:textStyle="normal|bold" />
 
                 <TextView
@@ -54,16 +55,17 @@
                     android:layout_weight="1"
                     android:text="@string/emptyString"
                     android:textAlignment="viewEnd"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     android:textStyle="normal|bold" />
 
 
                 <TextView
+                    android:id="@+id/textView8"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:text="@string/bpm"
-                    android:textSize="12sp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -104,7 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:text="@string/bpm"
-                    android:textSize="12sp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -138,7 +140,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:text="@string/bpm"
-                    android:textSize="12sp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -172,7 +174,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:text="@string/bpm"
-                    android:textSize="12sp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -192,7 +194,7 @@
                     android:layout_weight="4"
                     android:fontFamily="sans-serif"
                     android:text="@string/percentage_of_heart_rate"
-                    android:textSize="14sp"
+                    android:textSize="18sp"
                     android:textStyle="normal" />
 
                 <TextView
@@ -211,7 +213,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:text="@string/percentUnit"
-                    android:textSize="12sp" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -226,7 +228,7 @@
                     android:layout_weight="4"
                     android:fontFamily="sans-serif"
                     android:text="@string/energy_expenditure"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     android:textStyle="normal" />
 
                 <TextView
@@ -244,16 +246,20 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:text="@string/joules_min"
-                    android:textSize="12sp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
 
         </LinearLayout>
 
-        <android.support.v4.widget.Space
+        <View
             android:layout_width="match_parent"
-            android:layout_height="15dp" />
+            android:layout_height="2dip"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/mySpinnerColor" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -302,26 +308,26 @@
                     android:id="@+id/textView5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
+                    android:layout_weight="2"
                     android:fontFamily="sans-serif"
                     android:text="@string/trimp_score"
-                    android:textSize="21sp"
+                    android:textSize="22sp"
                     android:textStyle="normal|bold" />
 
                 <TextView
                     android:id="@+id/TS_TrimpScoreView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.03"
+                    android:layout_weight="1"
                     android:text="@string/emptyString"
                     android:textAlignment="viewEnd"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="normal|bold" />
 
                 <android.support.v4.widget.Space
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_weight="0.5" />
 
             </LinearLayout>
 
@@ -333,7 +339,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
+                    android:layout_weight="2"
                     android:fontFamily="sans-serif"
                     android:text="@string/energy_burned"
                     android:textSize="22sp"
@@ -346,13 +352,13 @@
                     android:layout_weight="1"
                     android:text="@string/emptyString"
                     android:textAlignment="viewEnd"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="normal|bold" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.5"
                     android:text="@string/kcal"
                     android:textSize="15sp" />
 
@@ -403,6 +409,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.1" />
+
             <Button
                 android:id="@+id/TS_PauseSessionBtn"
                 android:layout_width="0dp"

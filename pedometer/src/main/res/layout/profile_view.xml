@@ -25,7 +25,7 @@
             android:theme="@style/TextLabel">
 
             <EditText
-                android:id="@+id/input_email"
+                android:id="@+id/PF_input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="false"
@@ -146,11 +146,13 @@
         <Button
             android:id="@+id/PF_saveChangesBtn"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:background="#fcd0f9"
             android:onClick="onClickProfileActivity"
             android:text="@string/save" />
     </LinearLayout>
+
+
 </RelativeLayout>
 

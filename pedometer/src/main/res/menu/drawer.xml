@@ -17,22 +17,26 @@
             android:title="@string/heart_rate" />
 
         <item
+            android:id="@+id/StatisticsBtn"
+            android:checked="false"
+            android:icon="@mipmap/statistics_icon"
+            android:title="@string/statistics" />
+        <item
+            android:id="@+id/ProfileBtn"
+            android:checked="false"
+            android:icon="@mipmap/ic_profile"
+            android:title="@string/profile" />
+        <item
             android:id="@+id/SettingsBtn"
             android:checked="false"
             android:icon="@mipmap/settings_icon"
             android:title="@string/settings" />
 
         <item
-            android:id="@+id/ProfileBtn"
+            android:id="@+id/logOutBtn"
             android:checked="false"
-            android:icon="@mipmap/ic_profile"
-            android:title="@string/profile" />
-
-        <item
-            android:id="@+id/StatisticsBtn"
-            android:checked="false"
-            android:icon="@mipmap/statistics_icon"
-            android:title="@string/statistics" />
+            android:icon="@mipmap/logout"
+            android:title="@string/logout" />
 
     </group>
 </menu>

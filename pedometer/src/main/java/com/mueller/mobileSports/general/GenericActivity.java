@@ -10,18 +10,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.mueller.mobileSports.heartRate.HeartRateActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
 import com.mueller.mobileSports.user.ProfileActivity;
+import com.mueller.mobileSports.user.UserSessionManager;
 
 public class GenericActivity extends AppCompatActivity implements View.OnClickListener {
 
     protected Toolbar toolbar;
     protected NavigationView navigationView;
     protected DrawerLayout drawerLayout;
+    protected TextView text;
 
 
     @Override
@@ -35,11 +37,11 @@ public class GenericActivity extends AppCompatActivity implements View.OnClickLi
     protected void init() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ImageButton imgBtn = (ImageButton) findViewById(R.id.logOutBtn);
-        imgBtn.setOnClickListener(this);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
-
+        text = (TextView) navigationView.getHeaderView(0).findViewById(R.id.BackgrText);
+        String temp = "Step Up " + UserSessionManager.getUserData().getUsername();
+        text.setText(temp);
     }
 
     protected void setUpNavigation() {
@@ -73,6 +75,10 @@ public class GenericActivity extends AppCompatActivity implements View.OnClickLi
                     case R.id.StatisticsBtn:
                         i = new Intent(getApplicationContext(), StatisticsActivity.class);
                         startActivity(i);
+                        return true;
+                    case R.id.logOutBtn:
+                        UserSessionManager userSessionManager = new UserSessionManager(getApplicationContext());
+                        userSessionManager.uploadUserData(getApplicationContext(), false, true, true);
                         return true;
                     default:
                         return true;

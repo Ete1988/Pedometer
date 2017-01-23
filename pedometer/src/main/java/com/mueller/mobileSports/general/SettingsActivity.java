@@ -135,11 +135,11 @@ public class SettingsActivity extends GenericActivity {
         if (v.getId() == R.id.SE_GoalSelector) {
             setGoalDialog();
         } else if (v.getId() == R.id.SE_HeartRateMaxSelector) {
-            numberPickerDialog(120, 220, mHeartRateMax, "Set Maximum Heart Rate");
+            numberPickerDialog(90, 240, mHeartRateMax, "Set Maximum Heart Rate");
         } else if (v.getId() == R.id.SE_LevelSelector) {
             setActivityLevelDialog();
         } else if (v.getId() == R.id.SE_RestingHeartRateSelector) {
-            numberPickerDialog(40, 130, mRestingHeartRate, "Set Resting Heart Rate");
+            numberPickerDialog(20, 90, mRestingHeartRate, "Set Resting Heart Rate");
         } else if (v.getId() == R.id.SE_SaveChangesBtn) {
             updateData();
         }
@@ -301,14 +301,7 @@ public class SettingsActivity extends GenericActivity {
 
     }
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        if (v.getId() == R.id.logOutBtn) {
-            UserSessionManager userSessionManager = new UserSessionManager(this);
-            userSessionManager.uploadUserData(this, true, true, true);
-        }
-    }
+
 }
 
 

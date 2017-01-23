@@ -10,9 +10,6 @@ public class HeartRateData {
     private int maxHeartRate;
     private int minHeartRate;
     private int averageHeartRate;
-    private double sessionDuration;
-    private int trimpScore;
-    private float energyExpenditure;
     private String objectId;
 
     public String getObjectId() {
@@ -47,39 +44,12 @@ public class HeartRateData {
         this.averageHeartRate = averageHeartRate;
     }
 
-    public double getSessionDuration() {
-        return sessionDuration;
-    }
-
-    public void setSessionDuration(double sessionDuration) {
-        this.sessionDuration = sessionDuration;
-    }
-
-    public int getTrimpScore() {
-        return trimpScore;
-    }
-
-    public void setTrimpScore(int trimpScore) {
-        this.trimpScore = trimpScore;
-    }
-
-    public float getEnergyExpenditure() {
-        return energyExpenditure;
-    }
-
-    public void setEnergyExpenditure(float energyExpenditure) {
-        this.energyExpenditure = energyExpenditure;
-    }
-
     @Override
     public String toString() {
         return "HeartRateData{" +
                 "maxHeartRate=" + maxHeartRate +
                 ", minHeartRate=" + minHeartRate +
                 ", averageHeartRate=" + averageHeartRate +
-                ", sessionDuration=" + sessionDuration +
-                ", trimpScore=" + trimpScore +
-                ", energyExpenditure=" + energyExpenditure +
                 ", objectId='" + objectId + '\'' +
                 '}';
     }

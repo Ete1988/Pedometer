@@ -114,7 +114,7 @@ public class ProfileActivity extends GenericActivity {
         mInputAge = (EditText) findViewById(R.id.input_age);
         mInputWeight = (EditText) findViewById(R.id.input_weight);
         mInputHeight = (EditText) findViewById(R.id.input_height);
-        mInputEmail = (EditText) findViewById(R.id.input_email);
+        mInputEmail = (EditText) findViewById(R.id.PF_input_email);
         spinner = (Spinner) findViewById(R.id.spinner_gender);
 
         mapUserDataToView();
@@ -223,16 +223,6 @@ public class ProfileActivity extends GenericActivity {
             }
         }
     }
-
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        if (v.getId() == R.id.logOutBtn) {
-            UserSessionManager userSessionManager = new UserSessionManager(this);
-            userSessionManager.uploadUserData(this, true, true, true);
-        }
-    }
-
 
 }
 

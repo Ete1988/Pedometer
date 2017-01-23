@@ -1,4 +1,4 @@
-package com.mueller.mobileSports.general;
+package com.mueller.mobileSports.utility;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -70,7 +70,6 @@ public class SharedValues {
         }
         return 0f;
     }
-
 
     /**
      * Method to get a stored String value from the shared preference specified by a key

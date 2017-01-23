@@ -2,6 +2,7 @@ package com.mueller.mobileSports.user;
 
 import com.mueller.mobileSports.heartRate.HeartRateData;
 import com.mueller.mobileSports.pedometer.PedometerData;
+import com.mueller.mobileSports.session.TrainingSessionData;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,10 +14,11 @@ import java.util.Locale;
  * Dataobject to store the pedometer and heartrate data for a specific day
  */
 
-class DailyData {
+public class DailyData {
 
     private PedometerData pedometerData;
     private HeartRateData heartRateData;
+    private TrainingSessionData trainingSessionData;
     private String sessionDay;
     private String objectId;
 
@@ -26,7 +28,7 @@ class DailyData {
     }
 
 
-    PedometerData getPedometerData() {
+    public PedometerData getPedometerData() {
         if (pedometerData == null)
             return new PedometerData();
         return pedometerData;
@@ -36,7 +38,7 @@ class DailyData {
         this.pedometerData = pedometerData;
     }
 
-    HeartRateData getHeartRateData() {
+    public HeartRateData getHeartRateData() {
         if (heartRateData == null)
             return new HeartRateData();
         return heartRateData;
@@ -46,7 +48,18 @@ class DailyData {
         this.heartRateData = heartRateData;
     }
 
-    String getSessionDay() {
+    public TrainingSessionData getTrainingSessionData() {
+        if (trainingSessionData == null) {
+            return new TrainingSessionData();
+        }
+        return trainingSessionData;
+    }
+
+    public void setTrainingSessionData(TrainingSessionData trainingSessionData) {
+        this.trainingSessionData = trainingSessionData;
+    }
+
+    public String getSessionDay() {
         return sessionDay;
     }
 

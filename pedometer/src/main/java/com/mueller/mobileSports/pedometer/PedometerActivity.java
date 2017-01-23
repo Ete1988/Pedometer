@@ -17,11 +17,11 @@ import android.widget.Toast;
 
 import com.lylc.widget.circularprogressbar.CircularProgressBar;
 import com.mueller.mobileSports.general.GenericActivity;
-import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.heartRate.HeartRateSensorService;
 import com.mueller.mobileSports.heartRate.HeartRateSensorSimulationService;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.user.UserSessionManager;
+import com.mueller.mobileSports.utility.SharedValues;
 
 import java.util.Locale;
 
@@ -30,6 +30,7 @@ public class PedometerActivity extends GenericActivity {
     boolean doubleBackToExitPressedOnce = false;
     private UserSessionManager userSessionManager;
     private CircularProgressBar cBar;
+
     private final BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
@@ -37,6 +38,7 @@ public class PedometerActivity extends GenericActivity {
                 int steps = intent.getIntExtra("steps", 0);
                 cBar.setProgress(steps);
                 cBar.setTitle(Integer.toString(steps));
+
 
             } else if (PedometerService.VALUES_CHANGED.equals(action)) {
                 mCadence.setText(String.format(Locale.getDefault(), "%.2f", intent.getDoubleExtra("cadenceValue", 0.0)));
@@ -63,6 +65,7 @@ public class PedometerActivity extends GenericActivity {
         setContentView(R.layout.generic_layout);
         init();
         setUpNavigation();
+
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.getMenu().findItem(R.id.PedometerBtn).setChecked(true);
 
@@ -72,7 +75,6 @@ public class PedometerActivity extends GenericActivity {
                 (ViewGroup) findViewById(R.id.myPedometerView));
         frameLayout.addView(childLayout);
         initializeViews();
-
         registerReceiver(mUpdateReceiver, updateIntentFilter());
         if (!isMyServiceRunning(PedometerService.class)) {
             Intent intent = new Intent(PedometerActivity.this, PedometerService.class);
@@ -180,14 +182,7 @@ public class PedometerActivity extends GenericActivity {
         super.onDestroy();
     }
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        if (v.getId() == R.id.logOutBtn) {
-            UserSessionManager userSessionManager = new UserSessionManager(this);
-            userSessionManager.uploadUserData(this, true, true, true);
-        }
-    }
+
 }
 
 

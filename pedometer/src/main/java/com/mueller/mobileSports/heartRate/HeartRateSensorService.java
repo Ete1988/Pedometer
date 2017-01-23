@@ -14,8 +14,9 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.mueller.mobileSports.general.SharedValues;
+import com.mueller.mobileSports.utility.SharedValues;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 
@@ -27,6 +28,7 @@ import java.util.UUID;
  */
 
 public class HeartRateSensorService extends Service {
+
 
     public final static String ACTION_GATT_CONNECTED =
             "com.mueller.mobileSports.heartRate.ACTION_HRM_SIMULATION_CONNECTED";
@@ -47,12 +49,14 @@ public class HeartRateSensorService extends Service {
     public Context context;
     private SharedValues sharedValues;
     private int i = 0;
-    private int[] averageHeartRate = new int[3];
+    private ArrayList<Integer> array_HeartRate;
     private HeartRateMonitorUtility heartRateMonitorUtility;
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private String mBluetoothDeviceAddress;
     private BluetoothGatt mBluetoothGatt;
+
+    //Callback for Bluetooth events
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -107,30 +111,33 @@ public class HeartRateSensorService extends Service {
                                  final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
 
+        //HeartRate
         if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
             int flag = characteristic.getProperties();
             int format;
             if ((flag & 0x01) != 0) {
                 format = BluetoothGattCharacteristic.FORMAT_UINT16;
-                Log.d(TAG, "Heart rate format UINT16.");
             } else {
                 format = BluetoothGattCharacteristic.FORMAT_UINT8;
-                Log.d(TAG, "Heart rate format UINT8.");
             }
             final int heartRate = characteristic.getIntValue(format, 1);
-            Log.d(TAG, String.format("Received heart rate: %d", heartRate));
 
             sharedValues.saveInt("currentHeartRate", heartRate);
+
             heartRateMonitorUtility.doCalculations(heartRate);
 
-            if (i == 3) {
-                heartRateMonitorUtility.calculateAverageHeartRate(averageHeartRate);
-                i = 0;
-            }
-            averageHeartRate[i++] = heartRate;
+            array_HeartRate.add(heartRate);
+            heartRateMonitorUtility.calculateAverageHeartRateOverDay(array_HeartRate);
             intent.putExtra(EXTRA_DATA, String.valueOf(heartRate));
-        } else {
+        }
+
+        /*
+
+        Not needed.
+
+        else {
             // For all other profiles, writes the data formatted in HEX.
+            // Not tested and further implemented because our Sensor didn't support this profile.
             final byte[] data = characteristic.getValue();
             if (data != null && data.length > 0) {
                 final StringBuilder stringBuilder = new StringBuilder(data.length);
@@ -139,6 +146,7 @@ public class HeartRateSensorService extends Service {
                 intent.putExtra(EXTRA_DATA, new String(data) + "\n" + stringBuilder.toString());
             }
         }
+        */
         sendBroadcast(intent);
     }
 
@@ -186,6 +194,10 @@ public class HeartRateSensorService extends Service {
         if (sharedValues == null) {
             sharedValues = SharedValues.getInstance(this);
         }
+
+        if (array_HeartRate == null) {
+            array_HeartRate = new ArrayList<Integer>();
+        }
         Log.i(TAG, "HeartRateSensorService started.");
     }
 
@@ -216,10 +228,7 @@ public class HeartRateSensorService extends Service {
      * Connects to the GATT server hosted on the Bluetooth LE device.
      *
      * @param address The device address of the destination device.
-     * @return Return true if the connection is initiated successfully. The connection result
-     * is reported asynchronously through the
-     * {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
-     * callback.
+     * @return Return true if the connection is initiated successfully.
      */
     public boolean connect(final String address) {
         if (mBluetoothAdapter == null || address == null) {
@@ -248,10 +257,7 @@ public class HeartRateSensorService extends Service {
     }
 
     /**
-     * Disconnects an existing connection or cancel a pending connection. The disconnection result
-     * is reported asynchronously through the
-     * {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
-     * callback.
+     * Disconnects an existing connection or cancel a pending connection.
      */
     public void disconnect() {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {

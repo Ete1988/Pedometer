@@ -3,20 +3,23 @@
 
     <string name="app_name">Step Up</string>
     <string name="emptyString" />
+    <string name="closeDrawer">Navigation View</string>
+    <string name="openDrawer">Navigation View Closed</string>
 
-    <!-- Strings related to pedeometer -->
+    <!-- Strings related to pedometer -->
     <string name="pedometer">Pedometer</string>
     <string name="cadence">Cadence:</string>
-    <string name="steps_s">Steps/s</string>
+    <string name="steps_s">steps/s</string>
     <string name="speed">Speed:</string>
     <string name="km_h">km/h</string>
     <string name="distance">Distance:</string>
     <string name="km">km</string>
+    <string name="current_calculations">Current Calculations</string>
+    <string name="cal">cal</string>
 
     <!-- Strings related to settings layout -->
     <string name="activity_level">Activity level:</string>
     <string name="set_activity_level">set activity level</string>
-    <string name="set_goal">Set goal</string>
     <string name="fiveTH">5000</string>
     <string name="sixTH">6000</string>
     <string name="sevenTH">7000</string>
@@ -24,8 +27,7 @@
     <string name="itsOverNineTHousand">9000</string>
     <string name="tenTH">10000</string>
     <string name="general">General</string>
-    <string name="resting_heart_rate">Resting Heart Rate:</string>
-    <string name="maximum_heart_rate">Maximum Heart Rate:</string>
+    <string name="resting_heart_rate">Resting HR:</string>
     <string name="step_goal">Step Goal:</string>
 
 
@@ -42,18 +44,14 @@
         <item>Female</item>
     </string-array>
 
-    <string-array name="activity_selector">
-        <item>Heart Rate</item>
-        <item>Steps</item>
-    </string-array>
 
     <!-- Strings related to heart rate layout -->
     <string name="default_timer">00:00:00</string>
-    <string name="average">Average:</string>
-    <string name="minimum">Minimum:</string>
-    <string name="maximum">Maximum:</string>
-    <string name="heart_rate">Heart Rate</string>
-    <string name="percentage_of_heart_rate">Percentage of HRmax:</string>
+    <string name="average">Average HR:</string>
+    <string name="minimum">Minimum HR:</string>
+    <string name="maximum">Maximum HR:</string>
+    <string name="heart_rate">Heart Rate Monitor</string>
+    <string name="percentage_of_heart_rate">HRmax Percentage:</string>
     <string name="bpm">bpm</string>
     <string name="percentUnit">%</string>
     <string name="connected">Connected</string>
@@ -61,6 +59,9 @@
     <string name="bluetooth_status">Bluetooth Status:</string>
     <string name="search_bluetooth_device">Connect Device</string>
     <string name="go_to_session">Go to Session</string>
+    <string name="disconnect_device">Disconnect device</string>
+    <string name="to">To:</string>
+
 
     <!-- Strings related to login layout -->
     <string name="action_sign_in">Sign in</string>
@@ -80,8 +81,9 @@
     <string name="trimp_score">TRIMP Score:</string>
     <string name="energy_expenditure">Energy Expenditure:</string>
     <string name="joules_min">J/min</string>
-    <string name="kcal">kCal</string>
+    <string name="kcal">kcal</string>
     <string name="energy_burned">Energy burned:</string>
+    <string name="heart_rate2">Heart Rate</string>
 
     <!-- Bluetooth Search -->
     <string name="ble_not_supported">BLE is not supported</string>
@@ -93,27 +95,27 @@
     <string name="connect_to_device">Connect to device?</string>
     <string name="unknown">Unknown</string>
     <string name="pause">Pause</string>
-    <string name="scan">Scan</string>
 
     <!-- Main Menu -->
     <string name="settings">Settings</string>
     <string name="profile">Profile</string>
-    <string name="logout">Logout</string>
+    <string name="logout">Log Out</string>
     <string name="welcome_to_step_up">Welcome to Step Up!</string>
-    <string name="login">Login</string>
-    <string name="cal">Cal</string>
 
 
-    <string name="closeDrawer">Navigation View</string>
-    <string name="openDrawer">Navigation View Closed</string>
-    <string name="trainings_session">Trainings Session</string>
+    <!-- Statistics -->
     <string name="statistics">Statistics</string>
-    <string name="choose_date">Please select date and activity</string>
+    <string name="activity">Activity</string>
+    <string name="selected_interval">Selected Interval</string>
     <string name="set_date">From Date:</string>
     <string name="set_date2">To Date:</string>
-    <string name="disconnect_device">Disconnect device</string>
-    <string name="selected_interval">Selected Interval</string>
-    <string name="activity">Activity</string>
+    <string name="choose_date">Please select date and activity</string>
+    <string-array name="activity_selector">
+        <item>@string/emptyString</item>
+        <item>Steps</item>
+        <item>Heart Rate</item>
+        <item>Performance</item>
+    </string-array>
 
 
 </resources>

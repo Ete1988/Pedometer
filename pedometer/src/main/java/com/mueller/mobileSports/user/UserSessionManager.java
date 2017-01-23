@@ -14,10 +14,11 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.backendless.persistence.local.UserTokenStorageFactory;
 import com.mueller.mobileSports.account.LoginActivity;
-import com.mueller.mobileSports.general.SharedValues;
 import com.mueller.mobileSports.heartRate.HeartRateData;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
 import com.mueller.mobileSports.pedometer.PedometerData;
+import com.mueller.mobileSports.session.TrainingSessionData;
+import com.mueller.mobileSports.utility.SharedValues;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -28,6 +29,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by Ete on 10/12/2016.
@@ -41,8 +44,6 @@ public class UserSessionManager {
     private ProgressDialog progress;
     private SharedValues sharedValues;
     private Context context;
-
-    //TODO remove context everywhere?;
 
     // Constructor
     public UserSessionManager(Context context) {
@@ -119,6 +120,7 @@ public class UserSessionManager {
                     progress.dismiss();
                 }
 
+                UserSessionManager.setUserData(null);
                 Intent i = new Intent(context, LoginActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -199,7 +201,11 @@ public class UserSessionManager {
 
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
-                Toast.makeText(context, "Error logging in! Please register or check your log in details", Toast.LENGTH_LONG).show();
+                if (Objects.equals(backendlessFault.getCode(), "3087")) {
+                    Toast.makeText(context, "Please check and confirm email address", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, "Error logging in! Please register or check your log in details", Toast.LENGTH_LONG).show();
+                }
                 progress.dismiss();
             }
         }, true);
@@ -240,7 +246,6 @@ public class UserSessionManager {
                     userData = data.getData().get(0);
                     Log.e(TAG, "Loaded UserData: " + userData.getObjectId());
                     getDailyDataFromServer(intent);
-
                 } else {
                     Log.e(TAG, "Could not load UserData (Does not exist on server)");
                     userData = new UserData();
@@ -281,13 +286,8 @@ public class UserSessionManager {
                     mapDataToSharedValue(intent);
 
                 } else {
-                    Log.e(TAG, "Could not load UserData (Does not exist on server)");
-                    userData = new UserData();
-                    userData.setEmail(sharedValues.getString("email"));
-                    userData.setUsername(sharedValues.getString("name"));
-                    Intent i = new Intent(context, ProfileActivity.class);
-                    i.putExtra("firstTime", true);
-                    mapDataToSharedValue(i);
+                    Log.e(TAG, "Could not load DailyData (Does not exist on server)");
+                    mapDataToSharedValue(intent);
                 }
             }
 
@@ -299,79 +299,6 @@ public class UserSessionManager {
                     userData = new UserData();
                     createTablesAndTestData();
                 }
-            }
-        });
-    }
-
-    /**
-     * This method is only called if no tables in backendless exists.
-     */
-    private void createTablesAndTestData() {
-        ArrayList<DailyData> data = new ArrayList<>();
-
-        DailyData d1 = new DailyData();
-        DailyData d2 = new DailyData();
-        DailyData d3 = new DailyData();
-
-        DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);
-        d1.setSessionDay(dateFormat.format(cal.getTime()));
-        Calendar cal1 = Calendar.getInstance();
-        cal1.add(Calendar.DATE, -2);
-        d2.setSessionDay(dateFormat.format(cal1.getTime()));
-        Calendar cal2 = Calendar.getInstance();
-        cal2.add(Calendar.DATE, -3);
-        d3.setSessionDay(dateFormat.format(cal2.getTime()));
-
-        PedometerData p1 = new PedometerData();
-        p1.setDailyStepCount(800);
-        p1.setDistance(244.44);
-        p1.setEnergyExpenditureSteps(132);
-        PedometerData p2 = new PedometerData();
-        p2.setDailyStepCount(900);
-        p2.setEnergyExpenditureSteps(132);
-        p2.setDistance(344.44);
-        PedometerData p3 = new PedometerData();
-        p3.setDailyStepCount(1000);
-        p3.setDistance(444.44);
-        p3.setEnergyExpenditureSteps(132);
-
-        HeartRateData h1 = new HeartRateData();
-        h1.setMinHeartRate(56);
-        h1.setMaxHeartRate(123);
-        h1.setAverageHeartRate(76);
-        HeartRateData h2 = new HeartRateData();
-        h2.setMinHeartRate(57);
-        h2.setMaxHeartRate(124);
-        h2.setAverageHeartRate(77);
-        HeartRateData h3 = new HeartRateData();
-        h3.setMinHeartRate(58);
-        h3.setMaxHeartRate(125);
-        h3.setAverageHeartRate(78);
-
-        d1.setHeartRateData(h1);
-        d1.setPedometerData(p1);
-        d2.setHeartRateData(h2);
-        d2.setPedometerData(p2);
-        d3.setHeartRateData(h3);
-        d3.setPedometerData(p3);
-
-        data.add(d1);
-        data.add(d2);
-        data.add(d3);
-
-
-        userData.setDailyData(data);
-        Backendless.Persistence.of(UserData.class).save(userData, new AsyncCallback<UserData>() {
-            @Override
-            public void handleResponse(UserData updatedData) {
-                Log.i(TAG, "Tables Created");
-            }
-
-            @Override
-            public void handleFault(BackendlessFault backendlessFault) {
-                System.err.println("Error - " + backendlessFault);
             }
         });
     }
@@ -430,13 +357,12 @@ public class UserSessionManager {
         context.startActivity(i);
     }
 
-    public String getCurrentDateAsString() {
+    private String getCurrentDateAsString() {
         Date now = new Date();
         SimpleDateFormat currDate = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         sharedValues.saveString("sessionDay", currDate.format(now));
         return currDate.format(now);
     }
-
 
     private void mapDataToSharedValue(final Intent intent) {
 
@@ -504,31 +430,36 @@ public class UserSessionManager {
             //Same Day
             if (data.get(data.size() - 1).getSessionDay().equals(sharedValues.getString("sessionDay"))) {
                 dailyData = data.get(data.size() - 1);
+                data.remove(data.size() - 1);
             } else {
                 dailyData = new DailyData();
             }
         }
 
-
         PedometerData pedometerData = dailyData.getPedometerData();
         HeartRateData heartRateData = dailyData.getHeartRateData();
+        TrainingSessionData trainingSessionData = dailyData.getTrainingSessionData();
 
         //PedometerData
         pedometerData.setDailyStepCount(sharedValues.getInt("stepsOverDay"));
         pedometerData.setWeeklyStepCount(sharedValues.getInt("stepsOverWeek"));
         pedometerData.setDistance(sharedValues.getFloat("distance"));
         pedometerData.setEnergyExpenditureSteps(sharedValues.getInt("energyExpenditureSteps"));
-        pedometerData.setDistance(sharedValues.getFloat("distance"));
+
 
         //HeartRateData
-        heartRateData.setAverageHeartRate(sharedValues.getInt("averageHeartRate"));
+        heartRateData.setAverageHeartRate(sharedValues.getInt("averageHeartRateOverDay"));
         heartRateData.setMaxHeartRate(sharedValues.getInt("maxHeartRate"));
         heartRateData.setMinHeartRate(sharedValues.getInt("minHeartRate"));
-        heartRateData.setEnergyExpenditure(sharedValues.getFloat("totalEnergyExpenditureDuringSession"));
-        heartRateData.setTrimpScore(sharedValues.getInt("trimpScore"));
-        heartRateData.setSessionDuration(sharedValues.getFloat("sessionDuration"));
 
-        dailyData.setPedometerData(pedometerData);
+        //TrainingSessionData
+        trainingSessionData.setTrimpScore(sharedValues.getInt("trimpScore"));
+        trainingSessionData.setSessionDuration(sharedValues.getFloat("sessionDuration"));
+        trainingSessionData.setEnergyExpenditure(sharedValues.getFloat("totalEnergyExpenditureDuringSession"));
+        trainingSessionData.setFatigue(sharedValues.getInt("fatigue"));
+        trainingSessionData.setFitness(sharedValues.getInt("fitness"));
+        trainingSessionData.setPerformance(sharedValues.getInt("performance"));
+
         data.add(dailyData);
         userData.setDailyData(data);
 
@@ -558,6 +489,66 @@ public class UserSessionManager {
         int weekOfYear = checkWeek.get(Calendar.WEEK_OF_YEAR);
         return (c.get(Calendar.WEEK_OF_YEAR)) > weekOfYear;
     }
+
+    /**
+     * This method is only called if no tables in backendless exists.
+     */
+    private void createTablesAndTestData() {
+        ArrayList<DailyData> data = new ArrayList<>();
+        DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+
+        int i, j = -14;
+        int[] fatigue = {33, 137, 232, 308, 371, 458, 528, 608, 565, 565, 756, 851, 963, 1023, 1145, 1278, 1352};
+        int[] fitness = {1000, 1082, 1163, 1230, 1290, 1376, 1452, 1542, 1605, 1623, 1740, 1860, 1978, 2056, 2166, 2256, 2389};
+        int[] performance = {934, 808, 698, 614, 547, 461, 397, 327, 293, 310, 227, 153, 245, 133, 233, 355, 486, 333, 478, 321, 201, 145};
+        int[] trimp = {33, 107, 107, 96, 90, 119, 110, 126, 101, 57, 157, 163, 177, 105, 144, 106, 56, 189, 145, 136, 103, 78, 96, 177};
+
+        for (i = 0; i < 15; i++) {
+            Calendar cal = Calendar.getInstance();
+            DailyData myDara = new DailyData();
+            PedometerData pedometerData = new PedometerData();
+            HeartRateData heartRateData = new HeartRateData();
+            TrainingSessionData trainingSessionData = new TrainingSessionData();
+            Random r = new Random();
+            pedometerData.setDailyStepCount(r.nextInt(12000 - 6001) + 6000);
+            pedometerData.setEnergyExpenditureSteps(r.nextInt(50000 - 10001) + 10000);
+            pedometerData.setDistance(ThreadLocalRandom.current().nextDouble(10.0, 50.0));
+
+            heartRateData.setMinHeartRate(r.nextInt(150 - 81) + 80);
+            heartRateData.setMaxHeartRate(r.nextInt(250 - 151) + 150);
+            heartRateData.setAverageHeartRate(r.nextInt(175 - 121) + 120);
+
+            trainingSessionData.setFitness(fitness[i]);
+            trainingSessionData.setFatigue(fatigue[i]);
+            trainingSessionData.setTrimpScore(trimp[i]);
+            trainingSessionData.setPerformance(performance[i]);
+            trainingSessionData.setEnergyExpenditure((float) ThreadLocalRandom.current().nextDouble(50.0, 150.0));
+
+            myDara.setTrainingSessionData(trainingSessionData);
+            myDara.setHeartRateData(heartRateData);
+            myDara.setPedometerData(pedometerData);
+
+            cal.add(Calendar.DATE, +j);
+            myDara.setSessionDay(dateFormat.format(cal.getTime()));
+            data.add(myDara);
+            j++;
+        }
+
+        userData.setDailyData(data);
+
+        Backendless.Persistence.of(UserData.class).save(userData, new AsyncCallback<UserData>() {
+            @Override
+            public void handleResponse(UserData updatedData) {
+                Log.i(TAG, "Tables Created");
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                System.err.println("Error - " + backendlessFault);
+            }
+        });
+    }
+
 }
 
 

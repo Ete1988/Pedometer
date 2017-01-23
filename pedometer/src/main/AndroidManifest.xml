@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <!-- Bluetooth , only availabe for BLE supported devices -->
+    <!-- Bluetooth , only available for BLE supported devices -->
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
@@ -29,6 +29,7 @@
             android:name="com.mueller.mobileSports.account.LoginActivity"
             android:label="Step Up"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,47 +37,61 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="com.mueller.mobileSports.pedometer.PedometerActivity"
-            android:label="Pedometer" />
+            android:label="Pedometer"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.mueller.mobileSports.general.SettingsActivity"
             android:label="Settings"
             android:noHistory="true"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name="com.mueller.mobileSports.user.ProfileActivity"
             android:label="Edit Profile"
             android:noHistory="true"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name="com.mueller.mobileSports.account.RegisterActivity"
             android:label="Register"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name="com.mueller.mobileSports.heartRate.HeartRateActivity"
-            android:label="Heart-Rate Monitor" />
-        <activity android:name="com.mueller.mobileSports.general.BluetoothScanActivity" />
+            android:label="Heart Rate Monitor" />
+        <activity
+            android:name="com.mueller.mobileSports.general.BluetoothScanActivity"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name="com.mueller.mobileSports.general.StatisticsActivity"
             android:label="Statistics"
             android:windowSoftInputMode="adjustPan" />
 
+        <activity
+            android:name="com.mueller.mobileSports.session.TrainingSessionActivity"
+            android:label="Heart Rate Session"
+            android:screenOrientation="portrait" />
+
         <service
             android:name="com.mueller.mobileSports.pedometer.PedometerService"
-            android:enabled="true">
+            android:enabled="true" />
 
-            <!-- exported determines whether or not the service can be executed by other applications. -->
-        </service>
         <service
             android:name="com.mueller.mobileSports.heartRate.HeartRateSensorSimulationService"
             android:enabled="true" />
+
         <service
             android:name="com.mueller.mobileSports.heartRate.HeartRateSensorService"
             android:enabled="true" />
 
-        <activity android:name="com.mueller.mobileSports.heartRate.HRSessionActivity" />
     </application>
 
 </manifest>
