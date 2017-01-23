@@ -4,12 +4,15 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.NavigationView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
@@ -25,7 +28,7 @@ import java.util.Locale;
  * Activity that offers methods to adjust app relevant data.
  */
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends GenericActivity {
 
     private final String[] goalsValuesArray = {"5000", "6000", "7000", "8000", "9000", "10000", "Other? Please set here!"};
     private final String[] activityLevelTextArray = {"0: Avoid walking or exertion, for example, always use elevator, drive " +
@@ -51,9 +54,18 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-        setTitle("Settings");
+        setContentView(R.layout.generic_layout);
         init();
+        setUpNavigation();
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.getMenu().findItem(R.id.SettingsBtn).setChecked(true);
+        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.frame);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View childLayout = inflater.inflate(R.layout.settings_view,
+                (ViewGroup) findViewById(R.id.mySettingsView));
+        frameLayout.addView(childLayout);
+        initializeViews();
+
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,10 +74,20 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void init() {
+        super.init();
+    }
+
+    @Override
+    protected void setUpNavigation() {
+        super.setUpNavigation();
+    }
+
     /**
      * Initializes most fields of activity
      */
-    private void init() {
+    private void initializeViews() {
         UserData userData = UserSessionManager.getUserData();
         userSessionManager = new UserSessionManager(this);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -80,7 +102,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         mActivityLevelText.setText(String.format(Locale.getDefault(), "%d", activityLevel));
 
-        if(stepGoal == 0){
+        if (stepGoal == 0) {
             stepGoal = 5000;
             mCurrentStepGoalText.setText(String.format(Locale.getDefault(), "%d", stepGoal));
             userData.setStepGoal(stepGoal);
@@ -113,11 +135,11 @@ public class SettingsActivity extends AppCompatActivity {
         if (v.getId() == R.id.SE_GoalSelector) {
             setGoalDialog();
         } else if (v.getId() == R.id.SE_HeartRateMaxSelector) {
-            numberPickerDialog(120, 220, mHeartRateMax, "Set Maximum Heart Rate");
+            numberPickerDialog(90, 240, mHeartRateMax, "Set Maximum Heart Rate");
         } else if (v.getId() == R.id.SE_LevelSelector) {
             setActivityLevelDialog();
         } else if (v.getId() == R.id.SE_RestingHeartRateSelector) {
-            numberPickerDialog(40, 130, mRestingHeartRate, "Set Resting Heart Rate");
+            numberPickerDialog(20, 90, mRestingHeartRate, "Set Resting Heart Rate");
         } else if (v.getId() == R.id.SE_SaveChangesBtn) {
             updateData();
         }
@@ -243,10 +265,10 @@ public class SettingsActivity extends AppCompatActivity {
     /**
      * Method to generate numberPicker dialog
      *
-     * @param min min number to pick
-     * @param max max number to pick
+     * @param min      min number to pick
+     * @param max      max number to pick
      * @param textView textview to display picked number
-     * @param title title of to be created numberpicker
+     * @param title    title of to be created numberpicker
      */
     private void numberPickerDialog(int min, int max, final TextView textView, final String title) {
         NumberPicker myNumberPicker = new NumberPicker(this);
@@ -278,6 +300,8 @@ public class SettingsActivity extends AppCompatActivity {
         alert.show();
 
     }
+
+
 }
 
 

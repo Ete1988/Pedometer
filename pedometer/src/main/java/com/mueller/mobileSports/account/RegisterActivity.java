@@ -34,7 +34,8 @@ public class RegisterActivity extends AppCompatActivity {
     EditText _passwordText;
     @Bind(R.id.confirmpassword)
     EditText _confirmPasswordText;
-    @Bind(R.id.input_name) EditText name;
+    @Bind(R.id.input_name)
+    EditText name;
     @Bind(R.id.createAccount_button)
     Button _signupButton;
     @Bind(R.id.link_login)

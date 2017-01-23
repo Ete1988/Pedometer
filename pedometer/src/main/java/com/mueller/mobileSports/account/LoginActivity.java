@@ -45,6 +45,11 @@ public class LoginActivity extends AppCompatActivity {
         this.finish();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     public void onClick(View v) {
         if (v.getId() == R.id.register_button) {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
@@ -68,10 +73,8 @@ public class LoginActivity extends AppCompatActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             userSessionManager.userLogin(email, password, intent);
         } else {
-
             // user didn't enter username or password
             Toast.makeText(getBaseContext(), "Please enter username and password", Toast.LENGTH_LONG).show();
         }
     }
-
 }

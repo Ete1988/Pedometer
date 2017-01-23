@@ -11,7 +11,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/primary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
 
     <LinearLayout
@@ -79,9 +79,10 @@
         <android.support.v4.widget.Space
             android:layout_width="match_parent"
             android:layout_height="25sp" />
+
         <Button
             android:id="@+id/createAccount_button"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="40dp"
@@ -97,7 +98,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:gravity="center"
-            android:onClick="onClick"
             android:paddingTop="20dp"
             android:text="@string/already_have_an_account_login"
             android:textSize="16sp"

@@ -7,24 +7,24 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.mueller.mobileSports.general.SharedValues;
+import com.mueller.mobileSports.utility.SharedValues;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 /**
  * Created by Ete on 15/12/2016.
- *
+ * <p>
  * Class to simulate an connected BLE HeartRate device
- *
  */
 
 public class HeartRateSensorSimulationService extends Service {
 
-    public final static String ACTION_HRM_SIMULATION_STEP_DETECTED = "com.mueller.mobileSPorts.HeartRateSimulation.STEP_VALUE";
+    public final static String ACTION_HRM_SIMULATION_HEART_RATE_DETECTED = "com.mueller.mobileSPorts.HeartRateSimulation.STEP_VALUE";
     public final static String ACTION_HRM_SIMULATION_CONNECTED =
             "com.mueller.mobileSPorts.HeartRateSimulation.CONNECTED";
     public final static String ACTION_HRM_SIMULATION_DISCONNECTED =
@@ -33,8 +33,9 @@ public class HeartRateSensorSimulationService extends Service {
     private final static String TAG = HeartRateSensorSimulationService.class.getSimpleName();
     private final static int SIZE_OF_SIMULATION_DATA = 541;
     private final static int TIME_DELAY = 3000;
-    private int[] arraySimulationData, arrayAverageHeartRate;
-    private int updateCounter, averageHeartRateCalculationCounter;
+    private int[] arraySimulationData;
+    private ArrayList<Integer> array_HeartRate;
+    private int updateCounter;
     private Handler mHandler;
     private HeartRateMonitorUtility heartRateMonitorUtility;
     private SharedValues sharedValues;
@@ -48,16 +49,13 @@ public class HeartRateSensorSimulationService extends Service {
                 updateCounter = 0;
             }
 
-            arrayAverageHeartRate[averageHeartRateCalculationCounter++] = arraySimulationData[updateCounter];
-
-            if (averageHeartRateCalculationCounter == 3) {
-                heartRateMonitorUtility.calculateAverageHeartRate(arrayAverageHeartRate);
-                averageHeartRateCalculationCounter = 0;
-            }
-
+            array_HeartRate.add(arraySimulationData[updateCounter]);
             heartRateMonitorUtility.doCalculations(arraySimulationData[updateCounter]);
+            heartRateMonitorUtility.calculateAverageHeartRateOverDay(array_HeartRate);
             sharedValues.saveInt("currentHeartRate", arraySimulationData[updateCounter]);
-            broadcastUpdate(ACTION_HRM_SIMULATION_STEP_DETECTED, arraySimulationData[updateCounter++]);
+
+            //Send Data to activity
+            broadcastUpdate(ACTION_HRM_SIMULATION_HEART_RATE_DETECTED, arraySimulationData[updateCounter++]);
             mHandler.postDelayed(this, TIME_DELAY);
 
         }
@@ -71,7 +69,7 @@ public class HeartRateSensorSimulationService extends Service {
     private void broadcastUpdate(final String action,
                                  int heartRate) {
         final Intent intent = new Intent(action);
-        intent.putExtra(ACTION_HRM_SIMULATION_STEP_DETECTED, String.valueOf(heartRate));
+        intent.putExtra(ACTION_HRM_SIMULATION_HEART_RATE_DETECTED, String.valueOf(heartRate));
         sendBroadcast(intent);
     }
 
@@ -92,8 +90,8 @@ public class HeartRateSensorSimulationService extends Service {
             tryToReadSimulationData();
         }
 
-        if (arrayAverageHeartRate == null) {
-            arrayAverageHeartRate = new int[3];
+        if (array_HeartRate == null) {
+            array_HeartRate = new ArrayList<>();
         }
         if (heartRateMonitorUtility == null) {
             heartRateMonitorUtility = new HeartRateMonitorUtility(this);

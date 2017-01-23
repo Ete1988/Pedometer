@@ -283,6 +283,7 @@ public class BluetoothScanActivity extends AppCompatActivity {
             return i;
         }
 
+
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             ViewHolder viewHolder;
@@ -308,4 +309,6 @@ public class BluetoothScanActivity extends AppCompatActivity {
             return view;
         }
     }
+
+
 }

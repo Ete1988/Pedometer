@@ -3,14 +3,17 @@ package com.mueller.mobileSports.user;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.design.widget.NavigationView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.mueller.mobileSports.general.GenericActivity;
 import com.mueller.mobileSports.pedometer.MainActivity.R;
 import com.mueller.mobileSports.pedometer.PedometerActivity;
 
@@ -21,7 +24,7 @@ import java.util.Objects;
  * Created by Sandra on 8/10/2016.
  * A profile screen to display and edit user profile data
  */
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends GenericActivity {
 
     boolean firstTime;
     private EditText mInputUserName, mInputAge, mInputWeight, mInputHeight, mInputEmail;
@@ -33,9 +36,17 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-        setTitle("Edit Profile");
+        setContentView(R.layout.generic_layout);
         init();
+        setUpNavigation();
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.getMenu().findItem(R.id.ProfileBtn).setChecked(true);
+        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.frame);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View childLayout = inflater.inflate(R.layout.profile_view,
+                (ViewGroup) findViewById(R.id.myProfileView));
+        frameLayout.addView(childLayout);
+        initializeViews();
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -78,10 +89,20 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void setUpNavigation() {
+        super.setUpNavigation();
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+    }
+
     /**
      * Initializes most fields of activity
      */
-    private void init() {
+    private void initializeViews() {
         UserData userData = UserSessionManager.getUserData();
         age = userData.getAge();
         height = userData.getHeight();
@@ -89,13 +110,11 @@ public class ProfileActivity extends AppCompatActivity {
         username = userData.getUsername();
         email = userData.getEmail();
         userSessionManager = new UserSessionManager(this);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
         mInputUserName = (EditText) findViewById(R.id.input_name);
         mInputAge = (EditText) findViewById(R.id.input_age);
         mInputWeight = (EditText) findViewById(R.id.input_weight);
         mInputHeight = (EditText) findViewById(R.id.input_height);
-        mInputEmail = (EditText) findViewById(R.id.input_email);
+        mInputEmail = (EditText) findViewById(R.id.PF_input_email);
         spinner = (Spinner) findViewById(R.id.spinner_gender);
 
         mapUserDataToView();
@@ -109,6 +128,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * Maps userdata to widgets in view
      */
@@ -116,7 +136,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         if (Objects.equals(username, "")) {
             mInputUserName.setText("");
-            }else {
+        } else {
             mInputUserName.setText(username);
         }
 
@@ -203,5 +223,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
     }
+
 }
 
